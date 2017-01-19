@@ -7,7 +7,7 @@ use rollun\installer\Install\InstallerAbstract;
 use rollun\api\Api\Google\GoogleClient;
 use \Google_Client;
 
-abstract class CredentialsInstallAbstract extends InstallerAbstract implements InstallerInterface
+abstract class CredentialsInstallerAbstract extends InstallerAbstract implements InstallerInterface
 {
 
     // Overide thees :
@@ -31,6 +31,12 @@ abstract class CredentialsInstallAbstract extends InstallerAbstract implements I
             $this->io->writeError("Credentials exist in $credentialsPath\nDelete it for remake and restart this script\n");
         } else {
             $clientSecretPath = $this->getClientSecretPath();
+            if (!file_exists($clientSecretPath)) {
+                $this->io->writeError(
+                        "There is not file $clientSecretPath\nSee docs about client_secret.json\nhttps://developers.google.com/gmail/api/quickstart/php\n"
+                );
+                exit;
+            }
             $scopes = implode(' ', $this->scopes);
             $this->initClient(static::APPLICATION_NAME, $scopes, $clientSecretPath);
             $authUrl = $this->client->createAuthUrl();

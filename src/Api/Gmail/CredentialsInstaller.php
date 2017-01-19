@@ -4,9 +4,9 @@ namespace rollun\api\Api\Gmail;
 
 use rollun\api\Api\Gmail\GmailClient;
 use Google_Service_Gmail;
-use rollun\api\Api\Google\CredentialsInstallAbstract;
+use rollun\api\Api\Google\CredentialsInstallerAbstract;
 
-class CredentialsInstaller extends CredentialsInstallAbstract
+class CredentialsInstaller extends CredentialsInstallerAbstract
 {
 
     const CLIENT_CLASS = GmailClient::class; // child of  GoogleClient like 'MyClass::class'

@@ -26,6 +26,12 @@ return [
           ],
          */
         [
+            'name' => 'interrupt.cron',
+            'path' => '/interrupt/cron',
+            'middleware' => \rollun\api\Middleware\CronExceptionMiddleware::class,
+            'allowed_methods' => ['GET', 'POST'],
+        ],
+        [
             'name' => 'home',
             'path' => '/[{name}]',
             'middleware' => \rollun\api\Api\HelloAction::class,
