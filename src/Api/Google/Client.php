@@ -5,13 +5,13 @@ namespace rollun\api\Api\Google;
 use \Google_Client;
 use Zend\Filter\Word\SeparatorToDash;
 
-abstract class GoogleClientAbstract extends Google_Client
+class Client extends Google_Client
 {
 
-    const CLIENT_SECRET_FULL_PATH = 'resources/Api/Google/client_secret.json';
+    const CLIENT_SECRET_PATH = 'resources/Api/Google/';
     const CREDENTIALS_PATH = 'data/Api/Google/';
 
-    public function __construct($config = array())
+    public function __construct($secretKeyName, $creditionalName = null)
     {
         parent::__construct($config);
 

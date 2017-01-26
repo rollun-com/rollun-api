@@ -72,7 +72,6 @@ abstract class CredentialsInstallerAbstract extends InstallerAbstract implements
 
     protected function writeCredential($accessToken)
     {
-
         $credentialsPath = $this->getCredentialsPath();
         // Store the credentials to disk.
         if (!file_exists(dirname($credentialsPath))) {

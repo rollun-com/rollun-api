@@ -73,8 +73,9 @@ class HelloAction implements MiddlewareInterface
             throw $exc;
         }
 
-        $str = $messagesList->getMessagesIds();
-        return new HtmlResponse($this->templateRenderer->render('app::home-page', ['str' => print_r($str, true)]));
+//        $str = $messagesList->getMessagesIds();
+        $str = $messagesList->getGmailMessages(); //'newer_than:130d'
+        return new HtmlResponse($this->templateRenderer->render('app::home-page', ['str' => print_r($str[0], true)]));
     }
 
 }
