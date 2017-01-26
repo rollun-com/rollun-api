@@ -27,8 +27,8 @@
         "zendframework/zend-filter": "^2.0.1",
         "zendframework/zend-expressive-twigrenderer": "^1.0",
         "psr/log": "^1.0",
-        "rollun-com/rollun-installer": "^1.0.2",
-        "rollun-com/rollun-datastore": "^1.0.0",
+        "rollun-com/rollun-installer": "^1.0",
+        "rollun-com/rollun-datastore": "^1.0",
         "rollun-com/rollun-logger": "^1.0.0",
         "zendframework/zend-http": "^2.5",
         "google/apiclient": "2.0"
@@ -51,9 +51,9 @@
     "suggest": {
     },
     "scripts": {
-        "lib-install": "rollun\\installer\\Commands::install",
-        "lib-uninstall": "rollun\\installer\\Commands::uninstall",
-        "lib-reinstall": "rollun\\installer\\Commands::reinstall"
+        "lib-install": "rollun\\installer\\Command::install",
+        "lib-uninstall": "rollun\\installer\\Command::uninstall",
+        "lib-reinstall": "rollun\\installer\\Command::reinstall"
     }
 
 }
