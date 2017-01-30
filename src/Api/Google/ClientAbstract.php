@@ -25,6 +25,12 @@ abstract class ClientAbstract extends Google_Client
         $this->setCredential();
     }
 
+    abstract public function getAuthCode();
+
+    abstract public function saveCredential($accessToken);
+
+    abstract public function getSavedCredential();
+
     public function setConfigFromSecretFile($clientName = null)
     {
         $defaultClientName = 'client_secret';
