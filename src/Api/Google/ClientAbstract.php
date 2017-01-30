@@ -37,7 +37,7 @@ abstract class ClientAbstract extends Google_Client
         $clientName = $clientName? : $this->getClientName();
         $clientName = $clientName? : $this->$defaultClientName;
         $clientSecretFilename = $clientName . '.json';
-        $clientSecretFullFilename = static::CLIENT_SECRET_PATH . $clientSecretFilename;
+        $clientSecretFullFilename = static::SECRET_PATH . $clientSecretFilename;
         if (!file_exists($clientSecretFullFilename)) {
             $this->setAuthConfig($clientSecretFullFilename);
             return $clientSecretFullFilename;
@@ -75,7 +75,7 @@ abstract class ClientAbstract extends Google_Client
         return $accessTokenUpdated;
     }
 
-    public static function getClientName()
+    public function getClientName()
     {
         return $this->clientName;
     }

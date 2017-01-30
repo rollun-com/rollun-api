@@ -15,10 +15,10 @@ use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Console\Output\ConsoleOutput;
 
-class Client extends ClientAbstract
+class Cli extends ClientAbstract
 {
 
-    const CREDENTIALS_PATH = 'data/Api/Google/';
+    const SECRET_PATH = 'data/Api/Google/';
 
     protected $io;
 
@@ -28,12 +28,12 @@ class Client extends ClientAbstract
         parent::__construct($config, $clientName);
     }
 
-    public static function getCredentialFullFilename()
+    public function getCredentialFullFilename()
     {
         $defaultCredentialName = $this->convertStringToFilename(static::class);
         $credentialName = $this->clientName ? : $defaultCredentialName;
         $credentialName = $this->convertStringToFilename($credentialName);
-        return static::CREDENTIALS_PATH . $credentialName . '.json';
+        return static::SECRET_PATH . $credentialName . '.json';
     }
 
     /**

@@ -5,7 +5,7 @@ namespace rollun\api\Api\Google;
 use rollun\datastore\DataStore\Interfaces\DataStoresInterface;
 use Interop\Container\ContainerInterface;
 use rollun\datastore\AbstractFactoryAbstract;
-use rollun\api\Api\Google\Client as GoogleClient;
+use rollun\api\Api\Google\Cli as GoogleClient;
 use rollun\api\ApiException;
 
 /**
