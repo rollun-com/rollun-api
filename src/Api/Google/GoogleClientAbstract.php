@@ -16,7 +16,7 @@ abstract class GoogleClientAbstract extends Google_Client
         parent::__construct($config);
 
         if (!file_exists(static::CLIENT_SECRET_FULL_PATH)) {
-            throw new \RuntimeException(static::CLIENT_SECRET_FULL_PATH . ' do not exist');
+            throw new \RuntimeException(static::CLIENT_SECRET_FULL_PATH . ' does not exist');
         }
         $this->setAuthConfig(static::CLIENT_SECRET_FULL_PATH);
 
@@ -44,7 +44,7 @@ abstract class GoogleClientAbstract extends Google_Client
     {
         $credentialFullName = static::getCredentialFullName();
         if (!file_exists($credentialFullName)) {
-            throw new \RuntimeException($credentialFullName . ' do not exist.');
+            throw new \RuntimeException($credentialFullName . ' does not exist.');
         }
         $accessToken = json_decode(file_get_contents($credentialFullName), true);
         $this->setAccessToken($accessToken);
