@@ -57,16 +57,11 @@ class ClientAbstractFactory extends AbstractFactoryAbstract
     {
         $smConfig = $container->get('config');
 
-        if (!isset($smConfig[self::GOOGLE_API_CLIENTS_SERVICES_KEY][$requestedName])) {
-            return false;
+        if (isset($smConfig[self::GOOGLE_API_CLIENTS_SERVICES_KEY][$requestedName])) {
+            return true;
         } else {
-            $googleClientSmConfig = $smConfig[self::GOOGLE_API_CLIENTS_SERVICES_KEY][$requestedName];
+            return false;
         }
-        $requestedClassName = $googleClientSmConfig[static::KEY_CLASS] ? : GoogleClient::class;
-        if (!is_a($requestedClassName, GoogleClient::class, true)) {
-            throw new ApiException('Class $requestedClassName is not instance of ' . GoogleClient::class);
-        }
-        return true;
     }
 
     /**
@@ -84,32 +79,28 @@ class ClientAbstractFactory extends AbstractFactoryAbstract
         $smConfig = $container->get('config');
         $googleClientSmConfig = $smConfig[self::GOOGLE_API_CLIENTS_SERVICES_KEY][$requestedName];
         //Get class of Google Client - GoogleClient as default
-        if (isset($googleClientSmConfig[static::KEY_CLASS])) {
-            $className = $googleClientSmConfig[static::KEY_CLASS];
-        } else {
-            $className = GoogleClient::class;
+        $requestedClassName = $googleClientSmConfig[static::KEY_CLASS] ? : GoogleClient::class;
+        if (!is_a($requestedClassName, GoogleClient::class, true)) {
+            throw new ApiException('Class $requestedClassName is not instance of ' . GoogleClient::class);
         }
-        /* @var $client GoogleClient */
-        $client = new $className();
-
-        //Get and set config from file data/Api/Google/RequestedName.json
-        $secretName = $className::convertStringToFilename($requestedName);
-        $fullPathToSecret = $className::getSecretPath() . $secretName . '.json';
-        if (!file_exists($fullPathToSecret)) {
-            $client->setAuthConfig($fullPathToSecret);
-        }
-        //Get and set config from Service Manager config
+        //Get config from Service Manager config
         $clientConfigFromSmConfig = $googleClientSmConfig[static::CONFIG_KEY] ? : [];
+        $clientConfig = [];
         foreach ($clientConfigFromSmConfig as $key => $value) {
             if (in_array($key, static::GOOGLE_CLIENT_CONFIG_KEYS)) {
-                $client->setConfig($key, $value);
+                $clientConfig[$key] = $value;
             } else {
                 throw new ApiException('Wrong key in Google Client config: ' . $key);
             }
         }
+        /* @var $client GoogleClient */
+        $client = new $className($clientConfig, $requestedName);
+
         //Get and set SCOPES
         $scopes = $googleClientSmConfig[static::SCOPES]? : [];
         $client->setScopes($scopes);
+
+        return $client;
     }
 
 }

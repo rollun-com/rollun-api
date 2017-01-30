@@ -16,7 +16,7 @@ abstract class ClientAbstract extends Google_Client
 
     protected $clientName;
 
-    public function __construct($config, $clientName = null)
+    public function __construct($config = [], $clientName = null)
     {
         parent::__construct($config);
         $this->clientName = $clientName;

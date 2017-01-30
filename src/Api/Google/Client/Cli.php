@@ -32,6 +32,7 @@ class Client extends ClientAbstract
     {
         $defaultCredentialName = $this->convertStringToFilename(static::class);
         $credentialName = $this->clientName ? : $defaultCredentialName;
+        $credentialName = $this->convertStringToFilename($credentialName);
         return static::CREDENTIALS_PATH . $credentialName . '.json';
     }
 
