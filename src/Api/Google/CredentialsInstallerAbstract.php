@@ -25,6 +25,9 @@ abstract class CredentialsInstallerAbstract extends InstallerAbstract implements
 
     public function install()
     {
+        if (php_sapi_name() != 'cli') {
+            throw new Exception('This application must be run on the command line.');
+        }
 
         $credentialsPath = $this->getCredentialsPath();
         if (file_exists($credentialsPath)) {
