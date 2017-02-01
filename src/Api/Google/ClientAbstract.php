@@ -3,6 +3,7 @@
 namespace rollun\api\Api\Google;
 
 use \Google_Client;
+use Zend\Diactoros\Response\RedirectResponse;
 use Zend\Filter\Word\SeparatorToDash;
 use rollun\api\ApiException;
 
@@ -11,32 +12,30 @@ use rollun\api\ApiException;
  */
 abstract class ClientAbstract extends Google_Client
 {
-
     const SECRET_PATH = 'resources/Api/Google/';
+
+    const DEFAULT_CLIENT_NAME = 'client_secret';
 
     protected $clientName;
 
-    public function __construct($config = [], $clientName = null)
-    {
-        parent::__construct($config);
-        $this->clientName = $clientName;
-        $this->setConfigFromSecretFile();
+    protected $code;
 
-        $this->setCredential();
+    public function setCode($code)
+    {
+        $this->code = $code;
     }
 
-    abstract public function getAuthCode();
-
-    abstract public function saveCredential($accessToken);
-
-    abstract public function getSavedCredential();
-
-    public function setConfigFromSecretFile($clientName = null)
+    public function __construct($config = [], $code = null, $clientName = null)
     {
-        $defaultClientName = 'client_secret';
-        $clientName = $clientName? : $this->getClientName();
-        $clientName = $clientName? : $this->$defaultClientName;
-        $clientSecretFilename = $clientName . '.json';
+        parent::__construct($config);
+        $this->code = $code;
+        $this->clientName = $clientName ?: static::DEFAULT_CLIENT_NAME;
+        $this->setConfigFromSecretFile();
+    }
+
+    protected function setConfigFromSecretFile()
+    {
+        $clientSecretFilename = $this->getClientName() . '.json';
         $clientSecretFullFilename = static::SECRET_PATH . $clientSecretFilename;
         if (!file_exists($clientSecretFullFilename)) {
             $this->setAuthConfig($clientSecretFullFilename);
@@ -45,23 +44,36 @@ abstract class ClientAbstract extends Google_Client
         return false;
     }
 
-    public function setCredential()
+    public function getClientName()
+    {
+        return $this->clientName;
+    }
+
+    /**
+     * @return bool
+     * If credential set return true another else.
+     */
+    public function trySetCredential()
     {
         $accessToken = $this->getAccessToken();
-        $accessToken = $accessToken? : $this->getSavedCredential();
+        $accessToken = $accessToken ?: $this->getSavedCredential();
         if ($accessToken) {
             if ($this->isAccessTokenExpired()) {
                 $accessToken = $this->refreshAccessToken($accessToken);
                 $this->saveCredential($accessToken);
+                return true;
             }
-        } else {
-            $authCode = $this->getAuthCode();
+        } elseif (($authCode = $this->getAuthCode()) !== null) {
             $accessToken = $this->fetchAccessTokenWithAuthCode($authCode);
             $this->saveCredential($accessToken);
+            return true;
         }
+        return false;
     }
 
-    public function refreshAccessToken($accessToken)
+    abstract public function getSavedCredential();
+
+    public function refreshAccessToken()
     {
         // save refresh token to some variable
         $refreshTokenSaved = $this->getRefreshToken();
@@ -75,30 +87,23 @@ abstract class ClientAbstract extends Google_Client
         return $accessTokenUpdated;
     }
 
-    public function getClientName()
+    abstract public function saveCredential($accessToken);
+
+    public function getAuthCode()
     {
-        return $this->clientName;
+        return $this->code;
     }
 
-    public static function convertGmailToFilename($gmailAddress)
+    /**
+     * @param $state string crypt token
+     * @return RedirectResponse
+     */
+    public function getCodeResponse($state)
     {
-        $str = str_replace('@gmail.com', '_at_gmail_dat_com', $gmailAddress);
-        $str = str_replace('.', '', $str); //a.b@gmail.com and ab@gmail.com is same
-        return static::convertStringToFilename($str);
+        $this->setState($state);
+        $authUrl = $this->createAuthUrl();
+        return new RedirectResponse($authUrl, 302, ['Location' => filter_var($authUrl, FILTER_SANITIZE_URL)]);
     }
 
-    public static function convertStringToFilename($str)
-    {
-        $str = preg_replace('/[\r\n\t ]+/', ' ', $str);
-        $str = preg_replace('/[\"\*\/\:\<\>\?\'\|]+/', ' ', $str);
-        $str = strtolower($str);
-        $str = html_entity_decode($str, ENT_QUOTES, "utf-8");
-        $str = htmlentities($str, ENT_QUOTES, "utf-8");
-        $str = preg_replace("/(&)([a-z])([a-z]+;)/i", '$2', $str);
-        $str = str_replace(' ', '-', $str);
-        $str = rawurlencode($str);
-        $str = str_replace('%', '-', $str);
-        return $str;
-    }
 
 }

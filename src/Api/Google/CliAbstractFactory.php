@@ -2,11 +2,13 @@
 
 namespace rollun\api\Api\Google;
 
+use rollun\datastore\DataStore\DataStoreException;
 use rollun\datastore\DataStore\Interfaces\DataStoresInterface;
 use Interop\Container\ContainerInterface;
 use rollun\datastore\AbstractFactoryAbstract;
-use rollun\api\Api\Google\Cli as GoogleClient;
+use rollun\api\Api\Google\Cli as GoogleCLIClient;
 use rollun\api\ApiException;
+use Zend\ServiceManager\Factory\AbstractFactoryInterface;
 
 /**
  *
@@ -32,7 +34,7 @@ use rollun\api\ApiException;
  * ]
  *
  */
-class ClientAbstractFactory extends AbstractFactoryAbstract
+class CliAbstractFactory implements AbstractFactoryInterface
 {
 
     const GOOGLE_API_CLIENTS_SERVICES_KEY = 'GOOGLE_API_CLIENTS';
@@ -70,8 +72,8 @@ class ClientAbstractFactory extends AbstractFactoryAbstract
      * @param  ContainerInterface $container
      * @param  string $requestedName
      * @param  array $options
-     * @return DataStoresInterface
-     * @throws DataStoreException
+     * @return ClientAbstract
+     * @throws ApiException
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
@@ -79,9 +81,9 @@ class ClientAbstractFactory extends AbstractFactoryAbstract
         $smConfig = $container->get('config');
         $googleClientSmConfig = $smConfig[self::GOOGLE_API_CLIENTS_SERVICES_KEY][$requestedName];
         //Get class of Google Client - GoogleClient as default
-        $requestedClassName = $googleClientSmConfig[static::KEY_CLASS] ? : GoogleClient::class;
-        if (!is_a($requestedClassName, GoogleClient::class, true)) {
-            throw new ApiException('Class $requestedClassName is not instance of ' . GoogleClient::class);
+        $requestedClassName = $googleClientSmConfig['class'] ? : GoogleCLIClient::class;
+        if (!is_a($requestedClassName, GoogleCLIClient::class, true)) {
+            throw new ApiException('Class $requestedClassName is not instance of ' . GoogleCLIClient::class);
         }
         //Get config from Service Manager config
         $clientConfigFromSmConfig = $googleClientSmConfig[static::CONFIG_KEY] ? : [];
@@ -93,8 +95,8 @@ class ClientAbstractFactory extends AbstractFactoryAbstract
                 throw new ApiException('Wrong key in Google Client config: ' . $key);
             }
         }
-        /* @var $client GoogleClient */
-        $client = new $className($clientConfig, $requestedName);
+        /* @var $client GoogleCLIClient */
+        $client = new $requestedClassName($clientConfig, $requestedName);
 
         //Get and set SCOPES
         $scopes = $googleClientSmConfig[static::SCOPES]? : [];
@@ -102,5 +104,4 @@ class ClientAbstractFactory extends AbstractFactoryAbstract
 
         return $client;
     }
-
 }

@@ -50,6 +50,7 @@
     },
     "suggest": {
     },
+
     "scripts": {
         "lib-install": "rollun\\installer\\Command::install",
         "lib-uninstall": "rollun\\installer\\Command::uninstall",
