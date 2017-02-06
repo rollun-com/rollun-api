@@ -2,7 +2,7 @@
 
 namespace rollun\api\Api\Google;
 
-use rollun\api\Api\Google\ClientAbstract;
+use rollun\api\Api\Google\AuthcodeClientAbstract;
 use Zend\Filter\Word\SeparatorToDash;
 use rollun\api\ApiException;
 use Composer\IO\ConsoleIO;
@@ -15,7 +15,8 @@ use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Console\Output\ConsoleOutput;
 
-class Cli extends ClientAbstract
+//TODO: rework with new interface
+class Cli extends AuthcodeClientAbstract
 {
 
     const SECRET_PATH = 'data/Api/Google/';
@@ -50,7 +51,7 @@ class Cli extends ClientAbstract
         $authCode = trim($composerIo->ask('Enter verification code: '));
     }
 
-    public function saveCredential($accessToken)
+    public function saveCredential()
     {
         if (php_sapi_name() != 'cli') {
             throw new ApiException('This application must be run on the command line.');
@@ -92,4 +93,29 @@ class Cli extends ClientAbstract
         return $composerIo;
     }
 
+    /**
+     * @param $state string crypt token
+     */
+    public function codeRequest($state)
+    {
+        // TODO: Implement codeRequest() method.
+    }
+
+    /**
+     * load saved credential
+     * @return array
+     */
+    public function loadCredential()
+    {
+        // TODO: Implement loadCredential() method.
+    }
+
+    /**
+     * Request authCode
+     * @param $state
+     */
+    public function requestAuthCode($state)
+    {
+        // TODO: Implement requestAuthCode() method.
+    }
 }

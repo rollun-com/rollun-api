@@ -72,7 +72,7 @@ class CliAbstractFactory implements AbstractFactoryInterface
      * @param  ContainerInterface $container
      * @param  string $requestedName
      * @param  array $options
-     * @return ClientAbstract
+     * @return AuthcodeClientAbstract
      * @throws ApiException
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
