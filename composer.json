@@ -31,6 +31,8 @@
         "rollun-com/rollun-datastore": "^1.0",
         "rollun-com/rollun-logger": "^1.0.0",
         "zendframework/zend-http": "^2.5",
+        "zendframework/zend-session": "^2.7",
+
         "google/apiclient": "2.0"
     },
     "require-dev": {

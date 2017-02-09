@@ -10,72 +10,19 @@ use rollun\api\ApiException;
 /**
  * vendor\bin\InstallerSelfCall.bat "rollun\api\Api\Gmail\CredentialsInstaller" install
  */
-abstract class AuthcodeClientAbstract extends Google_Client implements AuthcodeClientInterface
+abstract class AuthcodeClientAbstract extends ConfiguredClientAbstract implements AuthcodeClientInterface
 {
     const SECRET_PATH = 'resources/Api/Google/';
 
     /**
-     * @var string $clientName
-     */
-    protected $clientName;
-
-    /**
      * @var string
      */
-    protected $code;
+    protected $authcode;
 
-    /** @var  mixed */
-    protected $credential;
-
-    /**
-     * @param $state string crypt token
-     */
-    abstract public function codeRequest($state);
-
-    /**
-     * load saved credential
-     * @return array
-     */
-    abstract public function loadCredential();
-
-    /**
-     * save credential
-     * @return void
-     */
-    abstract public function saveCredential();
-
-    /**
-     * Request authCode
-     * @param $state
-     */
-    abstract public function requestAuthCode($state);
-
-    /**
-     * AuthcodeClientAbstract constructor.
-     * @param string $clientName
-     * @param array $config
-     */
-    public function __construct($clientName, $config = [])
+    public function __construct(array $config, $clientName)
     {
-        $this->clientName = $clientName;
-        parent::__construct($config);
-        $this->code = isset($config['code']) ? $config['code'] : null;
-        $this->setConfigFromSecretFile();
-    }
-
-    /**
-     * Load config from file
-     * @return bool|string
-     */
-    protected function setConfigFromSecretFile()
-    {
-        $clientSecretFilename = $this->getClientName() . '.json';
-        $clientSecretFullFilename = static::SECRET_PATH . $clientSecretFilename;
-        if (!file_exists(realpath($clientSecretFullFilename))) {
-            $this->setAuthConfig($clientSecretFullFilename);
-            return $clientSecretFullFilename;
-        }
-        return false;
+        parent::__construct($clientName, $config);
+        $this->authcode = isset($config['code']) ? $config['code'] : null;
     }
 
     /**
@@ -87,27 +34,14 @@ abstract class AuthcodeClientAbstract extends Google_Client implements AuthcodeC
     }
 
     /**
-     * Set authCode
-     * @param $code
-     */
-    public function setAuthCode($code)
-    {
-        $this->code = $code;
-    }
-
-    /**
      * @return bool
      * If credential set return true another else.
      */
     public function authByCredential()
     {
-        $credential = $this->getCredential();
-        if ($credential) {
-            if ($this->isAccessTokenExpired()) {
-                $credential = $this->refreshCredential();
-                $this->setCredential($credential);
-                return true;
-            }
+
+        if (parent::authByCredential()) {
+            return true;
         } elseif (($authCode = $this->getAuthCode()) !== null) {
             $credential = $this->refreshCredential();
             $this->setCredential($credential);
@@ -117,33 +51,35 @@ abstract class AuthcodeClientAbstract extends Google_Client implements AuthcodeC
     }
 
     /**
+     * @return string|null
+     */
+    public function getAuthCode()
+    {
+        return $this->authcode;
+    }
+
+    /**
+     * Set authCode
+     * @param $code
+     */
+    public function setAuthCode($code)
+    {
+        $this->authcode = $code;
+    }
+
+    /**
      * refresh credential
      * @return array
      */
     protected function refreshCredential()
     {
-        // save refresh token to some variable
-        $refreshTokenSaved = $this->getRefreshToken();
-        if (isset($refreshTokenSaved)) {
-            // update access token
-            $this->fetchAccessTokenWithRefreshToken($refreshTokenSaved);
-            // pass access token to some variable
-            $credential = $this->getCredential();
-            // append refresh token
-            $accessTokenUpdated['refresh_token'] = $refreshTokenSaved;
-        } else {
+        try {
+            $credential = parent::refreshCredential();
+        } catch (ApiException $apiException) {
             $authCode = $this->getAuthCode();
             $credential = $this->fetchAccessTokenWithRefreshToken($authCode);
         }
         return $credential;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getAuthCode()
-    {
-        return $this->code;
     }
 
     /**
@@ -161,7 +97,7 @@ abstract class AuthcodeClientAbstract extends Google_Client implements AuthcodeC
     protected function getCredential()
     {
         $credential = $this->getAccessToken();
-        $credential  = $credential ?: $this->loadCredential();
+        $credential = $credential ?: $this->loadCredential();
         return $credential;
     }
 }
