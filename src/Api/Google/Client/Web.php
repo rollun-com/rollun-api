@@ -21,6 +21,8 @@ class Web extends \Google_Client
 
     const SECRET_NAME = 'WebClient';
 
+    const KEY_WEB_CLIENT = 'webClient';
+
     /** @var  SessionContainer */
     protected $sessionContainer;
 
