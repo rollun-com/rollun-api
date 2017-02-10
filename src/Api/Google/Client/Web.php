@@ -170,7 +170,7 @@ class Web extends \Google_Client
     {
 
         $clientSecretFullFilename = static::SECRET_PATH . DIRECTORY_SEPARATOR . static::SECRET_NAME;
-        if (!file_exists(realpath($clientSecretFullFilename))) {
+        if (file_exists(realpath($clientSecretFullFilename))) {
             $this->setAuthConfig($clientSecretFullFilename);
             return $clientSecretFullFilename;
         }
