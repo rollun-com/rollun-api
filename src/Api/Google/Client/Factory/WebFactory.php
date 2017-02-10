@@ -10,7 +10,7 @@ namespace rollun\api\Api\Google\Client\Factory;
 
 use Interop\Container\ContainerInterface;
 use Interop\Container\Exception\ContainerException;
-use rollun\api\Api\Google\Web;
+use rollun\api\Api\Google\Client\Web;
 use Zend\ServiceManager\Exception\ServiceNotCreatedException;
 use Zend\ServiceManager\Exception\ServiceNotFoundException;
 use Zend\ServiceManager\Factory\FactoryInterface;

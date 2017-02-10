@@ -6,7 +6,7 @@
  * Time: 10:32
  */
 
-namespace rollun\api\Api\Google;
+namespace rollun\api\Api\Google\Client;
 
 use rollun\api\ApiException;
 use Zend\Diactoros\Response\RedirectResponse;
