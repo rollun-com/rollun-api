@@ -129,7 +129,7 @@ class Web extends \Google_Client
             $accessTokenUpdated['refresh_token'] = $refreshTokenSaved;
             return $credential;
         } elseif (($authCode = $this->getAuthCode()) !== null) {
-            $credential = $this->fetchAccessTokenWithRefreshToken($authCode);
+            $credential = $this->fetchAccessTokenWithAuthCode($authCode);
             return $credential;
         }
         throw new ApiException("RefreshToken and AuthCode not set!");
