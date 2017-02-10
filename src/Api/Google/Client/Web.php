@@ -8,13 +8,18 @@
 
 namespace rollun\api\Api\Google;
 
+use rollun\api\ApiException;
 use Zend\Diactoros\Response\RedirectResponse;
 use Zend\Session\Container as SessionContainer;
 use Zend\Session\SessionManager;
+use Psr\Http\Message\ServerRequestInterface as Request;
 
-
-class Web extends ClientAbstract
+class Web extends \Google_Client
 {
+
+    const SECRET_PATH = 'data/Api/Google/';
+
+    const SECRET_NAME = 'WebClient';
 
     /** @var  SessionContainer */
     protected $sessionContainer;
@@ -22,28 +27,24 @@ class Web extends ClientAbstract
     /** @var  string */
     protected $authcode;
 
-    public function __construct(array $config)
-    {
-        SessionManager::class;
-        parent::__construct($config);
-    }
+    /** @var  string */
+    protected $state;
 
-    /**
-     * load saved credential
-     * @return array
-     */
-    public function loadCredential()
+    public function __construct(array $config, SessionContainer $sessionContainer)
     {
-        return $this->sessionContainer->credential ?: null;
+        $this->sessionContainer = $sessionContainer;
+        parent::__construct($config);
+        $this->saveCredential();
+        $this->setConfigFromSecretFile();
     }
 
     /**
      * save credential
      * @return void
      */
-    public function saveCredential()
+    protected function saveCredential()
     {
-        $this->sessionContainer->credential= $this->credential;
+        $this->sessionContainer->credential = $this->getAccessToken();
     }
 
     /**
@@ -75,5 +76,126 @@ class Web extends ClientAbstract
             return $playload->sub;
         }
         return null;
+    }
+
+    /**
+     * @return bool
+     * If credential set return true another else.
+     */
+    public function authByCredential()
+    {
+        if ($this->getAuthCode() || $this->isAccessTokenExpired()) {
+            $credential = $this->refreshCredential();
+            $this->setCredential($credential);
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getAuthCode()
+    {
+        return $this->authcode;
+    }
+
+    /**
+     * Set authCode
+     * @param $code
+     */
+    public function setAuthCode($code)
+    {
+        $this->authcode = $code;
+    }
+
+    /**
+     * refresh credential
+     * @return array
+     * @throws ApiException
+     */
+    protected function refreshCredential()
+    {
+        // save refresh token to some variable
+        $refreshTokenSaved = $this->getRefreshToken();
+        if (isset($refreshTokenSaved)) {
+            // update access token
+            $this->fetchAccessTokenWithRefreshToken($refreshTokenSaved);
+            // pass access token to some variable
+            $credential = $this->getCredential();
+            // append refresh token
+            $accessTokenUpdated['refresh_token'] = $refreshTokenSaved;
+            return $credential;
+        } elseif (($authCode = $this->getAuthCode()) !== null) {
+            $credential = $this->fetchAccessTokenWithRefreshToken($authCode);
+            return $credential;
+        }
+        throw new ApiException("RefreshToken and AuthCode not set!");
+    }
+
+    /**
+     * @return array
+     */
+    protected function getCredential()
+    {
+        $this->loadCredential();
+        return $this->getAccessToken();
+    }
+
+    /**
+     * load saved credential
+     */
+    protected function loadCredential()
+    {
+        $credential = isset($this->sessionContainer->credential) ? $this->sessionContainer->credential : null;
+        $this->setAccessToken($credential);
+    }
+
+    /**
+     * @param $credential
+     */
+    public function setCredential($credential)
+    {
+        $this->setAccessToken($credential);
+        $this->saveCredential();
+    }
+
+    /**
+     * Load config from file
+     * @return bool|string
+     */
+    protected function setConfigFromSecretFile()
+    {
+
+        $clientSecretFullFilename = static::SECRET_PATH . DIRECTORY_SEPARATOR . static::SECRET_NAME;
+        if (!file_exists(realpath($clientSecretFullFilename))) {
+            $this->setAuthConfig($clientSecretFullFilename);
+            return $clientSecretFullFilename;
+        }
+        return false;
+    }
+
+    /**
+     * return state string
+     * @return string
+     */
+    public function getState()
+    {
+        return $this->state ?: null;
+    }
+
+    /**
+     * init object by request data.
+     * @param Request $request
+     */
+    public function initByRequest(Request $request)
+    {
+        $query = $request->getQueryParams();
+        if (isset($query['code'])) {
+            $this->setAuthCode($query['code']);
+        }
+        if (isset($query['state'])) {
+            $this->state = $query['state'];
+        }
     }
 }
