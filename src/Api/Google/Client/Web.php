@@ -17,9 +17,9 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 class Web extends \Google_Client
 {
 
-    const SECRET_PATH = 'data/Api/Google/';
+    const SECRET_PATH = 'data' . DIRECTORY_SEPARATOR . 'Api' . DIRECTORY_SEPARATOR . 'Google';
 
-    const SECRET_NAME = 'WebClient';
+    const SECRET_NAME = 'WebClient.json';
 
     const KEY_WEB_CLIENT = 'webClient';
 
@@ -54,7 +54,7 @@ class Web extends \Google_Client
      * @param $state
      * @return RedirectResponse
      */
-    public function requestAuthCode($state)
+    public function getAuthCodeRedirect($state)
     {
         $this->sessionContainer->state = $state;
         $this->setState($state);

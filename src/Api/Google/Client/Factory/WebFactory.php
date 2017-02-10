@@ -43,7 +43,8 @@ class WebFactory implements FactoryInterface
         $sessionManager = $container->get(SessionManager::class);
         $sessionContainer = new Container('SessionContainer', $sessionManager);
 
-        return new Web($webConfig, $sessionContainer);
-
+        $webClient = new Web($webConfig, $sessionContainer);
+        $webClient->addScope('openid');
+        return $webClient;
     }
 }
