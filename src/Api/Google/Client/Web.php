@@ -8,7 +8,6 @@
 
 namespace rollun\api\Api\Google\Client;
 
-use rollun\api\Api\Google\ClientAbstract;
 use rollun\api\ApiException;
 use Zend\Diactoros\Response\RedirectResponse;
 use Zend\Session\Container as SessionContainer;

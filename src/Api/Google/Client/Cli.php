@@ -1,8 +1,7 @@
 <?php
 
-namespace rollun\api\Api\Google;
+namespace rollun\api\Api\Google\Client;
 
-use rollun\api\Api\Google\AuthcodeClientAbstract;
 use Zend\Filter\Word\SeparatorToDash;
 use rollun\api\ApiException;
 use Composer\IO\ConsoleIO;
