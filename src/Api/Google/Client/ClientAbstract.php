@@ -6,7 +6,7 @@
  * Time: 14:38
  */
 
-namespace rollun\api\Api\Google;
+namespace rollun\api\Api\Google\Client;
 
 class ClientAbstract extends \Google_Client
 {
