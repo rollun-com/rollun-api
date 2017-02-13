@@ -16,7 +16,7 @@ use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Console\Output\ConsoleOutput;
 
 //TODO: rework with new interface
-class Cli extends AuthcodeClientAbstract
+class Cli extends ClientAbstract
 {
 
     const SECRET_PATH = 'data/Api/Google/';

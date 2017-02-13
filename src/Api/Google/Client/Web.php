@@ -8,14 +8,19 @@
 
 namespace rollun\api\Api\Google\Client;
 
+use rollun\api\Api\Google\ClientAbstract;
 use rollun\api\ApiException;
 use Zend\Diactoros\Response\RedirectResponse;
 use Zend\Session\Container as SessionContainer;
 use Zend\Session\SessionManager;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
-class Web extends \Google_Client
+class Web extends ClientAbstract
 {
+    const KEY_CREDENTIAL = 'credential';
+
+    /** state is crypted string  */
+    const KEY_STATE = 'state';
 
     const SECRET_PATH = 'data' . DIRECTORY_SEPARATOR . 'Api' . DIRECTORY_SEPARATOR . 'Google';
 
@@ -30,7 +35,7 @@ class Web extends \Google_Client
     protected $authcode;
 
     /** @var  string */
-    protected $state;
+    protected $requestState;
 
     public function __construct(array $config, SessionContainer $sessionContainer)
     {
@@ -46,7 +51,7 @@ class Web extends \Google_Client
      */
     protected function saveCredential()
     {
-        $this->sessionContainer->credential = $this->getAccessToken();
+        $this->sessionContainer->{static::KEY_CREDENTIAL} = $this->getAccessToken();
     }
 
     /**
@@ -54,9 +59,10 @@ class Web extends \Google_Client
      * @param $state
      * @return RedirectResponse
      */
-    public function getAuthCodeRedirect($state)
+    public function getAuthCodeRedirect($state = null)
     {
-        $this->sessionContainer->state = $state;
+        $state = $state ?: sha1(openssl_random_pseudo_bytes(1024));
+        $this->sessionContainer{static::KEY_STATE} = $state;
         $this->setState($state);
         $authUrl = $this->createAuthUrl();
         return new RedirectResponse($authUrl, 302, ['Location' => filter_var($authUrl, FILTER_SANITIZE_URL)]);
@@ -67,15 +73,15 @@ class Web extends \Google_Client
      * An identifier for the user, unique among all Google accounts and never reused.
      * @return string|null
      */
-    public function getUniqueId()
+    public function getUserId()
     {
         $token = $this->getAccessToken();
         $idToken = $token['id_token'];
         if ($this->verifyIdToken($idToken)) {
-            $tks = explode('.', $idToken);
-            list($headb64, $bodyb64, $cryptob64) = $tks;
-            $playload = json_decode(base64_decode($bodyb64));
-            return $playload->sub;
+            $tokenParams = explode('.', $idToken);
+            list($headb64, $bodyb64, $cryptob64) = $tokenParams;
+            $payload = json_decode(base64_decode($bodyb64));
+            return $payload->sub;
         }
         return null;
     }
@@ -86,12 +92,22 @@ class Web extends \Google_Client
      */
     public function authByCredential()
     {
-        if ($this->getAuthCode() || $this->isAccessTokenExpired()) {
+        /*if ($this->getAuthCode() || $this->isAccessTokenExpired()) {
             $credential = $this->refreshCredential();
-            $this->setCredential($credential);
             return true;
         }
-        return false;
+        return false;*/
+        if (is_null($this->getAccessToken()) && $this->getAuthCode()) {
+            $authCode = $this->getAuthCode();
+            $this->fetchAccessTokenWithAuthCode($authCode);
+            $this->saveCredential();
+        } elseif ($this->isAccessTokenExpired()) {
+            $this->refreshAccessToken();
+            $this->saveCredential();
+        } else {
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -111,28 +127,15 @@ class Web extends \Google_Client
         $this->authcode = $code;
     }
 
-    /**
-     * refresh credential
-     * @return array
-     * @throws ApiException
-     */
-    protected function refreshCredential()
+    protected function refreshAccessToken()
     {
         // save refresh token to some variable
         $refreshTokenSaved = $this->getRefreshToken();
-        if (isset($refreshTokenSaved)) {
-            // update access token
-            $this->fetchAccessTokenWithRefreshToken($refreshTokenSaved);
-            // pass access token to some variable
-            $credential = $this->getCredential();
-            // append refresh token
-            $accessTokenUpdated['refresh_token'] = $refreshTokenSaved;
-            return $credential;
-        } elseif (($authCode = $this->getAuthCode()) !== null) {
-            $credential = $this->fetchAccessTokenWithAuthCode($authCode);
-            return $credential;
-        }
-        throw new ApiException("RefreshToken and AuthCode not set!");
+        // update access token and pass access token to some variable
+        $credential = $this->fetchAccessTokenWithRefreshToken($refreshTokenSaved);
+        // append refresh token
+        //$credential['refresh_token'] = $refreshTokenSaved;
+        return $credential;
     }
 
     /**
@@ -149,17 +152,10 @@ class Web extends \Google_Client
      */
     protected function loadCredential()
     {
-        $credential = isset($this->sessionContainer->credential) ? $this->sessionContainer->credential : null;
+        $credential = isset($this->sessionContainer->{static::KEY_CREDENTIAL}) ?
+            $this->sessionContainer->{static::KEY_CREDENTIAL} :
+            null;
         $this->setAccessToken($credential);
-    }
-
-    /**
-     * @param $credential
-     */
-    public function setCredential($credential)
-    {
-        $this->setAccessToken($credential);
-        $this->saveCredential();
     }
 
     /**
@@ -181,9 +177,14 @@ class Web extends \Google_Client
      * return state string
      * @return string
      */
-    public function getState()
+    public function getRequestState()
     {
-        return $this->state ?: null;
+        return $this->requestState ?: null;
+    }
+
+    public function getResponseState()
+    {
+        return $this->sessionContainer->{static::KEY_STATE};
     }
 
     /**
@@ -197,7 +198,7 @@ class Web extends \Google_Client
             $this->setAuthCode($query['code']);
         }
         if (isset($query['state'])) {
-            $this->state = $query['state'];
+            $this->requestState = $query['state'];
         }
     }
 }
