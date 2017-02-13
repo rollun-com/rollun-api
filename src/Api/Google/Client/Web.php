@@ -98,14 +98,16 @@ class Web extends ClientAbstract
         return false;*/
         if (is_null($this->getAccessToken()) && $this->getAuthCode()) {
             $authCode = $this->getAuthCode();
-            $this->fetchAccessTokenWithAuthCode($authCode);
-            $this->saveCredential();
+            $credential = $this->fetchAccessTokenWithAuthCode($authCode);
         } elseif ($this->isAccessTokenExpired()) {
-            $this->refreshAccessToken();
-            $this->saveCredential();
+            $credential = $this->refreshAccessToken();
         } else {
             return false;
         }
+        if (!$credential || isset($creds['error'])) {
+            return false;
+        }
+        $this->saveCredential();
         return true;
     }
 
