@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "e6a3d00d3af8924d931c22db99efd8e7",
-    "content-hash": "68b3d9f49192b09989c37923474183ec",
+    "hash": "a5e21c7502737144ad8562add6b76c02",
+    "content-hash": "834f31cde326da655ca84cdedfb15731",
     "packages": [
         {
             "name": "composer/ca-bundle",
@@ -348,16 +348,16 @@
         },
         {
             "name": "fig/http-message-util",
-            "version": "1.1.1",
+            "version": "1.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-fig/http-message-util.git",
-                "reference": "2794f0e6a2566c9cd6a9a521a729da8963a52ca4"
+                "reference": "20b2c280cb6914b7b83089720df44e490f4b42f0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-fig/http-message-util/zipball/2794f0e6a2566c9cd6a9a521a729da8963a52ca4",
-                "reference": "2794f0e6a2566c9cd6a9a521a729da8963a52ca4",
+                "url": "https://api.github.com/repos/php-fig/http-message-util/zipball/20b2c280cb6914b7b83089720df44e490f4b42f0",
+                "reference": "20b2c280cb6914b7b83089720df44e490f4b42f0",
                 "shasum": ""
             },
             "require": {
@@ -394,7 +394,7 @@
                 "request",
                 "response"
             ],
-            "time": "2017-02-06 19:24:13"
+            "time": "2017-02-09 16:10:21"
         },
         {
             "name": "firebase/php-jwt",
@@ -1987,12 +1987,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "3db4b0df21d1f527304650e717c66af48981f1c4"
+                "reference": "411283676149d8b8e8ee53ec621d84099e548090"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/3db4b0df21d1f527304650e717c66af48981f1c4",
-                "reference": "3db4b0df21d1f527304650e717c66af48981f1c4",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/411283676149d8b8e8ee53ec621d84099e548090",
+                "reference": "411283676149d8b8e8ee53ec621d84099e548090",
                 "shasum": ""
             },
             "conflict": {
@@ -2001,6 +2001,7 @@
                 "aws/aws-sdk-php": ">=3,<3.2.1",
                 "bugsnag/bugsnag-laravel": ">=2,<2.0.2",
                 "cakephp/cakephp": ">=3,<3.0.15|>=2,<2.4.99|>=2.5,<2.5.99|>=2.6,<2.6.12|>=1.3,<1.3.18|>=2.7,<2.7.6|>=3.1,<3.1.4",
+                "cart2quote/module-quotation": ">=4.1.6,<=4.4.5|>=5,<5.4.4",
                 "cartalyst/sentry": "<2.1",
                 "codeigniter/framework": "<=3.0.6",
                 "composer/composer": "<=1.0.0-alpha11",
@@ -2028,6 +2029,8 @@
                 "joomla/session": "<1.3.1",
                 "laravel/framework": ">=4,<4.0.99|>=4.1,<4.1.29",
                 "laravel/socialite": ">=1,<1.0.99|>=2,<2.0.10",
+                "magento/magento1ce": ">=1.5.0.1,<1.9.3.2",
+                "magento/magento1ee": ">=1.9,<1.14.3.2",
                 "magento/magento2ce": ">=2,<2.2",
                 "monolog/monolog": ">=1.8,<1.12",
                 "namshi/jose": "<2.2",
@@ -2036,7 +2039,7 @@
                 "phpmailer/phpmailer": ">=5,<5.2.22",
                 "pusher/pusher-php-server": "<2.2.1",
                 "sabre/dav": ">=1.6,<1.6.99|>=1.7,<1.7.11|>=1.8,<1.8.9",
-                "shopware/shopware": "<4.4|>=5,<5.2.15",
+                "shopware/shopware": "<4.4|>=5,<5.2.16",
                 "silverstripe/cms": ">=3.1,<3.1.11|>=3,<=3.0.11",
                 "silverstripe/forum": "<=0.6.1|>=0.7,<=0.7.3",
                 "silverstripe/framework": ">=3,<3.3",
@@ -2110,34 +2113,95 @@
                 }
             ],
             "description": "Prevents installation of composer packages with known security vulnerabilities: no API, simply require it",
-            "time": "2017-01-24 18:32:04"
+            "time": "2017-02-08 16:26:47"
         },
         {
-            "name": "rollun-com/rollun-datastore",
-            "version": "1.1.0",
+            "name": "rollun-com/rollun-actionrender",
+            "version": "2.1.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/rollun-com/rollun-datastore.git",
-                "reference": "8408f360b95cfd4a2273cae5f097f044ea207e8a"
+                "url": "https://github.com/rollun-com/rollun-actionrender.git",
+                "reference": "5cb8400783705736347a971ecebda6316a1b989b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/rollun-com/rollun-datastore/zipball/8408f360b95cfd4a2273cae5f097f044ea207e8a",
-                "reference": "8408f360b95cfd4a2273cae5f097f044ea207e8a",
+                "url": "https://api.github.com/repos/rollun-com/rollun-actionrender/zipball/5cb8400783705736347a971ecebda6316a1b989b",
+                "reference": "5cb8400783705736347a971ecebda6316a1b989b",
                 "shasum": ""
             },
             "require": {
                 "php": "^5.6 || ^7.0",
-                "phpunit/phpunit": "^4.0",
                 "psr/log": "^1.0",
                 "roave/security-advisories": "dev-master",
                 "rollun-com/rollun-installer": "^1.0",
+                "zendframework/zend-db": "2.8.2",
+                "zendframework/zend-expressive": "^1.0",
+                "zendframework/zend-expressive-fastroute": "^1.0",
+                "zendframework/zend-expressive-helpers": "^2.0",
+                "zendframework/zend-expressive-twigrenderer": "^1.0",
+                "zendframework/zend-http": "^2.5",
+                "zendframework/zend-servicemanager": "^3.0",
+                "zendframework/zend-stdlib": "^3"
+            },
+            "require-dev": {
+                "filp/whoops": "^1.1 || ^2.0",
+                "phpunit/phpunit": "^4.0",
+                "squizlabs/php_codesniffer": "^2.3"
+            },
+            "type": "project",
+            "autoload": {
+                "psr-4": {
+                    "rollun\\actionrender\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "proprietary"
+            ],
+            "authors": [
+                {
+                    "name": "avz-cmf",
+                    "email": "email@example.com"
+                },
+                {
+                    "name": "victorynox",
+                    "email": "it.proffesor02@gmail.com"
+                }
+            ],
+            "description": "Skeleton for app or lib",
+            "time": "2017-02-06 16:36:39"
+        },
+        {
+            "name": "rollun-com/rollun-datastore",
+            "version": "2.1.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/rollun-com/rollun-datastore.git",
+                "reference": "344197d0d96c78e93de019d4836e9dba7d7e7af2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/rollun-com/rollun-datastore/zipball/344197d0d96c78e93de019d4836e9dba7d7e7af2",
+                "reference": "344197d0d96c78e93de019d4836e9dba7d7e7af2",
+                "shasum": ""
+            },
+            "require": {
+                "mindplay/jsonfreeze": "0.3.3.x-dev",
+                "php": "^5.6 || ^7.0",
+                "phpunit/phpunit": "^4.0",
+                "psr/log": "^1.0",
+                "roave/security-advisories": "dev-master",
+                "rollun-com/rollun-actionrender": "^2.1",
+                "rollun-com/rollun-installer": "^1.0",
+                "rollun-com/rollun-logger": "^1.0",
+                "rollun-com/rollun-utils": "^1.0",
                 "symfony/filesystem": ">=2.7",
                 "xiag/rql-parser": "^1.0",
                 "zendframework/zend-db": "2.8.2",
                 "zendframework/zend-expressive": "^1.0",
                 "zendframework/zend-expressive-fastroute": "^1.0",
                 "zendframework/zend-expressive-helpers": "^2.0",
+                "zendframework/zend-expressive-twigrenderer": "^1.0",
                 "zendframework/zend-http": "^2.5",
                 "zendframework/zend-json": "^3",
                 "zendframework/zend-servicemanager": "^3.0",
@@ -2169,7 +2233,7 @@
                 }
             ],
             "description": "Datastore",
-            "time": "2017-01-18 15:29:41"
+            "time": "2017-02-10 15:32:45"
         },
         {
             "name": "rollun-com/rollun-dic",
