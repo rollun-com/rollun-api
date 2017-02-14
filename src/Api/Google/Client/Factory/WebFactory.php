@@ -15,6 +15,7 @@ use Zend\ServiceManager\Exception\ServiceNotCreatedException;
 use Zend\ServiceManager\Exception\ServiceNotFoundException;
 use Zend\ServiceManager\Factory\FactoryInterface;
 use Zend\Session\Container;
+use Zend\Session\Service\SessionManagerFactory;
 use Zend\Session\SessionManager;
 
 class WebFactory implements FactoryInterface
@@ -38,9 +39,11 @@ class WebFactory implements FactoryInterface
         $config = $container->has('config') ? $container->get('config') : [];
         $webConfig = isset($config[Web::KEY_WEB_CLIENT]) ? $config[Web::KEY_WEB_CLIENT] : [];
         if (!$container->has(SessionManager::class)) {
-            throw new ServiceNotCreatedException(SessionManager::class . "not found");
+            $sessionManagerFactory = new SessionManagerFactory();
+            $sessionManager = $sessionManagerFactory($container, SessionManager::class);
+        } else {
+            $sessionManager = $container->get(SessionManager::class);
         }
-        $sessionManager = $container->get(SessionManager::class);
         $sessionContainer = new Container('SessionContainer', $sessionManager);
 
         $webClient = new Web($webConfig, $sessionContainer);

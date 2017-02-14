@@ -1,8 +1,7 @@
 <?php
 
-namespace rollun\api\Api\Google;
+namespace rollun\api\Api\Google\Client;
 
-use rollun\api\Api\Google\AuthcodeClientAbstract;
 use Zend\Filter\Word\SeparatorToDash;
 use rollun\api\ApiException;
 use Composer\IO\ConsoleIO;
@@ -16,7 +15,7 @@ use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Console\Output\ConsoleOutput;
 
 //TODO: rework with new interface
-class Cli extends AuthcodeClientAbstract
+class Cli extends ClientAbstract
 {
 
     const SECRET_PATH = 'data/Api/Google/';
