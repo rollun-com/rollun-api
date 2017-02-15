@@ -2,7 +2,6 @@
 
 namespace rollun\api\Api\Google\Client;
 
-use Google_Service;
 use rollun\api\ApiException;
 use Composer\IO\ConsoleIO;
 use rollun\api\Api\Google\Utils as ApiGoogleUtils;
@@ -37,7 +36,7 @@ class Cli extends ClientAbstract
 
         parent::__construct($config);
         $this->setLoginHint($this->clientEmail);
-        $this->addScope(\Google_Service_Plus::USERINFO_EMAIL);
+        $this->addScope('https://www.googleapis.com/auth/EMAIL!!!!!!!!');
         $this->setAccessType('offline');
     }
 
