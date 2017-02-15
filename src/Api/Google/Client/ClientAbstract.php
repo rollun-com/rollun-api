@@ -49,5 +49,6 @@ abstract class ClientAbstract extends \Google_Client
         return $accessToken;
     }
 
-    abstract public function loadCredential();
+    //old be public
+    abstract protected function loadCredential();
 }

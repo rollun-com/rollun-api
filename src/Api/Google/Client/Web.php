@@ -21,9 +21,12 @@ class Web extends ClientAbstract
     /** state is crypted string  */
     const KEY_STATE = 'state';
 
-    const SECRET_PATH = 'data' . DIRECTORY_SEPARATOR . 'Api' . DIRECTORY_SEPARATOR . 'Google';
+    const SECRET_PATH = 'data'
+    . DIRECTORY_SEPARATOR . 'Api'
+    . DIRECTORY_SEPARATOR . 'Google'
+    . DIRECTORY_SEPARATOR . 'Web';
 
-    const SECRET_NAME = 'WebClient.json';
+    const SECRET_FILENAME = 'client_secret.json';
 
     const KEY_WEB_CLIENT = 'webClient';
 
@@ -85,30 +88,18 @@ class Web extends ClientAbstract
         return null;
     }
 
-    /**
-     * @return bool
-     * If credential set return true another else.
-     */
-    public function authByCredential()
+    public function authByCode()
     {
-        /*if ($this->getAuthCode() || $this->isAccessTokenExpired()) {
-            $credential = $this->refreshCredential();
-            return true;
-        }
-        return false;*/
-        if (is_null($this->getAccessToken()) && $this->getAuthCode()) {
+        if ($this->getAuthCode()) {
             $authCode = $this->getAuthCode();
             $credential = $this->fetchAccessTokenWithAuthCode($authCode);
-        } elseif ($this->isAccessTokenExpired()) {
-            $credential = $this->refreshAccessToken();
-        } else {
-            return false;
+            if (!$credential || isset($creds['error'])) {
+                return false;
+            }
+            $this->saveCredential();
+            return true;
         }
-        if (!$credential || isset($creds['error'])) {
-            return false;
-        }
-        $this->saveCredential();
-        return true;
+        return false;
     }
 
     /**
@@ -128,24 +119,23 @@ class Web extends ClientAbstract
         $this->authcode = $code;
     }
 
-    protected function refreshAccessToken()
+    public function refreshAccessToken()
     {
-        // save refresh token to some variable
-        $refreshTokenSaved = $this->getRefreshToken();
-        // update access token and pass access token to some variable
-        $credential = $this->fetchAccessTokenWithRefreshToken($refreshTokenSaved);
-        // append refresh token
-        //$credential['refresh_token'] = $refreshTokenSaved;
-        return $credential;
-    }
-
-    /**
-     * @return array
-     */
-    protected function getCredential()
-    {
-        $this->loadCredential();
-        return $this->getAccessToken();
+        if(!is_null($this->getAccessToken()) && $this->isAccessTokenExpired()) {
+            // save refresh token to some variable
+            $refreshTokenSaved = $this->getRefreshToken();
+            // update access token and pass access token to some variable
+            $credential = $this->fetchAccessTokenWithRefreshToken($refreshTokenSaved);
+            // append refresh token
+            if (!$credential || isset($credential['error'])) {
+                return false;
+            }
+            $credential['refresh_token'] = $refreshTokenSaved;
+            $this->setAccessToken($credential);
+            $this->saveCredential();
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -153,22 +143,23 @@ class Web extends ClientAbstract
      */
     protected function loadCredential()
     {
-        $credential = isset($this->sessionContainer->{static::KEY_CREDENTIAL}) ?
-            $this->sessionContainer->{static::KEY_CREDENTIAL} :
-            null;
-        $this->setAccessToken($credential);
+        if (isset($this->sessionContainer->{static::KEY_CREDENTIAL})) {
+            $this->setAccessToken($this->sessionContainer->{static::KEY_CREDENTIAL});
+        } else {
+            throw new ApiException("Credential not saved.");
+        }
     }
 
     /**
      * Load config from file
-     * @return bool|string
+     * @return bool
      */
     protected function setConfigFromSecretFile()
     {
-        $clientSecretFullFilename = static::SECRET_PATH . DIRECTORY_SEPARATOR . static::SECRET_NAME;
-        if (file_exists(realpath($clientSecretFullFilename))) {
-            $this->setAuthConfig($clientSecretFullFilename);
-            return $clientSecretFullFilename;
+        $clientFullSecretPath = $this->getFullSecretPath();
+        if (file_exists(realpath($clientFullSecretPath))) {
+            $this->setAuthConfig($clientFullSecretPath);
+            return true;
         }
         return false;
     }
