@@ -33,12 +33,6 @@ class Web extends ClientAbstract
     /** @var  SessionContainer */
     protected $sessionContainer;
 
-    /** @var  string */
-    protected $authcode;
-
-    /** @var  string */
-    protected $requestState;
-
     public function __construct(array $config, SessionContainer $sessionContainer)
     {
         $this->sessionContainer = $sessionContainer;
@@ -88,10 +82,9 @@ class Web extends ClientAbstract
         return null;
     }
 
-    public function authByCode()
+    public function authByCode($authCode)
     {
-        if ($this->getAuthCode()) {
-            $authCode = $this->getAuthCode();
+        if (isset($authCode)) {
             $credential = $this->fetchAccessTokenWithAuthCode($authCode);
             if (!$credential || isset($creds['error'])) {
                 return false;
@@ -100,23 +93,6 @@ class Web extends ClientAbstract
             return true;
         }
         return false;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getAuthCode()
-    {
-        return $this->authcode;
-    }
-
-    /**
-     * Set authCode
-     * @param $code
-     */
-    public function setAuthCode($code)
-    {
-        $this->authcode = $code;
     }
 
     public function refreshAccessToken()
@@ -164,32 +140,8 @@ class Web extends ClientAbstract
         return false;
     }
 
-    /**
-     * return state string
-     * @return string
-     */
-    public function getRequestState()
-    {
-        return $this->requestState ?: null;
-    }
-
     public function getResponseState()
     {
         return $this->sessionContainer->{static::KEY_STATE};
-    }
-
-    /**
-     * init object by request data.
-     * @param Request $request
-     */
-    public function initByRequest(Request $request)
-    {
-        $query = $request->getQueryParams();
-        if (isset($query['code'])) {
-            $this->setAuthCode($query['code']);
-        }
-        if (isset($query['state'])) {
-            $this->requestState = $query['state'];
-        }
     }
 }
