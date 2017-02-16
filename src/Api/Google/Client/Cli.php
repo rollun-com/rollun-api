@@ -7,21 +7,21 @@ use Composer\IO\ConsoleIO;
 use rollun\api\Api\Google\Utils as ApiGoogleUtils;
 use rollun\api\Api\Google\Client\Factory\ConsoleIoFactory;
 
-//TODO: rework with new interface
 class Cli extends ClientAbstract
 {
 
-    const CREDENTIAL_COMMON_PATH = 'resources'
+    const CREDENTIAL_COMMON_PATH = 'data'
             . DIRECTORY_SEPARATOR . 'Api'
             . DIRECTORY_SEPARATOR . 'Google'
             . DIRECTORY_SEPARATOR . 'Cli';
-    const CREDENTIAL_FILENAME = 'credential.json';
 
     protected $consoleIo;
-    protected $clientName;
+    public $clientName;
 
     public function __construct($config, $clientName, ConsoleIO $consoleIo = null)
     {
+        parent::__construct($config);
+
         $this->consoleIo = $consoleIo;
 
         $clientEmail = $this->getClientEmail();
@@ -31,12 +31,10 @@ class Cli extends ClientAbstract
         if (strpos($clientEmail, '@gmail.com') === false) {
             throw new ApiException('Google Api Client email must contane "@gmail.com"');
         }
+        $this->setLoginHint($clientEmail);
 
-        $this->clientName = $clientName; //service name
 
-        parent::__construct($config);
-        $this->setLoginHint($this->clientEmail);
-        $this->addScope('https://www.googleapis.com/auth/EMAIL!!!!!!!!');
+        $this->addScope(\Google_Service_Oauth2::USERINFO_EMAIL);
         $this->setAccessType('offline');
     }
 
@@ -45,35 +43,29 @@ class Cli extends ClientAbstract
         return $this->getConfig('login_hint');
     }
 
-    protected function getCredentialPath()
+    public static function retrieveClientEmail()
     {
-        return rtrim(static::CREDENTIAL_COMMON_PATH, '\\/')
-                . DIRECTORY_SEPARATOR
-                . ApiGoogleUtils::convertGmailToFilename($this->getClientEmail());
-    }
-
-    protected function getCredentialFilename()
-    {
-        return 'credential_'
-                . ApiGoogleUtils::convertStringToFilename($this->clientName)
-                . '.json';
-    }
-
-    public function getCredentialFullFilename()
-    {
-        return rtrim($this->getCredentialPath(), '\\/')
-                . DIRECTORY_SEPARATOR . $this->getCredentialFilename();
+        $service = new \Google_Service_Oauth2($this);
+        $user = $service->userinfo->get();
+        return $user->email;
     }
 
     public function getConsoleIo()
     {
+        if (!isset($this->consoleIo)) {
+            $this->setConsoleIo();
+        }
+        return $this->consoleIo;
+    }
 
-        if (isset($this->consoleIo)) {
-            return $this->consoleIo;
+    public function setConsoleIo(ConsoleIO $consoleIo = null)
+    {
+        if (isset($consoleIo)) {
+            $this->consoleIo = $consoleIo;
         }
         $consoleIoFactory = new ConsoleIoFactory;
         $this->consoleIo = $consoleIoFactory->createConsoleIO();
-        return $this->consoleIo;
+        $this->consoleIo = $consoleIo;
     }
 
     /**
@@ -89,14 +81,6 @@ class Cli extends ClientAbstract
         $consoleIo->write("Open the following link in your browser:\n$authUrl\n");
         $authCode = $consoleIo->ask('Enter verification code: ');
         return trim($authCode);
-    }
-
-    public function retrieveCredential($authCode)
-    {
-        $accessToken = $this->fetchAccessTokenWithAuthCode($authCode);
-        if (!isset($accessToken['access_token'])) {
-            throw new ApiException('Can not get Access Token. $authCode = ' . $authCode);
-        }
     }
 
     public function saveCredential()
@@ -124,33 +108,7 @@ class Cli extends ClientAbstract
         if (file_exists($creditionalFullFilename)) {
             $accessToken = json_decode(file_get_contents($creditionalFullFilename), true);
         } else {
-            throw new ApiException('Can not get Saved Token. File ' . $creditionalFullFilename . ' is absent.');
-        }
-        $this->setAccessToken($accessToken);
-        $this->refreshAccessToken();
-    }
-
-    public function refreshAccessToken()
-    {
-        $accessToken = $this->getAccessToken();
-        if (is_null($accessToken)) {
-            throw new ApiException('Can not get Access Token');
-        }
-        if ($this->isAccessTokenExpired()) {
-            // save refresh token to some variable
-            $refreshTokenSaved = $this->getRefreshToken();
-            if (is_null($refreshTokenSaved)) {
-                throw new ApiException('Can not get Refresh Token');
-            }
-            // update access token
-            $accessTokenUpdated = $this->fetchAccessTokenWithRefreshToken($refreshTokenSaved);
-            if (is_null($accessTokenUpdated)) {
-                throw new ApiException('Can not get Refreshed Token');
-            }
-            // append refresh token
-            $accessTokenUpdated['refresh_token'] = $refreshTokenSaved;
-            $this->setAccessToken($accessToken);
-            $this->saveCredential();
+            return null;
         }
     }
 
