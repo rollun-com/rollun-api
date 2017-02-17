@@ -45,6 +45,7 @@ class ConsoleIoFactory implements FactoryInterface
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
+        //recursive error!
         if ($container->has(ConsoleIO::class)) {
             return $container->get(ConsoleIO::class);
         }

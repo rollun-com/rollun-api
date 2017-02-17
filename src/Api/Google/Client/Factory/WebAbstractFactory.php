@@ -11,6 +11,7 @@ namespace rollun\api\Api\Google\Client\Factory;
 use Interop\Container\ContainerInterface;
 use Interop\Container\Exception\ContainerException;
 use rollun\api\Api\Google\Client\Web;
+use rollun\api\ApiException;
 use Zend\ServiceManager\Exception\ServiceNotCreatedException;
 use Zend\ServiceManager\Exception\ServiceNotFoundException;
 use Zend\ServiceManager\Factory\FactoryInterface;
@@ -18,9 +19,9 @@ use Zend\Session\Container;
 use Zend\Session\Service\SessionManagerFactory;
 use Zend\Session\SessionManager;
 
-class WebFactory implements FactoryInterface
+class WebAbstractFactory extends AbstractFactory
 {
-
+    const DEFAULT_CLASS = Web::class;
     /**
      * Create an object
      *
@@ -36,8 +37,18 @@ class WebFactory implements FactoryInterface
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
 
-        $config = $container->has('config') ? $container->get('config') : [];
-        $webConfig = isset($config[Web::KEY_WEB_CLIENT]) ? $config[Web::KEY_WEB_CLIENT] : [];
+        //Get config
+        $smConfig = $container->get('config');
+        $googleClientSmConfig = $smConfig[self::KEY_GOOGLE_API_CLIENTS][$requestedName];
+        //Get class of Google Client - ApiGoogleClient as default
+        $requestedClassName = $this->getClass($smConfig, $requestedName);
+        //Get config from Service Manager config
+        $clientConfigFromSmConfig = $googleClientSmConfig[static::KEY_CONFIG] ?: [];
+        $arrayDiff = array_diff(array_keys($clientConfigFromSmConfig), static::GOOGLE_CLIENT_CONFIG_KEYS);
+        if (count($arrayDiff) != 0) {
+            throw new ApiException('Wrong key in Google Client config: ' . array_shift($arrayDiff));
+        }
+
         if (!$container->has(SessionManager::class)) {
             $sessionManagerFactory = new SessionManagerFactory();
             $sessionManager = $sessionManagerFactory($container, SessionManager::class);
@@ -46,8 +57,14 @@ class WebFactory implements FactoryInterface
         }
         $sessionContainer = new Container('SessionContainer', $sessionManager);
 
-        $webClient = new Web($webConfig, $sessionContainer);
-        $webClient->addScope('openid');
-        return $webClient;
+
+        /* @var $client ApiGoogleClient */
+        $client = new $requestedClassName($clientConfigFromSmConfig, $requestedName, $sessionContainer);
+        //Get and set SCOPES
+        $scopes = $googleClientSmConfig[static::KEY_SCOPES] ?: ['openid'];
+        $client->setScopes($scopes);
+
+        return $client;
+
     }
 }
