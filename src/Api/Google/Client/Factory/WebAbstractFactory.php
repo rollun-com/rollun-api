@@ -22,6 +22,9 @@ use Zend\Session\SessionManager;
 class WebAbstractFactory extends AbstractFactory
 {
     const DEFAULT_CLASS = Web::class;
+
+    const KEY_CLASS = 'class';
+
     /**
      * Create an object
      *
@@ -29,10 +32,7 @@ class WebAbstractFactory extends AbstractFactory
      * @param  string $requestedName
      * @param  null|array $options
      * @return object
-     * @throws ServiceNotFoundException if unable to resolve the service.
-     * @throws ServiceNotCreatedException if an exception is raised when
-     *     creating a service.
-     * @throws ContainerException if any other error occurs
+     * @throws ApiException
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
@@ -43,7 +43,9 @@ class WebAbstractFactory extends AbstractFactory
         //Get class of Google Client - ApiGoogleClient as default
         $requestedClassName = $this->getClass($smConfig, $requestedName);
         //Get config from Service Manager config
-        $clientConfigFromSmConfig = $googleClientSmConfig[static::KEY_CONFIG] ?: [];
+        $clientConfigFromSmConfig = isset($googleClientSmConfig[static::KEY_CONFIG]) ?
+            $googleClientSmConfig[static::KEY_CONFIG] :
+            [];
         $arrayDiff = array_diff(array_keys($clientConfigFromSmConfig), static::GOOGLE_CLIENT_CONFIG_KEYS);
         if (count($arrayDiff) != 0) {
             throw new ApiException('Wrong key in Google Client config: ' . array_shift($arrayDiff));
@@ -58,7 +60,7 @@ class WebAbstractFactory extends AbstractFactory
         $sessionContainer = new Container('SessionContainer', $sessionManager);
 
 
-        /* @var $client ApiGoogleClient */
+        /* @var $client Web */
         $client = new $requestedClassName($clientConfigFromSmConfig, $requestedName, $sessionContainer);
         //Get and set SCOPES
         $scopes = $googleClientSmConfig[static::KEY_SCOPES] ?: ['openid'];

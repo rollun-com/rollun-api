@@ -12,7 +12,7 @@ abstract class ClientAbstract extends \Google_Client
         parent::__construct($config);
 
         $clientSecretFullFilename = $this->getFullSecretPath();
-        if (!file_exists($clientSecretFullFilename)) {
+        if (!file_exists(realPath($clientSecretFullFilename))) {
             throw new ApiException(
             "There is not file $clientSecretFullFilename\n"
             . "See docs about client_secret.json\n"
@@ -39,7 +39,7 @@ abstract class ClientAbstract extends \Google_Client
         $classWithNamespace = get_class($this);
         $classWithNamespaceArray = explode('\\', $classWithNamespace);
         $class = end($classWithNamespaceArray);
-        return self::SECRET_PATH
+        return static::SECRET_PATH
                 . DIRECTORY_SEPARATOR
                 . $class;
     }

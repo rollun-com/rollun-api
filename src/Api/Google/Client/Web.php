@@ -24,8 +24,7 @@ class Web extends Client
 
     const SECRET_PATH = 'data'
     . DIRECTORY_SEPARATOR . 'Api'
-    . DIRECTORY_SEPARATOR . 'Google'
-    . DIRECTORY_SEPARATOR . 'Web';
+    . DIRECTORY_SEPARATOR . 'Google';
 
     const SECRET_FILENAME = 'client_secret.json';
 
