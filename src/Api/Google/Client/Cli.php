@@ -88,9 +88,6 @@ class Cli extends ClientAbstract
         $this->consoleIo = $consoleIo;
     }
 
-    /**
-     * vendor\bin\InstallerSelfCall.bat "rollun\api\Api\Gmail\CredentialsInstaller" install
-     */
     public function getAuthCode()
     {
         if (php_sapi_name() != 'cli') {

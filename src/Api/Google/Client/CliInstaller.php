@@ -7,7 +7,10 @@ use rollun\installer\Install\InstallerAbstract;
 use rollun\api\Api\Google\Client\Factory\AbstractFactory as ApiGoogleClientAbstractFactory;
 use rollun\api\Api\Google\Client\Cli as ApiGoogleClientCli;
 
-abstract class CliInstaller extends InstallerAbstract implements InstallerInterface
+/**
+ * vendor\bin\InstallerSelfCall.bat "rollun\api\Api\Gmail\CredentialsInstaller" install
+ */
+class CliInstaller extends InstallerAbstract implements InstallerInterface
 {
 
     public function install()

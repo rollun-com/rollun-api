@@ -18,6 +18,7 @@ use Zend\Stratigility\MiddlewareInterface;
 use rollun\api\Api\Gmail\GmailClient;
 use rollun\api\Api\Google\Gmail\GoogleServiceGmail;
 use rollun\api\Api\Google\Gmail\MessagesList;
+use rollun\api\Api\Google\Client\Cli as ApiGoogleClientCli;
 
 class HelloAction implements MiddlewareInterface
 {
@@ -28,12 +29,18 @@ class HelloAction implements MiddlewareInterface
     protected $templateRenderer;
 
     /**
+     * @var TemplateRendererInterface
+     */
+    protected $gmailGoogleClient;
+
+    /**
      * HelloAction constructor.
      * @param TemplateRendererInterface $templateRenderer
      */
-    public function __construct(TemplateRendererInterface $templateRenderer)
+    public function __construct(TemplateRendererInterface $templateRenderer, ApiGoogleClientCli $gmailGoogleClient)
     {
         $this->templateRenderer = $templateRenderer;
+        $this->gmailGoogleClient = $gmailGoogleClient;
     }
 
     /**
@@ -64,11 +71,10 @@ class HelloAction implements MiddlewareInterface
      */
     public function __invoke(Request $request, Response $response, callable $out = null)
     {
-        $gmailClient = new GmailClient;
-        $googleServiceGmail = new GoogleServiceGmail($gmailClient);
+        $googleServiceGmail = new GoogleServiceGmail($this->gmailGoogleClient);
 
         try {
-            $messagesList = new MessagesList($gmailClient);
+            $messagesList = new MessagesList($this->gmailGoogleClient);
         } catch (\Exception $exc) {
             throw $exc;
         }

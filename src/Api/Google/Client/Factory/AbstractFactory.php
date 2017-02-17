@@ -19,7 +19,7 @@ use Zend\ServiceManager\Factory\AbstractFactoryInterface;
  *                  ...
  *              ],
  *              'CONFIG' =>[
- *                  //Must be set:
+ *                  //Must be set for Cli:
  *                  "login_hint"=>"user@gmail.com", //<<--imortant!!!  will be use as user's Email
  *                  //optionaly:
  *                  "application_name"=>"MyApp",
