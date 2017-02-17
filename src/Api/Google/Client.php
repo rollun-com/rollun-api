@@ -24,6 +24,18 @@ class Client extends ClientAbstract
         }
     }
 
+    public function retrieveAccessToken($authCode)
+    {
+        parent::retrieveAccessToken($authCode);
+        try {
+            $this->saveCredential();
+        } catch (\Exception $exc) {
+            return new ApiException(
+                    'Can not save retrieved Credential', 0, $exc
+            );
+        }
+    }
+
     public function refreshAccessToken()
     {
         parent::refreshAccessToken();
@@ -41,7 +53,7 @@ class Client extends ClientAbstract
      * Throw exception only if i/o error rise
      * @return array|null
      */
-    public function loadCredential()
+    protected function loadCredential()
     {
         return null;
     }
@@ -51,7 +63,7 @@ class Client extends ClientAbstract
      *
      * @return mix
      */
-    public function saveCredential()
+    protected function saveCredential()
     {
         $class = get_class($this);
         throw new ApiException("Method saveCredential of class $class is not exist");

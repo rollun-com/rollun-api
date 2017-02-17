@@ -128,7 +128,10 @@ class AbstractFactory implements AbstractFactoryInterface
         $smConfig = $container->get('config');
         if (isset($smConfig[self::KEY_GOOGLE_API_CLIENTS])) {
             $googleCliClientsSmConfig = $smConfig[self::KEY_GOOGLE_API_CLIENTS];
-            return array_keys($googleCliClientsSmConfig);
+            foreach ($googleCliClientsSmConfig as $clientName => $value) {
+                $allClasses[$clientName] = $this->getClass($smConfig, $clientName);
+            }
+            return $allClasses;
         } else {
             return [];
         }

@@ -100,7 +100,7 @@ class Cli extends ClientAbstract
         return trim($authCode);
     }
 
-    public function saveCredential()
+    protected function saveCredential()
     {
         if (php_sapi_name() != 'cli') {
             throw new ApiException('This application must be run on the command line.');
@@ -119,7 +119,7 @@ class Cli extends ClientAbstract
      * load saved credential
      * @return array
      */
-    public function loadCredential()
+    protected function loadCredential()
     {
         $creditionalFullFilename = $this->getCredentialFullFilename();
         if (file_exists($creditionalFullFilename)) {

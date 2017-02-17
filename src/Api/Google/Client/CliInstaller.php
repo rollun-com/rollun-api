@@ -1,6 +1,6 @@
 <?php
 
-namespace rollun\api\Api\Google;
+namespace rollun\api\Api\Google\Client;
 
 use rollun\installer\Install\InstallerInterface;
 use rollun\installer\Install\InstallerAbstract;
@@ -8,7 +8,7 @@ use rollun\api\Api\Google\Client\Factory\AbstractFactory as ApiGoogleClientAbstr
 use rollun\api\Api\Google\Client\Cli as ApiGoogleClientCli;
 
 /**
- * vendor\bin\InstallerSelfCall.bat "rollun\api\Api\Gmail\CredentialsInstaller" install
+ * vendor\bin\InstallerSelfCall.bat "rollun\api\Api\Google\Client\CliInstaller" install
  */
 class CliInstaller extends InstallerAbstract implements InstallerInterface
 {
