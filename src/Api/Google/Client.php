@@ -18,8 +18,8 @@ class Client extends ClientAbstract
         $this->setAccessType('offline');
         $accessToken = $this->loadCredential();
         //$accessToken may be null
-        $this->setAccessToken($accessToken);
         if ($this->isAccessTokenContained($accessToken)) {
+            $this->setAccessToken($accessToken);
             $this->refreshAccessToken();
         }
     }

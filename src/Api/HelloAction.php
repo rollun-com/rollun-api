@@ -80,7 +80,7 @@ class HelloAction implements MiddlewareInterface
         }
 
 //        $str = $messagesList->getMessagesIds();
-        $str = $messagesList->getGmailMessages(); //'newer_than:130d'
+        $str = $messagesList->getGmailMessages('newer_than:230d'); //'newer_than:130d'
         return new HtmlResponse($this->templateRenderer->render('app::home-page', ['str' => print_r($str[0], true)]));
     }
 

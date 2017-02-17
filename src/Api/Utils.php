@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: root
@@ -6,10 +7,11 @@
  * Time: 17:50
  */
 
-namespace rollun\api\Api\Google;
+namespace rollun\api\Api;
 
 class Utils
 {
+
     public static function convertGmailToFilename($gmailAddress)
     {
         $str = str_replace('@gmail.com', '_at_gmail_dat_com', $gmailAddress);
@@ -30,4 +32,5 @@ class Utils
         $str = str_replace('%', '-', $str);
         return $str;
     }
+
 }

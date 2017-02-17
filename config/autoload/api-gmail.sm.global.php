@@ -30,7 +30,7 @@ return [
                 "login_hint" => "test.rocky.gift@gmail.com", //<<--imortant!!!  will be use as user's Email
                 //optionaly:
                 "application_name" => "Gmail Parser",
-                "approval_prompt" => "Just do it!",
+                "approval_prompt" => "auto",
             ],
         ]
     ]

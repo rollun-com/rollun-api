@@ -4,10 +4,11 @@ namespace rollun\api\Api\Google\Client;
 
 use rollun\api\ApiException;
 use Composer\IO\ConsoleIO;
-use rollun\api\Api\Google\Utils as ApiGoogleUtils;
+use rollun\api\Api\Utils as ApiGoogleUtils;
 use rollun\api\Api\Google\Client\Factory\ConsoleIoFactory;
+use rollun\api\Api\Google\Client;
 
-class Cli extends ClientAbstract
+class Cli extends Client
 {
 
     const CREDENTIAL_COMMON_PATH = 'data'
@@ -38,12 +39,12 @@ class Cli extends ClientAbstract
         $this->setAccessType('offline');
     }
 
-    public static function getClientEmail()
+    public function getClientEmail()
     {
         return $this->getConfig('login_hint');
     }
 
-    public static function retrieveClientEmail()
+    public function retrieveClientEmail()
     {
         $service = new \Google_Service_Oauth2($this);
         $user = $service->userinfo->get();
@@ -105,7 +106,7 @@ class Cli extends ClientAbstract
         if (php_sapi_name() != 'cli') {
             throw new ApiException('This application must be run on the command line.');
         }
-        $creditionalFullFilename = $this->getCreditionalFullFilename();
+        $creditionalFullFilename = $this->getCredentialFullFilename();
         // Store the credentials to disk.
         if (!file_exists(dirname($creditionalFullFilename))) {
             mkdir(dirname($creditionalFullFilename), 0766, true);
@@ -124,6 +125,7 @@ class Cli extends ClientAbstract
         $creditionalFullFilename = $this->getCredentialFullFilename();
         if (file_exists($creditionalFullFilename)) {
             $accessToken = json_decode(file_get_contents($creditionalFullFilename), true);
+            return $accessToken;
         } else {
             return null;
         }

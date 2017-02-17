@@ -45,18 +45,11 @@ class CliInstaller extends InstallerAbstract implements InstallerInterface
             try {
                 $cliClient->retrieveAccessToken($authCode);
             } catch (\Exception $exc) {
-                $this->io->writeError('Can not get AccessToken for Cli Client with name: ' . $cliClientName);
+                $this->io->writeError('Can not get and save AccessToken for Cli Client with name: ' . $cliClientName);
                 $this->io->writeError('Exception message: ' . $exc->getMessage() . '\n');
                 continue;
             }
-
-            try {
-                $cliClient->saveCredential();
-            } catch (\Exception $exc) {
-                $this->io->writeError('Can not save AccessToken for Cli Client with name: ' . $cliClientName);
-                $this->io->writeError('Exception message: ' . $exc->getMessage() . '\n');
-                continue;
-            }
+            $this->io->writeError('AccessToken was saved for Cli Client with name: ' . $cliClientName);
         }
         exit;
     }

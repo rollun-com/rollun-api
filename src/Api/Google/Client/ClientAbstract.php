@@ -36,9 +36,12 @@ abstract class ClientAbstract extends \Google_Client
 
     protected function getSecretPath()
     {
+        $classWithNamespace = get_class($this);
+        $classWithNamespaceArray = explode('\\', $classWithNamespace);
+        $class = end($classWithNamespaceArray);
         return self::SECRET_PATH
                 . DIRECTORY_SEPARATOR
-                . end(explode('\\', get_class($this)));
+                . $class;
     }
 
     protected function getSecretFilename()

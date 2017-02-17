@@ -4,12 +4,12 @@ namespace rollun\api\Api\Google\Gmail;
 
 use \Google_Service_Gmail;
 //use zaboy\res\Di\InsideConstruct;
-use rollun\api\Api\Google\GoogleClientAbstract;
+use rollun\api\Api\Google\Client\ClientAbstract;
 
 class GoogleServiceGmail extends Google_Service_Gmail
 {
 
-    public function __construct(GoogleClientAbstract $gmailGoogleClient = null)
+    public function __construct(ClientAbstract $gmailGoogleClient = null)
     {
         parent::__construct($gmailGoogleClient);
     }
