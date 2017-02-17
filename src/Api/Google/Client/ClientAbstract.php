@@ -46,7 +46,7 @@ abstract class ClientAbstract extends \Google_Client
         return static::SECRET_FILENAME;
     }
 
-    protected function isAccessTokenContained($accessToken)
+    public function isAccessTokenContained($accessToken)
     {
         if (isset($accessToken['access_token'])) {
             return true;
@@ -54,7 +54,7 @@ abstract class ClientAbstract extends \Google_Client
         return false;
     }
 
-    protected function checkAccessToken()
+    public function checkAccessToken()
     {
         $accessToken = $this->getAccessToken();
         if (!$this->isAccessTokenContained($accessToken)) {

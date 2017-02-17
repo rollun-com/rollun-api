@@ -50,6 +50,26 @@ class Cli extends ClientAbstract
         return $user->email;
     }
 
+    protected function getCredentialPath()
+    {
+        return rtrim(static::CREDENTIAL_COMMON_PATH, '\\/')
+                . DIRECTORY_SEPARATOR
+                . ApiGoogleUtils::convertGmailToFilename($this->getClientEmail());
+    }
+
+    protected function getCredentialFilename()
+    {
+        return 'credential_'
+                . ApiGoogleUtils::convertStringToFilename($this->clientName)
+                . '.json';
+    }
+
+    public function getCredentialFullFilename()
+    {
+        return rtrim($this->getCredentialPath(), '\\/')
+                . DIRECTORY_SEPARATOR . $this->getCredentialFilename();
+    }
+
     public function getConsoleIo()
     {
         if (!isset($this->consoleIo)) {
