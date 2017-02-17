@@ -15,7 +15,7 @@ use Zend\Session\Container as SessionContainer;
 use Zend\Session\SessionManager;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
-class Web extends Client
+class Web extends ClientAbstract
 {
     const KEY_CREDENTIAL = 'credential';
 
@@ -33,10 +33,48 @@ class Web extends Client
     /** @var  SessionContainer */
     protected $sessionContainer;
 
-    public function __construct(array $config, $clientName = null, SessionContainer $sessionContainer)
+    public function __construct(array $config, SessionContainer $sessionContainer)
     {
         $this->sessionContainer = $sessionContainer;
-        parent::__construct($config, $clientName);
+        parent::__construct($config);
+        try {
+            $accessToken = $this->loadCredential();
+            if ($this->isAccessTokenContained($accessToken)) {
+                $this->setAccessToken($accessToken);
+                $this->refreshAccessToken();
+            }
+        } catch (ApiException $apiException) {}
+    }
+
+    /**
+     * load saved credential
+     */
+    public function loadCredential()
+    {
+        if (isset($this->sessionContainer->{static::KEY_CREDENTIAL})) {
+            $this->setAccessToken($this->sessionContainer->{static::KEY_CREDENTIAL});
+        } else {
+            throw new ApiException("Credential not saved.");
+        }
+    }
+
+    public function refreshAccessToken()
+    {
+        if (!is_null($this->getAccessToken()) && $this->isAccessTokenExpired()) {
+            // save refresh token to some variable
+            $refreshTokenSaved = $this->getRefreshToken();
+            // update access token and pass access token to some variable
+            $credential = $this->fetchAccessTokenWithRefreshToken($refreshTokenSaved);
+            // append refresh token
+            if (!$credential || isset($credential['error'])) {
+                return false;
+            }
+            $credential['refresh_token'] = $refreshTokenSaved;
+            $this->setAccessToken($credential);
+            $this->saveCredential();
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -91,37 +129,6 @@ class Web extends Client
             return true;
         }
         return false;
-    }
-
-    public function refreshAccessToken()
-    {
-        if(!is_null($this->getAccessToken()) && $this->isAccessTokenExpired()) {
-            // save refresh token to some variable
-            $refreshTokenSaved = $this->getRefreshToken();
-            // update access token and pass access token to some variable
-            $credential = $this->fetchAccessTokenWithRefreshToken($refreshTokenSaved);
-            // append refresh token
-            if (!$credential || isset($credential['error'])) {
-                return false;
-            }
-            $credential['refresh_token'] = $refreshTokenSaved;
-            $this->setAccessToken($credential);
-            $this->saveCredential();
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * load saved credential
-     */
-    public function loadCredential()
-    {
-        if (isset($this->sessionContainer->{static::KEY_CREDENTIAL})) {
-            $this->setAccessToken($this->sessionContainer->{static::KEY_CREDENTIAL});
-        } else {
-            throw new ApiException("Credential not saved.");
-        }
     }
 
     public function getResponseState()
