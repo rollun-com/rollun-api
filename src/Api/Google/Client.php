@@ -58,7 +58,7 @@ class Client extends ClientAbstract
     }
 
     /**
-     * Metho like loadCredential(), but throw new Exception if $accessToken was not saved
+     * Method like loadCredential(), but throw new Exception if $accessToken was not saved
      *
      * @return array
      */
