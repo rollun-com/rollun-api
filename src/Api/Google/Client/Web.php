@@ -8,13 +8,14 @@
 
 namespace rollun\api\Api\Google\Client;
 
+use rollun\api\Api\Google\Client;
 use rollun\api\ApiException;
 use Zend\Diactoros\Response\RedirectResponse;
 use Zend\Session\Container as SessionContainer;
 use Zend\Session\SessionManager;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
-class Web extends ClientAbstract
+class Web extends Client
 {
     const KEY_CREDENTIAL = 'credential';
 
@@ -33,19 +34,17 @@ class Web extends ClientAbstract
     /** @var  SessionContainer */
     protected $sessionContainer;
 
-    public function __construct(array $config, SessionContainer $sessionContainer)
+    public function __construct(array $config, $clientName = null, SessionContainer $sessionContainer)
     {
         $this->sessionContainer = $sessionContainer;
-        parent::__construct($config);
-        $this->saveCredential();
-        $this->setConfigFromSecretFile();
+        parent::__construct($config, $clientName);
     }
 
     /**
      * save credential
      * @return void
      */
-    protected function saveCredential()
+    public function saveCredential()
     {
         $this->sessionContainer->{static::KEY_CREDENTIAL} = $this->getAccessToken();
     }
@@ -117,27 +116,13 @@ class Web extends ClientAbstract
     /**
      * load saved credential
      */
-    protected function loadCredential()
+    public function loadCredential()
     {
         if (isset($this->sessionContainer->{static::KEY_CREDENTIAL})) {
             $this->setAccessToken($this->sessionContainer->{static::KEY_CREDENTIAL});
         } else {
             throw new ApiException("Credential not saved.");
         }
-    }
-
-    /**
-     * Load config from file
-     * @return bool
-     */
-    protected function setConfigFromSecretFile()
-    {
-        $clientFullSecretPath = $this->getFullSecretPath();
-        if (file_exists(realpath($clientFullSecretPath))) {
-            $this->setAuthConfig($clientFullSecretPath);
-            return true;
-        }
-        return false;
     }
 
     public function getResponseState()

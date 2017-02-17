@@ -35,10 +35,11 @@ use Zend\ServiceManager\Factory\AbstractFactoryInterface;
 class AbstractFactory implements AbstractFactoryInterface
 {
 
+    const DEFAULT_CLASS = ApiGoogleClient::class;
     const KEY_GOOGLE_API_CLIENTS = 'GOOGLE_API_CLIENTS';
     const KEY_SCOPES = 'SCOPES';
     const KEY_CONFIG = 'CONFIG';
-    const GOOGLE_CLIENT_CONFIG_KEYS = [ 'application_name', 'base_path',
+    const GOOGLE_CLIENT_CONFIG_KEYS = ['application_name', 'base_path',
         'client_id', 'client_secret', 'redirect_uri', 'state', 'developer_key',
         'use_application_default_credentials', 'signing_key', 'signing_algorithm',
         'subject', 'hd', 'prompt', 'openid.realm', 'include_granted_scopes',
@@ -81,7 +82,7 @@ class AbstractFactory implements AbstractFactoryInterface
         //Get class of Google Client - ApiGoogleClient as default
         $requestedClassName = $this->getClass($smConfig, $requestedName);
         //Get config from Service Manager config
-        $clientConfigFromSmConfig = $googleClientSmConfig[static::KEY_CONFIG] ? : [];
+        $clientConfigFromSmConfig = $googleClientSmConfig[static::KEY_CONFIG] ?: [];
         $arrayDiff = array_diff(array_keys($clientConfigFromSmConfig), static::GOOGLE_CLIENT_CONFIG_KEYS);
         if (count($arrayDiff) != 0) {
             throw new ApiException('Wrong key in Google Client config: ' . array_shift($arrayDiff));
@@ -91,7 +92,7 @@ class AbstractFactory implements AbstractFactoryInterface
         $client = new $requestedClassName($clientConfigFromSmConfig, $requestedName);
 
         //Get and set SCOPES
-        $scopes = $googleClientSmConfig[static::KEY_SCOPES]? : [];
+        $scopes = $googleClientSmConfig[static::KEY_SCOPES] ?: [];
         $client->setScopes($scopes);
 
         return $client;
@@ -109,10 +110,10 @@ class AbstractFactory implements AbstractFactoryInterface
     {
         $googleClientSmConfig = $smConfig[self::KEY_GOOGLE_API_CLIENTS][$requestedName];
         $requestedClassName = isset($googleClientSmConfig[AbstractFactoryAbstract::KEY_CLASS]) ?
-                $googleClientSmConfig[AbstractFactoryAbstract::KEY_CLASS] :
-                ApiGoogleClient::class;
-        if (!is_a($requestedClassName, ApiGoogleClient::class, true)) {
-            throw new ApiException("Class $requestedClassName is not instance of " . ApiGoogleClient::class);
+            $googleClientSmConfig[AbstractFactoryAbstract::KEY_CLASS] :
+            static::DEFAULT_CLASS;
+        if (!is_a($requestedClassName, static::DEFAULT_CLASS, true)) {
+            throw new ApiException("Class $requestedClassName is not instance of " . static::DEFAULT_CLASS);
         }
         return $requestedClassName;
     }
@@ -128,6 +129,7 @@ class AbstractFactory implements AbstractFactoryInterface
         $smConfig = $container->get('config');
         if (isset($smConfig[self::KEY_GOOGLE_API_CLIENTS])) {
             $googleCliClientsSmConfig = $smConfig[self::KEY_GOOGLE_API_CLIENTS];
+            $allClasses = [];
             foreach ($googleCliClientsSmConfig as $clientName => $value) {
                 $allClasses[$clientName] = $this->getClass($smConfig, $clientName);
             }
