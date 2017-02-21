@@ -82,7 +82,7 @@ class AbstractFactory implements AbstractFactoryInterface
         //Get class of Google Client - ApiGoogleClient as default
         $requestedClassName = $this->getClass($smConfig, $requestedName);
         //Get config from Service Manager config
-        $clientConfigFromSmConfig = $googleClientSmConfig[static::KEY_CONFIG] ?: [];
+        $clientConfigFromSmConfig = isset($googleClientSmConfig[static::KEY_CONFIG]) ? $googleClientSmConfig[static::KEY_CONFIG] : [];
         $arrayDiff = array_diff(array_keys($clientConfigFromSmConfig), static::GOOGLE_CLIENT_CONFIG_KEYS);
         if (count($arrayDiff) != 0) {
             throw new ApiException('Wrong key in Google Client config: ' . array_shift($arrayDiff));
