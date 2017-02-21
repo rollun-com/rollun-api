@@ -9,7 +9,7 @@
 
 namespace rollun\api\Action;
 
-use
+use Zend\Diactoros\Response\HtmlResponse;
 
 class Cron implements MiddlewareInterface
 {

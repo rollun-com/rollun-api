@@ -36,6 +36,8 @@ class AbstractFactory implements AbstractFactoryInterface
 {
 
     const DEFAULT_CLASS = ApiGoogleClient::class;
+    //
+    const KEY_CLASS = AbstractFactoryAbstract::KEY_CLASS;
     const KEY_GOOGLE_API_CLIENTS = 'GOOGLE_API_CLIENTS';
     const KEY_SCOPES = 'SCOPES';
     const KEY_CONFIG = 'CONFIG';
@@ -82,7 +84,7 @@ class AbstractFactory implements AbstractFactoryInterface
         //Get class of Google Client - ApiGoogleClient as default
         $requestedClassName = $this->getClass($smConfig, $requestedName);
         //Get config from Service Manager config
-        $clientConfigFromSmConfig = $googleClientSmConfig[static::KEY_CONFIG] ?: [];
+        $clientConfigFromSmConfig = $googleClientSmConfig[static::KEY_CONFIG] ? : [];
         $arrayDiff = array_diff(array_keys($clientConfigFromSmConfig), static::GOOGLE_CLIENT_CONFIG_KEYS);
         if (count($arrayDiff) != 0) {
             throw new ApiException('Wrong key in Google Client config: ' . array_shift($arrayDiff));
@@ -92,7 +94,7 @@ class AbstractFactory implements AbstractFactoryInterface
         $client = new $requestedClassName($clientConfigFromSmConfig, $requestedName);
 
         //Get and set SCOPES
-        $scopes = $googleClientSmConfig[static::KEY_SCOPES] ?: [];
+        $scopes = $googleClientSmConfig[static::KEY_SCOPES] ? : [];
         $client->setScopes($scopes);
 
         return $client;
@@ -110,8 +112,8 @@ class AbstractFactory implements AbstractFactoryInterface
     {
         $googleClientSmConfig = $smConfig[self::KEY_GOOGLE_API_CLIENTS][$requestedName];
         $requestedClassName = isset($googleClientSmConfig[AbstractFactoryAbstract::KEY_CLASS]) ?
-            $googleClientSmConfig[AbstractFactoryAbstract::KEY_CLASS] :
-            static::DEFAULT_CLASS;
+                $googleClientSmConfig[static::KEY_CLASS] :
+                static::DEFAULT_CLASS;
         if (!is_a($requestedClassName, static::DEFAULT_CLASS, true)) {
             throw new ApiException("Class $requestedClassName is not instance of " . static::DEFAULT_CLASS);
         }

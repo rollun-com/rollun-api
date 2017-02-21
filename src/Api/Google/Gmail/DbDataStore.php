@@ -1,6 +1,6 @@
 <?php
 
-namespace rollun\api\Api\Gmail\DataStore;
+namespace rollun\api\Api\Gmail;
 
 use rollun\datastore\DataStore\DbTable;
 use Zend\Db\TableGateway\TableGateway;
@@ -8,10 +8,11 @@ use Zend\Db\Adapter\AdapterInterface;
 use zaboy\res\Di\InsideConstruct;
 use rollun\datastore\TableGateway\TableManagerMysql as TableManager;
 
-class Emails extends DbTable
+class DbDataStore extends DbTable
 {
 
-    const DB_ADAPTER = 'emailsDbAdapter';
+    const DEFAULT_TABLE_NAME = 'gmails';
+    const DB_ADAPTER = 'gmailsDbAdapter';
     //
     const MESSAGE_ID = 'id';
     const SUBJECT = 'subject';
@@ -23,19 +24,7 @@ class Emails extends DbTable
     const STATUS_IS_PARSED = 'PARSED';
     const STATUS_IS_NOT_PARSED = 'NOT PARSED';
 
-    public static function install($tableName)
-    {
-        $tableManager = new TableManager($this->dbTable->adapter);
-        $tableConfig = $this->getTableConfig();
-        $tableManager->createTable($tableName, $tableConfig);
-    }
-
-    public static function getDbAdapterServiceName()
-    {
-        return static::DB_ADAPTER;
-    }
-
-    protected function getTableConfig()
+    public static function getTableConfig()
     {
         return [
             static::MESSAGE_ID => [
