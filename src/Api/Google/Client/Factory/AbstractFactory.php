@@ -92,7 +92,7 @@ class AbstractFactory implements AbstractFactoryInterface
         $client = new $requestedClassName($clientConfigFromSmConfig, $requestedName);
 
         //Get and set SCOPES
-        $scopes = $googleClientSmConfig[static::KEY_SCOPES] ?: [];
+        $scopes = isset($googleClientSmConfig[static::KEY_SCOPES]) ? $googleClientSmConfig[static::KEY_SCOPES] : [];
         $client->setScopes($scopes);
 
         return $client;
