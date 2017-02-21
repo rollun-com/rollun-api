@@ -10,12 +10,13 @@ namespace rollun\api\Api\Google\Client;
 
 use rollun\api\Api\Google\Client;
 use rollun\api\ApiException;
+use rollun\dic\InsideConstruct;
 use Zend\Diactoros\Response\RedirectResponse;
 use Zend\Session\Container as SessionContainer;
 use Zend\Session\SessionManager;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
-class Web extends ClientAbstract
+class Web extends Client
 {
     const KEY_CREDENTIAL = 'credential';
 
@@ -33,29 +34,25 @@ class Web extends ClientAbstract
     /** @var  SessionContainer */
     protected $sessionContainer;
 
-    public function __construct(array $config, SessionContainer $sessionContainer)
+    public function __construct(array $config, $clientName, SessionContainer $sessionContainer = null)
     {
-        $this->sessionContainer = $sessionContainer;
-        parent::__construct($config);
-        try {
-            $accessToken = $this->loadCredential();
-            if ($this->isAccessTokenContained($accessToken)) {
-                $this->setAccessToken($accessToken);
-                $this->refreshAccessToken();
-            }
-        } catch (ApiException $apiException) {}
+        InsideConstruct::setConstructParams(['sessionContainer' => 'WebSessionContainer']);
+        if(!isset($this->sessionContainer)) {
+            throw new ApiException("sessionContainer not set!");
+        }
+        parent::__construct($config, $clientName);
     }
 
     /**
      * load saved credential
      */
-    public function loadCredential()
+    protected function loadCredential()
     {
         if (isset($this->sessionContainer->{static::KEY_CREDENTIAL})) {
             $this->setAccessToken($this->sessionContainer->{static::KEY_CREDENTIAL});
-        } else {
-            throw new ApiException("Credential not saved.");
+            return $this->sessionContainer->{static::KEY_CREDENTIAL};
         }
+        return null;
     }
 
     public function refreshAccessToken()
@@ -81,7 +78,7 @@ class Web extends ClientAbstract
      * save credential
      * @return void
      */
-    public function saveCredential()
+    protected function saveCredential()
     {
         $this->sessionContainer->{static::KEY_CREDENTIAL} = $this->getAccessToken();
     }
