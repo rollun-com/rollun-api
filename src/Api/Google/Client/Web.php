@@ -20,6 +20,8 @@ class Web extends Client
 {
     const KEY_CREDENTIAL = 'credential';
 
+    const KEY_CODE = 'code';
+
     /** state is crypted string  */
     const KEY_STATE = 'state';
 
@@ -55,6 +57,9 @@ class Web extends Client
         return null;
     }
 
+    /**
+     * @return bool
+     */
     public function refreshAccessToken()
     {
         if (!is_null($this->getAccessToken()) && $this->isAccessTokenExpired()) {
@@ -115,6 +120,10 @@ class Web extends Client
         return null;
     }
 
+    /**
+     * @param $authCode
+     * @return bool
+     */
     public function authByCode($authCode)
     {
         if (isset($authCode)) {
@@ -133,6 +142,10 @@ class Web extends Client
         return $this->sessionContainer->{static::KEY_STATE};
     }
 
+    /**
+     * @param null $token
+     * @return bool
+     */
     public function revokeToken($token = null)
     {
         unset($this->sessionContainer->{static::KEY_CREDENTIAL});
