@@ -7,7 +7,9 @@
  * Time: 18:00
  */
 use rollun\api\Api\Google\Client\Factory\AbstractFactory as ApiGoogleClientAbstractFactory;
-use rollun\api\Api\Gmail\DbDataStore as GmailDbDataStore;
+use rollun\datastore\AbstractFactoryAbstract;
+use rollun\api\Api\Google\Gmail\DbDataStore as GmailDbDataStore;
+use rollun\api\Api\Google\Client\Cli as ApiGoogleClientCli;
 
 return [
     ApiGoogleClientAbstractFactory::KEY_GOOGLE_API_CLIENTS => [
@@ -27,10 +29,10 @@ return [
     ],
     'services' => [
         'abstract_factories' => [
-            ApiGoogleClientFactoryAbstractFactory::class,
+            ApiGoogleClientAbstractFactory::class,
         ],
         'aliases' => [
-            GmailDbDataStore::DB_ADAPTER => 'db',
+            GmailDbDataStore::DB_ADAPTER => 'db', //gmailsDbAdapter => 'db'
         ],
     ],
 ];

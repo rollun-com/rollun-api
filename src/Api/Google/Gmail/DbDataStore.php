@@ -1,12 +1,10 @@
 <?php
 
-namespace rollun\api\Api\Gmail;
+namespace rollun\api\Api\Google\Gmail;
 
 use rollun\datastore\DataStore\DbTable;
+use rollun\dic\InsideConstruct;
 use Zend\Db\TableGateway\TableGateway;
-use Zend\Db\Adapter\AdapterInterface;
-use zaboy\res\Di\InsideConstruct;
-use rollun\datastore\TableGateway\TableManagerMysql as TableManager;
 
 class DbDataStore extends DbTable
 {
@@ -20,9 +18,20 @@ class DbDataStore extends DbTable
     const FROM = 'from';
     const BODY_HTML = 'body_html';
     const BODY_TXT = 'body_txt';
+    const HEADERS = 'headers';
+
     //
-    const STATUS_IS_PARSED = 'PARSED';
-    const STATUS_IS_NOT_PARSED = 'NOT PARSED';
+//    const STATUS_IS_PARSED = 'PARSED';
+//    const STATUS_IS_NOT_PARSED = 'NOT PARSED';
+
+    public function __construct($gmailsDbAdapter = null)
+    {
+        //set $this->emailDbAdapter as $cotainer->get('emailDbAdapter');
+        $params = InsideConstruct::setConstructParams();
+
+        $dbTable = new TableGateway(static::DEFAULT_TABLE_NAME, $params['gmailsDbAdapter']);
+        parent::__construct($dbTable);
+    }
 
     public static function getTableConfig()
     {
@@ -41,16 +50,16 @@ class DbDataStore extends DbTable
                     'nullable' => true
                 ]
             ],
-            static::SENDING_TIME => [
-                'field_type' => 'Integer',
-                'field_params' => [
-                    'nullable' => true
-                ]
-            ],
             static::FROM => [
                 'field_type' => 'Varchar',
                 'field_params' => [
-                    'length' => 256,
+                    'length' => 1024,
+                    'nullable' => false
+                ]
+            ],
+            static::SENDING_TIME => [
+                'field_type' => 'Integer',
+                'field_params' => [
                     'nullable' => true
                 ]
             ],
@@ -62,6 +71,13 @@ class DbDataStore extends DbTable
                 ]
             ],
             static::BODY_TXT => [
+                'field_type' => 'Varchar',
+                'field_params' => [
+                    'length' => 65000,
+                    'nullable' => true
+                ]
+            ],
+            static::HEADERS => [
                 'field_type' => 'Varchar',
                 'field_params' => [
                     'length' => 65000,

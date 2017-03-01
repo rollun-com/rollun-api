@@ -1,28 +1,21 @@
 <?php
 
-namespace zaboy\utils\Api\Gmail;
+namespace rollun\api\Api\Google\Gmail;
 
-use zaboy\utils\Api\Gmail\DataStore\Emails as DataStoreEmails;
+use rollun\api\Api\Google\Gmail\DbDataStore as DataStoreEmails;
 use Zend\Filter\Word\UnderscoreToCamelCase as UnderscoreToCamelCaseFilter;
 use Zend\Filter\Word\CamelCaseToUnderscore as CamelCaseToUnderscoreFilter;
-use zaboy\utils\Api\Gmail\MessagesList;
+use rollun\api\Api\Google\Gmail\MessagesList;
 use \Google_Service_Gmail_Message as GmailMessage;
-use zaboy\utils\Api\GoogleClient;
-use zaboy\res\Di\InsideConstruct;
-use rollun\api\Api\Google\GoogleClientAbstract;
+use rollun\dic\InsideConstruct;
+use rollun\utils\Json\Serializer as JsonSerializer;
+use rollun\api\Api\Google\Client\ClientAbstract as GoogleClientAbstract;
 
 /**
  *
- * Add to config:
- * <code>
- * 'services' => [
- *       'factories' => [
- *           GoogleClient::class => GoogleClientFactory::class,
- *       ],
- *       'aliases' => [
- *           'gmailGoogleClient' => GoogleClient::class,
- * ]
- * </code>
+ *
+ * Use rollun\api\Api\Google\Client\Cli for child of rollun\api\Api\Google\Client\ClientAbstract
+ * for $gmailGoogleClient. Use rollun\api\Api\Google\Client\Factory\AbstractFactory fo create it.
  *
  * time UTC
  * @see http://stackoverflow.com/questions/25427670/how-to-use-gmail-api-query-filter-for-datetime?noredirect=1&lq=1
@@ -33,7 +26,7 @@ class Message
 
     /**
      *
-     * @var GoogleClient
+     * @var ClientAbstract
      */
     protected $gmailGoogleClient;
 
@@ -48,17 +41,21 @@ class Message
         DataStoreEmails::SENDING_TIME,
         DataStoreEmails::FROM,
         DataStoreEmails::BODY_HTML,
-        DataStoreEmails::BODY_TXT
+        DataStoreEmails::BODY_TXT,
+        DataStoreEmails::HEADERS
     ];
 
     public function __construct($messageId, GoogleClientAbstract $gmailGoogleClient = null)
     {
         //set $this->gmailGoogleClient as $cotainer->get('gmailGoogleClient');
-        InsideConstruct::initServices();
+        InsideConstruct::setConstructParams();
 
-        $dataStore = new DataStoreEmails;
+        $dataStore = new DataStoreEmails();
         $this->messageData = $dataStore->read($messageId);
         if (isset($this->messageData)) {
+            $jsonStringHeaders = $this->messageData[DataStoreEmails::HEADERS];
+            $arrayHeaders = (array) JsonSerializer::jsonUnserialize($jsonStringHeaders);
+            $this->messageData[DataStoreEmails::HEADERS] = $arrayHeaders;
             return;
         }
 
@@ -70,7 +67,11 @@ class Message
             $value = call_user_func([$this, 'getGmail' . $camelCaseFildName], $gmailMessage);
             call_user_func([$this, 'set' . $camelCaseFildName], $value);
         }
-        $dataStore->create($this->messageData, true);
+        $storedMessage = $this->messageData;
+        $arrayHeaders = $this->messageData[DataStoreEmails::HEADERS];
+        $jsonStringHeaders = JsonSerializer::jsonSerialize($arrayHeaders);
+        $storedMessage[DataStoreEmails::HEADERS] = $jsonStringHeaders;
+        $dataStore->create($storedMessage, true);
     }
 
     /**
@@ -120,7 +121,7 @@ class Message
 
     protected function getGmailHeader(GmailMessage $gmailMessage, $name)
     {
-        $headers = $this->getGmailPayload($gmailMessage)->getHeaders();
+        $headers = $this->getGmailHeaders($gmailMessage);
         foreach ($headers as $header) {
             if ($header['name'] == $name) {
                 return $header['value'];

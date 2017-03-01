@@ -19,6 +19,7 @@ use rollun\api\Api\Gmail\GmailClient;
 use rollun\api\Api\Google\Gmail\GoogleServiceGmail;
 use rollun\api\Api\Google\Gmail\MessagesList;
 use rollun\api\Api\Google\Client\Cli as ApiGoogleClientCli;
+use rollun\api\Api\Google\Gmail\Message as GmailMessage;
 
 class HelloAction implements MiddlewareInterface
 {
@@ -80,8 +81,11 @@ class HelloAction implements MiddlewareInterface
         }
 
 //        $str = $messagesList->getMessagesIds();
-        $str = $messagesList->getGmailMessages('newer_than:230d'); //'newer_than:130d'
-        return new HtmlResponse($this->templateRenderer->render('app::home-page', ['str' => print_r($str[0], true)]));
+        //$messages = $messagesList->getGmailMessages('newer_than:230d'); //'newer_than:130d'
+        //return new HtmlResponse($this->templateRenderer->render('app::home-page', ['str' => print_r($messages[0], true)]));
+        $message = new GmailMessage('1598794b3c840513'); //new GmailMessage($messages[0]->getId());
+        $str = $message->getBodyHtml();
+        return new HtmlResponse($this->templateRenderer->render('app::gmail_message', ['str' => $str]));
     }
 
 }
