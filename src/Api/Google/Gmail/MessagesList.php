@@ -5,7 +5,7 @@ namespace rollun\api\Api\Google\Gmail;
 use Google_Service_Gmail_MessagePart;
 use rollun\api\Api\Google\Gmail\GoogleServiceGmail;
 use \Google_Service_Gmail_Message as GmailMessage;
-use rollun\api\Api\Google\GoogleClientAbstract;
+use rollun\api\Api\Google\Client\ClientAbstract;
 
 /**
  *
@@ -43,7 +43,7 @@ class MessagesList
      */
     public $messagesList = null;
 
-    public function __construct(GoogleClientAbstract $gmailGoogleClient)
+    public function __construct(ClientAbstract $gmailGoogleClient)
     {
         $this->gmailGoogleClient = $gmailGoogleClient;
     }

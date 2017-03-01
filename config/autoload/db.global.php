@@ -1,12 +1,13 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: root
  * Date: 13.01.17
  * Time: 18:00
  */
-
 use Zend\Db\Adapter\AdapterAbstractServiceFactory;
+
 return [
     'db' => [
         'adapters' => [
@@ -27,6 +28,6 @@ return [
     'services' => [
         'abstract_factories' => [
             AdapterAbstractServiceFactory::class,
-        ]
+        ],
     ],
 ];
