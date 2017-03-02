@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "a5e21c7502737144ad8562add6b76c02",
-    "content-hash": "834f31cde326da655ca84cdedfb15731",
+    "hash": "4e38a8ff827c01aeb05d93f336c0c3fa",
+    "content-hash": "26c6d9252c7c270cc2f0add36190c784",
     "packages": [
         {
             "name": "composer/ca-bundle",
@@ -915,16 +915,16 @@
         },
         {
             "name": "mindplay/jsonfreeze",
-            "version": "0.3.3.x-dev",
+            "version": "0.3.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mindplay-dk/jsonfreeze.git",
-                "reference": "06cb8564fd8209a24d454c097ab7e6298cc92841"
+                "reference": "b7c234f24baa2acebdf6aa360559a21d23d1696e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mindplay-dk/jsonfreeze/zipball/06cb8564fd8209a24d454c097ab7e6298cc92841",
-                "reference": "06cb8564fd8209a24d454c097ab7e6298cc92841",
+                "url": "https://api.github.com/repos/mindplay-dk/jsonfreeze/zipball/b7c234f24baa2acebdf6aa360559a21d23d1696e",
+                "reference": "b7c234f24baa2acebdf6aa360559a21d23d1696e",
                 "shasum": ""
             },
             "require": {
@@ -950,7 +950,7 @@
                 }
             ],
             "description": "JSON Serialization library",
-            "time": "2016-09-14 20:57:29"
+            "time": "2017-01-16 17:41:36"
         },
         {
             "name": "monolog/monolog",
@@ -1629,16 +1629,16 @@
         },
         {
             "name": "phpunit/php-token-stream",
-            "version": "1.4.10",
+            "version": "1.4.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-token-stream.git",
-                "reference": "284fb0679dd25fb5ffb56dad92c72860c0a22f1b"
+                "reference": "e03f8f67534427a787e21a385a67ec3ca6978ea7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-token-stream/zipball/284fb0679dd25fb5ffb56dad92c72860c0a22f1b",
-                "reference": "284fb0679dd25fb5ffb56dad92c72860c0a22f1b",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-token-stream/zipball/e03f8f67534427a787e21a385a67ec3ca6978ea7",
+                "reference": "e03f8f67534427a787e21a385a67ec3ca6978ea7",
                 "shasum": ""
             },
             "require": {
@@ -1674,7 +1674,7 @@
             "keywords": [
                 "tokenizer"
             ],
-            "time": "2017-02-23 06:14:45"
+            "time": "2017-02-27 10:12:30"
         },
         {
             "name": "phpunit/phpunit",
@@ -2045,12 +2045,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "411283676149d8b8e8ee53ec621d84099e548090"
+                "reference": "07acc8c9c8d55bd2f1f161acc5aa164b571e4e8e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/411283676149d8b8e8ee53ec621d84099e548090",
-                "reference": "411283676149d8b8e8ee53ec621d84099e548090",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/07acc8c9c8d55bd2f1f161acc5aa164b571e4e8e",
+                "reference": "07acc8c9c8d55bd2f1f161acc5aa164b571e4e8e",
                 "shasum": ""
             },
             "conflict": {
@@ -2125,7 +2125,7 @@
                 "thelia/backoffice-default-template": ">=2.1,<2.1.2",
                 "thelia/thelia": ">=2.1.0-beta1,<2.1.3|>=2.1,<2.1.2",
                 "twig/twig": "<1.20",
-                "typo3/cms": ">=6.2,<6.2.30|>=8,<8.4.1|>=7,<7.6.13",
+                "typo3/cms": ">=6.2,<6.2.30|>=8,<8.6.1|>=7,<7.6.16",
                 "typo3/flow": ">=2.3,<2.3.16|>=3,<3.0.10|>=3.1,<3.1.7|>=3.2,<3.2.7|>=3.3,<3.3.5|>=1,<1.0.4|>=1.1,<1.1.1|>=2,<2.0.1",
                 "typo3/neos": ">=1.1,<1.1.3|>=1.2,<1.2.13|>=2,<2.0.4",
                 "willdurand/js-translation-bundle": "<2.1.1",
@@ -2171,20 +2171,20 @@
                 }
             ],
             "description": "Prevents installation of composer packages with known security vulnerabilities: no API, simply require it",
-            "time": "2017-02-08 16:26:47"
+            "time": "2017-02-28 15:07:27"
         },
         {
             "name": "rollun-com/rollun-actionrender",
-            "version": "2.2.1",
+            "version": "2.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/rollun-com/rollun-actionrender.git",
-                "reference": "28abbe0adc5c511f45e426ec1a0dd253eb24b35d"
+                "reference": "d47714c900ab1dd9bcbd52d45a6ae6a6a0443d75"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/rollun-com/rollun-actionrender/zipball/28abbe0adc5c511f45e426ec1a0dd253eb24b35d",
-                "reference": "28abbe0adc5c511f45e426ec1a0dd253eb24b35d",
+                "url": "https://api.github.com/repos/rollun-com/rollun-actionrender/zipball/d47714c900ab1dd9bcbd52d45a6ae6a6a0443d75",
+                "reference": "d47714c900ab1dd9bcbd52d45a6ae6a6a0443d75",
                 "shasum": ""
             },
             "require": {
@@ -2227,20 +2227,20 @@
                 }
             ],
             "description": "Skeleton for app or lib",
-            "time": "2017-02-24 13:20:34"
+            "time": "2017-03-01 12:35:46"
         },
         {
             "name": "rollun-com/rollun-datastore",
-            "version": "2.1.7",
+            "version": "2.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/rollun-com/rollun-datastore.git",
-                "reference": "876124e897f4de84bbd2dbf1fcd801c706af7a02"
+                "reference": "1e2ef550f0628e05cd4a0ed1a0aebbdc515596f7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/rollun-com/rollun-datastore/zipball/876124e897f4de84bbd2dbf1fcd801c706af7a02",
-                "reference": "876124e897f4de84bbd2dbf1fcd801c706af7a02",
+                "url": "https://api.github.com/repos/rollun-com/rollun-datastore/zipball/1e2ef550f0628e05cd4a0ed1a0aebbdc515596f7",
+                "reference": "1e2ef550f0628e05cd4a0ed1a0aebbdc515596f7",
                 "shasum": ""
             },
             "require": {
@@ -2290,7 +2290,7 @@
                 }
             ],
             "description": "Datastore",
-            "time": "2017-02-21 09:06:08"
+            "time": "2017-02-27 14:22:54"
         },
         {
             "name": "rollun-com/rollun-dic",
@@ -2462,20 +2462,20 @@
         },
         {
             "name": "rollun-com/rollun-utils",
-            "version": "1.0.4",
+            "version": "1.0.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/rollun-com/rollun-utils.git",
-                "reference": "4440686c8feff69742ee7a61a1b79d59cad8d5e3"
+                "reference": "01a22482824e23b72ef9aa8481466d24cef0159f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/rollun-com/rollun-utils/zipball/4440686c8feff69742ee7a61a1b79d59cad8d5e3",
-                "reference": "4440686c8feff69742ee7a61a1b79d59cad8d5e3",
+                "url": "https://api.github.com/repos/rollun-com/rollun-utils/zipball/01a22482824e23b72ef9aa8481466d24cef0159f",
+                "reference": "01a22482824e23b72ef9aa8481466d24cef0159f",
                 "shasum": ""
             },
             "require": {
-                "mindplay/jsonfreeze": "0.3.3.x-dev",
+                "mindplay/jsonfreeze": "0.3.3",
                 "opis/closure": "^2.1.0",
                 "php": "^5.6 || ^7.0",
                 "psr/log": "^1.0",
@@ -2520,7 +2520,7 @@
                 "php",
                 "rest"
             ],
-            "time": "2017-02-01 13:35:47"
+            "time": "2017-02-18 08:29:27"
         },
         {
             "name": "sebastian/comparator",
@@ -3415,29 +3415,30 @@
         },
         {
             "name": "twig/twig",
-            "version": "v1.31.0",
+            "version": "v1.32.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/twigphp/Twig.git",
-                "reference": "ddc9e3e20ee9c0b6908f401ac8353635b750eca7"
+                "reference": "9935b662e24d6e634da88901ab534cc12e8c728f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twigphp/Twig/zipball/ddc9e3e20ee9c0b6908f401ac8353635b750eca7",
-                "reference": "ddc9e3e20ee9c0b6908f401ac8353635b750eca7",
+                "url": "https://api.github.com/repos/twigphp/Twig/zipball/9935b662e24d6e634da88901ab534cc12e8c728f",
+                "reference": "9935b662e24d6e634da88901ab534cc12e8c728f",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.2.7"
             },
             "require-dev": {
+                "psr/container": "^1.0",
                 "symfony/debug": "~2.7",
                 "symfony/phpunit-bridge": "~3.2"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.31-dev"
+                    "dev-master": "1.32-dev"
                 }
             },
             "autoload": {
@@ -3472,7 +3473,7 @@
             "keywords": [
                 "templating"
             ],
-            "time": "2017-01-11 19:36:15"
+            "time": "2017-02-27 00:07:03"
         },
         {
             "name": "webmozart/assert",
@@ -4318,25 +4319,27 @@
         },
         {
             "name": "zendframework/zend-servicemanager",
-            "version": "3.2.1",
+            "version": "3.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zendframework/zend-servicemanager.git",
-                "reference": "fe608d85457449889750fc6bf8d0859af59f56ec"
+                "reference": "c3036efb81f71bfa36cc9962ee5d4474f36581d0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/zend-servicemanager/zipball/fe608d85457449889750fc6bf8d0859af59f56ec",
-                "reference": "fe608d85457449889750fc6bf8d0859af59f56ec",
+                "url": "https://api.github.com/repos/zendframework/zend-servicemanager/zipball/c3036efb81f71bfa36cc9962ee5d4474f36581d0",
+                "reference": "c3036efb81f71bfa36cc9962ee5d4474f36581d0",
                 "shasum": ""
             },
             "require": {
-                "container-interop/container-interop": "~1.0",
+                "container-interop/container-interop": "^1.2",
                 "php": "^5.6 || ^7.0",
+                "psr/container": "^1.0",
                 "zendframework/zend-stdlib": "^3.1"
             },
             "provide": {
-                "container-interop/container-interop-implementation": "^1.1"
+                "container-interop/container-interop-implementation": "^1.2",
+                "psr/container-implementation": "^1.0"
             },
             "require-dev": {
                 "mikey179/vfsstream": "^1.6",
@@ -4356,8 +4359,8 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.2-dev",
-                    "dev-develop": "3.3-dev"
+                    "dev-master": "3.3-dev",
+                    "dev-develop": "3.4-dev"
                 }
             },
             "autoload": {
@@ -4375,7 +4378,7 @@
                 "servicemanager",
                 "zf"
             ],
-            "time": "2017-02-15 15:29:48"
+            "time": "2017-03-01 22:08:02"
         },
         {
             "name": "zendframework/zend-session",
@@ -4723,16 +4726,16 @@
         },
         {
             "name": "squizlabs/php_codesniffer",
-            "version": "2.8.0",
+            "version": "2.8.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/squizlabs/PHP_CodeSniffer.git",
-                "reference": "86dd55a522238211f9f3631e3361703578941d9a"
+                "reference": "d7cf0d894e8aa4c73712ee4a331cc1eaa37cdc7d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/86dd55a522238211f9f3631e3361703578941d9a",
-                "reference": "86dd55a522238211f9f3631e3361703578941d9a",
+                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/d7cf0d894e8aa4c73712ee4a331cc1eaa37cdc7d",
+                "reference": "d7cf0d894e8aa4c73712ee4a331cc1eaa37cdc7d",
                 "shasum": ""
             },
             "require": {
@@ -4797,13 +4800,12 @@
                 "phpcs",
                 "standards"
             ],
-            "time": "2017-02-02 03:30:00"
+            "time": "2017-03-01 22:17:45"
         }
     ],
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "mindplay/jsonfreeze": 20,
         "roave/security-advisories": 20
     },
     "prefer-stable": false,

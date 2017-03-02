@@ -16,7 +16,7 @@
     },
     "require": {
         "php": "^5.6 || ^7.0",
-        "mindplay/jsonfreeze": "0.3.3.x-dev",
+        "mindplay/jsonfreeze": "0.3.3",
         "roave/security-advisories": "dev-master",
         "zendframework/zend-expressive": "^1.0",
         "zendframework/zend-expressive-helpers": "^2.0",
