@@ -9,13 +9,12 @@
 
 namespace rollun\api\Api\Google\Gmail;
 
-use Zend\Db\Adapter\AdapterInterface;
+use Composer\IO\IOInterface;
+use Interop\Container\ContainerInterface;
 use rollun\datastore\TableGateway\TableManagerMysql as TableManager;
 use rollun\dic\InsideConstruct;
-use rollun\api\Api\Google\Gmail\DbDataStore;
 use rollun\installer\Install\InstallerAbstract;
-use Interop\Container\ContainerInterface;
-use Composer\IO\IOInterface;
+use Zend\Db\Adapter\AdapterInterface;
 
 /**
  * Installer class
@@ -40,10 +39,13 @@ class DbDataStoreInstaller extends InstallerAbstract
 
     public function install()
     {
-        $tableManager = new TableManager($this->gmailsDbAdapter);
-        $tableConfig = DbDataStore::getTableConfig();
-        $tableName = DbDataStore::DEFAULT_TABLE_NAME;
-        $tableManager->createTable($tableName, $tableConfig);
+        if (isset($this->gmailsDbAdapter)) {
+            /** @noinspection PhpParamsInspection */
+            $tableManager = new TableManager($this->gmailsDbAdapter);
+            $tableConfig = DbDataStore::getTableConfig();
+            $tableName = DbDataStore::DEFAULT_TABLE_NAME;
+            $tableManager->createTable($tableName, $tableConfig);
+        }
     }
 
     public function uninstall()
