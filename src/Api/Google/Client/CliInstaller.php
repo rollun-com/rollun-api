@@ -51,7 +51,6 @@ class CliInstaller extends InstallerAbstract implements InstallerInterface
             }
             $this->io->writeError('AccessToken was saved for Cli Client with name: ' . $cliClientName);
         }
-        exit;
     }
 
     public function uninstall()
