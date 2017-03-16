@@ -27,7 +27,7 @@ return [
             ],
         ]
     ],
-    'services' => [
+    'dependencies' => [
         'abstract_factories' => [
             ApiGoogleClientAbstractFactory::class,
         ],
