@@ -2,10 +2,9 @@
 
 namespace rollun\api\Api\Gmail\DataStore;
 
-use zaboy\rest\TableGateway\TableManagerMysql as TableManager;
+use rollun\dic\InsideConstruct;
 use Zend\Db\TableGateway\TableGateway;
 use Zend\Db\Adapter\AdapterInterface;
-use zaboy\res\Di\InsideConstruct;
 
 class EmailsTableGateway extends TableGateway
 {
