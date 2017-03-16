@@ -2,6 +2,7 @@
 
 namespace rollun\api\Api\Gmail\DataStore;
 
+use rollun\datastore\TableGateway\TableManagerMysql as TableManager;
 use rollun\dic\InsideConstruct;
 use Zend\Db\TableGateway\TableGateway;
 use Zend\Db\Adapter\AdapterInterface;
