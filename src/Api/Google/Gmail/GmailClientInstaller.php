@@ -94,14 +94,11 @@ class GmailClientInstaller extends InstallerAbstract
 
     public function isInstall()
     {
-        $this->gmailsDbAdapter = $this->container->get('db');
-
         $config = $this->container->get('config');
         return (
             isset($config[ApiGoogleClientAbstractFactory::KEY_GOOGLE_API_CLIENTS]['gmailGoogleClient']) &&
             isset($config['dependencies']['aliases'][GmailDbDataStore::DB_ADAPTER]) &&
             $this->container->has('gmailGoogleClient')
-
         );
     }
 
