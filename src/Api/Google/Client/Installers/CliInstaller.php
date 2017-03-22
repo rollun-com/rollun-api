@@ -1,6 +1,6 @@
 <?php
 
-namespace rollun\api\Api\Google\Client;
+namespace rollun\api\Api\Google\Client\Installers;
 
 use Exception;
 use rollun\api\Api\Google\Gmail\GmailClientInstaller;
