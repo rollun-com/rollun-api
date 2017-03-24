@@ -36,13 +36,13 @@ class Web extends Client
     /** @var  SessionContainer */
     protected $sessionContainer;
 
-    public function __construct(array $config, $clientName, SessionContainer $sessionContainer = null)
+    public function __construct(array $configGoogle, $clientName, SessionContainer $sessionContainer = null)
     {
         InsideConstruct::setConstructParams(['sessionContainer' => 'WebSessionContainer']);
         if(!isset($this->sessionContainer)) {
             throw new ApiException("sessionContainer not set!");
         }
-        parent::__construct($config, $clientName);
+        parent::__construct($configGoogle, $clientName);
     }
 
     /**
