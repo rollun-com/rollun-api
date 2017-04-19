@@ -9,7 +9,7 @@
 
 namespace rollun\test\skeleton;
 
-class TestEnvTest extends \PHPUnit_Framework_TestCase
+class TestEnvTest extends \PHPUnit\Framework\TestCase
 {
 
     protected $nameEnvVars = [
