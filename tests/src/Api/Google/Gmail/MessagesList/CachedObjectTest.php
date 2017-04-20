@@ -111,24 +111,4 @@ class CachedObjectTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-//
-//    public function test_DataGetSet()
-//    {
-//        $cache = new Cache();
-//        $data = 'testdata1';
-//        $cache->setMessagesListItems('testName', $data);
-//        $this->assertEquals(
-//                $data, $cache->getMessagesListItems('testName')
-//        );
-//    }
-//
-//    public function test_DateGetSet()
-//    {
-//        $cache = new Cache();
-//        $utcDateInSec = 7;
-//        $cache->setMessagesListDate('testName', $utcDateInSec);
-//        $this->assertEquals(
-//                $utcDateInSec, $cache->getMessagesListDate('testName')
-//        );
-//    }
 }

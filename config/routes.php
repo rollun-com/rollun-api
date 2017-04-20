@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Setup routes with a single request method:
  *
@@ -25,7 +26,6 @@
  *     'contact'
  * );
  */
-
 if ($container->has('home-service')) {
     $app->route('/', 'home-service', ['GET'], 'home-page');
 }
@@ -49,4 +49,7 @@ if ($container->has('logoutAR')) {
 }
 if ($container->has('user-page')) {
     $app->route('/user', 'user-page', ['GET', 'POST'], 'user-page');
+}
+if ($container->has('message-list')) {
+    $app->route('/messagelist', 'message-list', ['GET'], 'message-list');
 }

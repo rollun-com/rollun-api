@@ -1,0 +1,14 @@
+NThmOGU2YWQ4M2Q0OTUuMTQ3MzU0NThfMTQ5MjcwNjk4OQ==;error;" message: [Class MessagesList is not instance of rollun\api\Api\Google\Gmail\MessagesList]file: [D:\OpenServer\domains\rollun-api.loc\src\Api\src\Api\Google\Gmail\MessagesListAbstractFactory.php]line: [110]"
+NThmOGU2ZmM3YjY5NTYuMDcyMjQyMjRfMTQ5MjcwNzA2OA==;error;" message: [Class MessagesList is not instance of rollun\api\Api\Google\Gmail\MessagesList]file: [D:\OpenServer\domains\rollun-api.loc\src\Api\src\Api\Google\Gmail\MessagesListAbstractFactory.php]line: [110]"
+NThmOGU3MjgzMzQ0OTUuMTU4ODI3NThfMTQ5MjcwNzExMg==;error;" message: [Class MessagesList is not instance of rollun\api\Api\Google\Gmail\MessagesList]file: [D:\OpenServer\domains\rollun-api.loc\src\Api\src\Api\Google\Gmail\MessagesListAbstractFactory.php]line: [110]"
+NThmOGU3OGUzY2ZlNTIuNTk3ODI2MTBfMTQ5MjcwNzIxNA==;error;" message: [Class MessagesList is not instance of rollun\api\Api\Google\Gmail\MessagesList]file: [D:\OpenServer\domains\rollun-api.loc\src\Api\src\Api\Google\Gmail\MessagesListAbstractFactory.php]line: [110]"
+NThmOGU3ZmNkNmEzNTAuODM0NDY1NjZfMTQ5MjcwNzMyNA==;error;" message: [Class MessagesList is not instance of rollun\api\Api\Google\Gmail\MessagesList]file: [D:\OpenServer\domains\rollun-api.loc\src\Api\src\Api\Google\Gmail\MessagesListAbstractFactory.php]line: [110]"
+NThmOGU4NTNiZGY4ZjEuODc4MDgzODFfMTQ5MjcwNzQxMQ==;error;" message: [Class MessagesList is not instance of rollun\api\Api\Google\Gmail\MessagesList]file: [D:\OpenServer\domains\rollun-api.loc\src\Api\src\Api\Google\Gmail\MessagesListAbstractFactory.php]line: [110]"
+NThmOGU5Mjk4ZGIwNDcuOTE0MTUyMzVfMTQ5MjcwNzYyNQ==;error;" message: [There is not file resources\Api\Google\Cli\client_secret.json
+See docs about client_secret.json
+https://developers.google.com/gmail/api/quickstart/php
+]file: [D:\OpenServer\domains\rollun-api.loc\src\Api\src\Api\Google\Client\ClientAbstract.php]line: [16]"
+NThmOGU5M2IwNGI5YTUuODQzNTIwMzdfMTQ5MjcwNzY0Mw==;error;" message: [There is not file resources\Api\Google\Cli\client_secret.json
+See docs about client_secret.json
+https://developers.google.com/gmail/api/quickstart/php
+]file: [D:\OpenServer\domains\rollun-api.loc\src\Api\src\Api\Google\Client\ClientAbstract.php]line: [16]"
