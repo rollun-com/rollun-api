@@ -120,6 +120,14 @@ class Web extends Client
         return null;
     }
 
+    public function getUserEmail()
+    {
+        $service = new \Google_Service_Oauth2($this);
+        $user = $service->userinfo->get();
+        return $user->email;
+    }
+
+
     /**
      * @param $authCode
      * @return bool
