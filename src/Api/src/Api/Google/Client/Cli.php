@@ -83,10 +83,11 @@ class Cli extends Client
     {
         if (isset($consoleIo)) {
             $this->consoleIo = $consoleIo;
+        } else {
+            $consoleIoFactory = new ConsoleIoFactory;
+            $this->consoleIo = $consoleIoFactory->createConsoleIO();
+            $this->consoleIo = $consoleIo;
         }
-        $consoleIoFactory = new ConsoleIoFactory;
-        $this->consoleIo = $consoleIoFactory->createConsoleIO();
-        $this->consoleIo = $consoleIo;
     }
 
     public function getAuthCode()

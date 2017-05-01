@@ -12,10 +12,14 @@ use Zend\ServiceManager\Factory\AbstractFactoryInterface;
  *
  * return[
  *      'GOOGLE_API_CLIENTS' =>[
- *          "CliClient" =>[
+ *          "clientName" =>[
  *              AbstractFactoryAbstract::KEY_CLASS => GoogleClient::class, //optionaly
- *              'SCOPES' => [ //Must be set:
+ *              'SCOPES' => [
+ *                  //For Cli must be set:
  *                  Google_Service_Gmail::GMAIL_READONLY,
+ *                  //For WebClient must be set:
+ *                  Google_Service_Plus::USERINFO_EMAIL,
+ *                  'openid',
  *                  ...
  *              ],
  *              'CONFIG' =>[
@@ -39,7 +43,8 @@ class AbstractFactory implements AbstractFactoryInterface
     const KEY_GOOGLE_API_CLIENTS = 'GOOGLE_API_CLIENTS';
     const KEY_SCOPES = 'SCOPES';
     const KEY_CONFIG = 'CONFIG';
-    const GOOGLE_CLIENT_CONFIG_KEYS = ['application_name', 'base_path',
+    const GOOGLE_CLIENT_CONFIG_KEYS = [
+        'application_name', 'base_path',
         'client_id', 'client_secret', 'redirect_uri', 'state', 'developer_key',
         'use_application_default_credentials', 'signing_key', 'signing_algorithm',
         'subject', 'hd', 'prompt', 'openid.realm', 'include_granted_scopes',
