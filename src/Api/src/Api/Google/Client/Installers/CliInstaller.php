@@ -11,6 +11,29 @@ use rollun\api\Api\Google\Client\Cli as ApiGoogleClientCli;
 
 /**
  * vendor\bin\InstallerSelfCall.bat "rollun\api\Api\Google\Client\CliInstaller" install
+ *
+ * config:
+ * return[
+ *      'GOOGLE_API_CLIENTS' =>[
+ *          "CliClient" =>[
+ *              AbstractFactoryAbstract::KEY_CLASS => GoogleClient::class, //optionaly
+ *              'SCOPES' => [ //Must be set:
+ *                  Google_Service_Gmail::GMAIL_READONLY,
+ *                  ...
+ *              ],
+ *              'CONFIG' =>[
+ *                  //Must be set for Cli:
+ *                  "login_hint"=>"user@gmail.com", //<<--imortant!!!  will be use as user's Email
+ *                  //optionaly:
+ *                  "application_name"=>"MyApp",
+ *                  "approval_prompt" =>"",
+ *                  ...
+ *              ],
+ *          ],
+ *          "NextCliClient" =>[
+ *      ]
+ * ]
+ *
  */
 class CliInstaller extends InstallerAbstract
 {
@@ -27,7 +50,7 @@ class CliInstaller extends InstallerAbstract
                 continue;
             }
             $try = 0;
-            $cliClient= null;
+            $cliClient = null;
             do {
                 try {
                     /* @var $cliClient ApiGoogleClientCli */
@@ -41,7 +64,7 @@ class CliInstaller extends InstallerAbstract
                 }
             } while ($try < 2 || isset($cliClient));
 
-            if(is_null($cliClient) || !isset($cliClient)) {
+            if (is_null($cliClient) || !isset($cliClient)) {
                 $this->consoleIO->writeError('Can not get ApiGoogleClientCli with name: ' . $cliClientName);
                 continue;
             }
@@ -66,7 +89,6 @@ class CliInstaller extends InstallerAbstract
             $this->consoleIO->writeError('AccessToken was saved for Cli Client with name: ' . $cliClientName);
         }
         return [
-
         ];
     }
 
@@ -118,4 +140,5 @@ class CliInstaller extends InstallerAbstract
             GmailClientInstaller::class
         ];
     }
+
 }

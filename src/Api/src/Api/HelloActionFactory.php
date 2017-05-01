@@ -34,7 +34,7 @@ class HelloActionFactory implements FactoryInterface
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         if ($container->has(TemplateRendererInterface::class)) {
-            return new HelloAction($container->get(TemplateRendererInterface::class), $container->get('gmailGoogleClient'));
+            return new HelloAction($container->get(TemplateRendererInterface::class), $container->get("emails_from_rm_test"));
         }
         //throw new \Exception(TemplateRendererInterface::class . " not fount in container");
     }

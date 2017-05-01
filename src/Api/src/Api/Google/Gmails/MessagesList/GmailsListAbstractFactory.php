@@ -1,41 +1,55 @@
 <?php
 
-namespace rollun\api\Api\Google\Gmail;
+namespace rollun\api\Api\Google\Gmails\MessagesList;
 
 use Interop\Container\ContainerInterface;
 use rollun\datastore\AbstractFactoryAbstract;
 use rollun\api\Api\Google\Client as ApiGoogleClient;
 use rollun\api\ApiException;
 use Zend\ServiceManager\Factory\AbstractFactoryInterface;
-use rollun\api\Api\Google\Gmail\MessagesList;
+use rollun\api\Api\Google\Gmails\MessagesList\GmailsFilteredList;
 use rollun\logger\Exception\LoggedException;
 
 /**
  *
  * return[
- *      'MESSAGES_LIST' =>[
- *          //key is MessagesList name. May contains '/^[a-z0-9_\+\-]*$/Di' - any spaces, @ ... Something like 'emails_from_Bob'
- *          "emails_from_Bob" =>[
- *              MessagesListAbstractFactory::KEY_CLASS => 'rollun\api\Api\Google\Gmail\MessagesList', //optionaly
- *              'GOOGLE_API_CLIENT' => 'CLI_name_at_gmail'//name of service for Api\Google\Client\Factory\AbstractFactory
- *              'OPT_PARAM' =>[
- *                  'maxResults' =>1000,
- *                  'q'=> 'filename:(jpg OR png OR gif)', //'!in:chats' https://support.google.com/mail/answer/7190?hl=en&ref_topic=3394914
- *                  'format' => 'metadata', //'full'
- *                  'includeSpamTrash' =>false,
- *                  'labelIds' =>"UNREAD",// "SENT", "INBOX"]
- *              ],
- *          ],
- *          "NextCliClient" =>[
- *      ]
- * ]
+ *     'GMAILS_LIST' => [
+ *         "emails_from_rm_test" => [
+ *             GmailsListAbstractFactory::KEY_CLASS => GmailsFilteredList::class, //optionaly
+ *             'GOOGLE_API_CLIENT' => 'gmailGoogleClient', //name of service for Api\Google\Client\Factory\AbstractFactory see below
+ *             'OPT_PARAM' => [
+ *                 //'q' => 'filename:(jpg OR png OR gif)', //'!in:chats' https://support.google.com/mail/answer/7190?hl=en&ref_topic=3394914
+ *                 'includeSpamTrash' => true,
+ *             //'labelIds' => "UNREAD", // "SENT", "INBOX"]
+ *             ],
+ *         ],
+ *     ],
+ *     'GOOGLE_API_CLIENTS' => [
+ *         'gmailGoogleClient' => [
+ *             'class' => 'rollun\api\Api\Google\Client\Cli',
+ *             'SCOPES' => [
+ *                 'https://www.googleapis.com/auth/gmail.readonly',
+ *             ],
+ *             'CONFIG' => [
+ *                 'login_hint' => 'test.rocky.gift@gmail.com',
+ *                 'application_name' => 'Gmail Parser',
+ *                 'approval_prompt' => 'auto',
+ *             ],
+ *         ],
+ *     ],
+ *     'dependencies' => [
+ *         'abstract_factories' => [
+ *             GmailsListAbstractFactory::class
+ *         ]
+ *     ]
+ * ];
  *
  */
-class MessagesListAbstractFactory implements AbstractFactoryInterface
+class GmailsListAbstractFactory implements AbstractFactoryInterface
 {
 
-    const DEFAULT_CLASS = MessagesList::class;
-    const KEY = 'MESSAGES_LIST';
+    const DEFAULT_CLASS = GmailsFilteredList::class;
+    const KEY = 'GMAILS_LIST';
     const KEY_CLASS = 'class';
     const KEY_GOOGLE_API_CLIENT = 'GOOGLE_API_CLIENT';
     const KEY_OPT_PARAM = 'OPT_PARAM';
@@ -75,11 +89,6 @@ class MessagesListAbstractFactory implements AbstractFactoryInterface
         //Get class of Google Client - MessagesList as default
         $requestedClassName = $this->getClass($listSmConfig, $requestedName);
         $listName = $requestedName;
-        try {
-            MessagesList::checkName($listName);
-        } catch (Exception $exc) {
-            throw new LoggedException('Wrong name for MessagesList: ' . $listName);
-        }
         if (!isset($listSmConfig[static::KEY_GOOGLE_API_CLIENT]) || !$container->has($listSmConfig[static::KEY_GOOGLE_API_CLIENT])) {
             throw new LoggedException('Ther is not GOOGLE_API_CLIENT for MessagesList: ' . $listName);
         }
@@ -88,7 +97,7 @@ class MessagesListAbstractFactory implements AbstractFactoryInterface
         $optParams = isset($listSmConfig[static::KEY_OPT_PARAM]) ? $listSmConfig[static::KEY_OPT_PARAM] : [];
 
         /* @var $messagesList MessagesList */
-        $messagesList = new $requestedClassName($listName, $googleApiClient, $optParams);
+        $messagesList = new $requestedClassName($googleApiClient, $optParams);
 
         return $messagesList;
     }

@@ -32,8 +32,11 @@ use rollun\utils\Time\UtcTime;
 class MessagesList
 {
 
+    const FROM_CACHE = 0;
+    const FROM_GMAIL = null;
+
     /**
-     * '/^[a-z0-9_\+\-]*$/Di' - any spaces, @ ...
+     * '/^[a-z0-9_\+\-]*$/Di' - any spaces, @ ...   are prohibited
      *
      * @var string MessagesListName like 'emails_from_Bob '
      */
@@ -56,7 +59,7 @@ class MessagesList
      * @opt_param string q Only return messages matching the specified query.
      * @var string https://support.google.com/mail/answer/7190?hl=en&ref_topic=3394914
      */
-    protected $optParam;
+    protected $optParams;
 
     /**
      *
@@ -74,20 +77,20 @@ class MessagesList
      *
      * @param string $name '/^[a-z0-9_\+\-]*$/Di'
      * @param ClientAbstract $gmailGoogleClient
-     * @param array $optParam
+     * @param array $optParams
      */
-    public function __construct($name, ClientAbstract $gmailGoogleClient, $optParam = [])
+    public function __construct($name, ClientAbstract $gmailGoogleClient, $optParams = [])
     {
         static::checkName($name);
         $this->name = $name;
         $this->gmailGoogleClient = $gmailGoogleClient;
         $this->cachedObject = new CachedObject($this->name);
 
-        if (!isset($optParam['maxResults'])) {
-            $optParam['maxResults'] = 1000;
+        if (!isset($optParams['maxResults'])) {
+            $optParams['maxResults'] = 500;
         }
-        $optParam['pageToken'] = null;
-        $this->optParam = $optParam;
+        $optParams['pageToken'] = null;
+        $this->optParams = $optParams;
     }
 
     /**
@@ -95,9 +98,9 @@ class MessagesList
      * @param int|null $actualDate  null - from Gmail, 0 - from Cache, Int - may be from cache (if actual)
      * @return type
      */
-    public function getMessages($actualDate = null)
+    public function getMessages($actualDate = self::FROM_GMAIL) //self::FROM_CACHE
     {
-        if (is_null($actualDate)) {
+        if ($actualDate === self::FROM_GMAIL) {
             // get acual data
             return $this->getGmailMessages();
         }
@@ -136,14 +139,14 @@ class MessagesList
         return $dateOfCache;
     }
 
-    public function getMessagesIds()
+    public function getMessagesIds($actualDate = self::FROM_GMAIL)
     {
-        $list = $this->getGmailMessages();
-        $messageIds = [];
+        $list = $this->getMessages($actualDate);
+        $messagesIds = [];
         foreach ($list as $message) {
-            $messageIds[] = $message->getId();
+            $messagesIds[] = $message->getId();
         }
-        return $messageIds;
+        return $messagesIds;
     }
 
     public function getGmailMessage($messageId)
@@ -167,13 +170,14 @@ class MessagesList
     protected function getGmailMessages()
     {
         $list = [];
-        $this->optParams['pageToken'] = null;
+        $optParams = $this->optParams;
+        //$optParams['pageToken'] = null;
         do {
             $googleServiceGmail = new GoogleServiceGmail($this->gmailGoogleClient);
-            $messages = $googleServiceGmail->users_messages->listUsersMessages('me', $this->optParams);
+            $messages = $googleServiceGmail->users_messages->listUsersMessages('me', $optParams);
             $list = $messages->getMessages() ? array_merge($list, $messages->getMessages()) : $list;
             $nextPageToken = $messages->getNextPageToken();
-            $this->optParams['pageToken'] = $nextPageToken;
+            $optParams['pageToken'] = $nextPageToken;
         } while (!is_null($nextPageToken));
 
         $this->cachedObject->setMessagesListData($list);

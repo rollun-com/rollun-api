@@ -44,12 +44,16 @@ class MessagesListAction implements MiddlewareInterface
     public function process(Request $request, DelegateInterface $delegate)
     {
 
-        $str = get_class($this->messagesList);
+        $str = $this->messagesList->getMessages();
 
         if ($name === "error") {
             throw new \Exception("Exception by string: $str");
         }
-        $request = $request->withAttribute('responseData', ['str' => $str]);
+        $request = $request->withAttribute('responseData', [
+            'str' => print_r(
+                    $str[0], true
+            )
+        ]);
         $response = $delegate->process($request);
         return $response;
     }
