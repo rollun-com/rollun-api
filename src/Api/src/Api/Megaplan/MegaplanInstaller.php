@@ -20,16 +20,11 @@ class MegaplanInstaller extends InstallerAbstract
                     'login' => '',
                     'password' => '',
                 ],
-                'megaplan_entities' => [
-                    'some_entity_service' => [
-                        'entity' => 'deal',
-                        'dataStore' => 'some_entity_service_dataStore',
-                        'serializer' => 'serializer',
-                        'serializerOptions' => 'serializerOptions',
-                    ],
-                ],
                 'dataStore' => [
-                    'some_entity_service_dataStore' => [
+                    'megaplan_deal_dataStore_service' => [
+                        'singleEntity' => 'dealEntity',
+                        'listEntity' => 'dealsEntity',
+                        'class' => \rollun\api\Api\Megaplan\DataStore\MegaplanDataStore::class,
                     ],
                 ],
                 'dependencies' => [
@@ -38,18 +33,33 @@ class MegaplanInstaller extends InstallerAbstract
                             \rollun\api\Api\Megaplan\Serializer\Megaplan::class,
                         \rollun\api\Api\Megaplan\Serializer\MegaplanOptions::class =>
                             \rollun\api\Api\Megaplan\Serializer\MegaplanOptions::class,
+
+                        \rollun\api\Api\Megaplan\Entity\Deal\Deal::class =>
+                            \rollun\api\Api\Megaplan\Entity\Deal\Deal::class,
+                        \rollun\api\Api\Megaplan\Entity\Deal\Deals::class =>
+                            \rollun\api\Api\Megaplan\Entity\Deal\Deals::class,
+                        \rollun\api\Api\Megaplan\Entity\Deal\Fields::class =>
+                            \rollun\api\Api\Megaplan\Entity\Deal\Fields::class,
                     ],
                     'factories' => [
                         \Megaplan\SimpleClient\Client::class =>
-                            \rollun\api\Api\Megaplan\Entity\Factory\MegaplanClientFactory::class
+                            \rollun\api\Api\Megaplan\Entity\Factory\MegaplanClientFactory::class,
                     ],
                     'abstract_factories' => [
-                        \rollun\api\Api\Megaplan\Entity\Factory\AbstractFactory::class,
+                        \rollun\api\Api\Megaplan\DataStore\Factory\MegaplanAbstractFactory::class,
                     ],
                     'aliases' => [
-                        'megaplan' => \Megaplan\SimpleClient\Client::class,
+                        'megaplanClient' => \Megaplan\SimpleClient\Client::class,
                         'serializer' => \rollun\api\Api\Megaplan\Serializer\Megaplan::class,
-                        'serializerOptions' => \rollun\api\Api\Megaplan\Serializer\MegaplanOptions::class,
+                        'options' => \rollun\api\Api\Megaplan\Serializer\MegaplanOptions::class,
+                        'dealsEntity' => \rollun\api\Api\Megaplan\Entity\Deal\Deals::class,
+                        'dealEntity' => \rollun\api\Api\Megaplan\Entity\Deal\Deal::class,
+                        'dealListFields' => \rollun\api\Api\Megaplan\Entity\Deal\Fields::class,
+                        'dataStore' => 'megaplan_deal_dataStore_service',
+                    ],
+                    'shared' => [
+                        'serializer' => false,
+                        'options' => false,
                     ],
                 ],
             ];

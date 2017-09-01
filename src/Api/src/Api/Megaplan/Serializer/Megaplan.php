@@ -3,10 +3,17 @@
 namespace rollun\api\Api\Megaplan\Serializer;
 
 use Ramsey\Uuid\Uuid;
+use rollun\dic\InsideConstruct;
 use Zend\Serializer\Adapter\Json;
 
 class Megaplan extends Json
 {
+    public function __construct($options = null)
+    {
+        InsideConstruct::init();
+        parent::__construct($this->options);
+    }
+
     /**
      * Deserialize an incoming JSON-string to array.
      *
@@ -54,17 +61,24 @@ class Megaplan extends Json
      */
     public function unserialize($serialized)
     {
+        // Data may come already in stdClass view
+        if (!(is_string($serialized) && (is_object(json_decode($serialized)) || is_array(json_decode($serialized))))) {
+            // So encode them again
+            $serialized = parent::serialize($serialized);
+        }
+        // Now decode data with $assoc = true
         $unserializedData = parent::unserialize($serialized);
         $rawUnserializedData = $unserializedData["data"][$this->options->getEntity()];
+        return $rawUnserializedData;
 
-        $returnData = [];
-        foreach ($rawUnserializedData as $entity) {
-            $id = isset($entity['Id']) ? $entity['Id'] : Uuid::uuid4()->__toString();
-            $returnData[] = [
-                'id' => $id,
-                $this->options->getEntity() => $this->serialize($entity),
-            ];
-        }
-        return $returnData;
+//        $returnData = [];
+//        foreach ($rawUnserializedData as $entity) {
+//            $id = isset($entity['Id']) ? $entity['Id'] : Uuid::uuid4()->__toString();
+//            $returnData[] = [
+//                'id' => $id,
+//                $this->options->getEntity() => $this->serialize($entity),
+//            ];
+//        }
+//        return $returnData;
     }
 }

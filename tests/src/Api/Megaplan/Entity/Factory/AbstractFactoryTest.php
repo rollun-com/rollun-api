@@ -3,7 +3,7 @@
 namespace rollun\test\api\Api\Megaplan\Entity\Factory;
 
 use Mockery;
-use rollun\api\Api\Megaplan\Entity\Deal;
+use rollun\api\Api\Megaplan\Entity\Deals;
 use rollun\api\Api\Megaplan\Entity\Factory\AbstractFactory;
 use rollun\test\api\Api\Megaplan\Entity\ContainerMockTrait;
 
@@ -27,7 +27,7 @@ class AbstractFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $instance = $factory($this->getContainerMock(), 'deal_service');
         $this->assertInstanceOf(
-            Deal::class, $instance
+            Deals::class, $instance
         );
     }
 }
