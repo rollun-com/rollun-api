@@ -27,6 +27,16 @@ class MegaplanInstaller extends InstallerAbstract
                         'class' => \rollun\api\Api\Megaplan\DataStore\MegaplanDataStore::class,
                     ],
                 ],
+                'megaplan_entities' => [
+                    'deals' => [
+                        'dealListFields' => 'dealListFields',
+                        'filterField' => [
+                            'Program' => 6,
+                        ],
+                        'requestedFields' => [],
+                        'extraFields' => [],
+                    ],
+                ],
                 'dependencies' => [
                     'invokables' => [
                         \rollun\api\Api\Megaplan\Serializer\Megaplan::class =>
@@ -36,14 +46,15 @@ class MegaplanInstaller extends InstallerAbstract
 
                         \rollun\api\Api\Megaplan\Entity\Deal\Deal::class =>
                             \rollun\api\Api\Megaplan\Entity\Deal\Deal::class,
-                        \rollun\api\Api\Megaplan\Entity\Deal\Deals::class =>
-                            \rollun\api\Api\Megaplan\Entity\Deal\Deals::class,
+
                         \rollun\api\Api\Megaplan\Entity\Deal\Fields::class =>
                             \rollun\api\Api\Megaplan\Entity\Deal\Fields::class,
                     ],
                     'factories' => [
                         \Megaplan\SimpleClient\Client::class =>
                             \rollun\api\Api\Megaplan\Entity\Factory\MegaplanClientFactory::class,
+                        \rollun\api\Api\Megaplan\Entity\Deal\Deals::class =>
+                            \rollun\api\Api\Megaplan\Entity\Deal\Factory\DealsFactory::class,
                     ],
                     'abstract_factories' => [
                         \rollun\api\Api\Megaplan\DataStore\Factory\MegaplanAbstractFactory::class,

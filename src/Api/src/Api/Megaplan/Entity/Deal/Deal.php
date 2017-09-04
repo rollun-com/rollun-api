@@ -15,9 +15,21 @@ class Deal extends EntityAbstract
 
     protected $id;
 
-    protected $requestedFields = [];
+    protected $requestedFields;
 
-    protected $extraFields = [];
+    protected $extraFields;
+
+    /**
+     * Deal constructor.
+     * @param array $requestedFields
+     * @param array $extraFields
+     */
+    public function __construct(array $requestedFields = [], array $extraFields = [])
+    {
+        parent::__construct();
+        $this->requestedFields = $requestedFields;
+        $this->extraFields = $extraFields;
+    }
 
     protected function prepareRequestParams()
     {
@@ -32,30 +44,13 @@ class Deal extends EntityAbstract
         return $requestParams;
     }
 
-    public function getOption($optionName)
+    public function getId()
     {
-        return $this->determineInsideParameter($optionName);
+        return $this->id;
     }
 
-    public function setOption($optionName, $optionValue)
+    public function setId($id)
     {
-        $param = &$this->determineInsideParameter($optionName);
-        $param = $optionValue;
-    }
-
-    protected function &determineInsideParameter($optionName)
-    {
-        switch (true) {
-            case (self::ID_OPTION_KEY == $optionName):
-                $param = &$this->id;
-                break;
-            case (preg_match("/CustomField/", $optionName)):
-                $param = &$this->extraFields[$optionName];
-                break;
-            default:
-                $param = &$this->requestedFields[$optionName];
-                break;
-        }
-        return $param;
+        $this->id = $id;
     }
 }

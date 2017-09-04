@@ -32,7 +32,7 @@ class MegaplanDataStore extends DataStoreAbstract implements DataSourceInterface
 
     public function read($id)
     {
-        $this->singleEntity->setOption('Id', $id);
+        $this->singleEntity->setId($id);
         return $this->singleEntity->get();
     }
 

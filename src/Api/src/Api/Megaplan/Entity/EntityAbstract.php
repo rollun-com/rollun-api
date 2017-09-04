@@ -8,7 +8,7 @@ use rollun\dic\InsideConstruct;
 use Zend\Serializer\Adapter\AdapterInterface as SerializerAdapterInterface;
 use rollun\datastore\DataStore\DataStoreAbstract;
 
-abstract class EntityAbstract implements EntityOptinableInterface
+abstract class EntityAbstract
 {
     const URI_ENTITY_GET = '';
 

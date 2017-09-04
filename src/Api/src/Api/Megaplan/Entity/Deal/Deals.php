@@ -2,10 +2,9 @@
 
 namespace rollun\api\Api\Megaplan\Entity\Deal;
 
-use rollun\api\Api\Megaplan\DataStore\Factory\MegaplanAbstractFactory;
 use rollun\api\Api\Megaplan\Exception\InvalidRequestCountException;
 use rollun\api\Api\Megaplan\Entity\EntityAbstract;
-use rollun\dic\InsideConstruct;
+use rollun\api\Api\Megaplan\Entity\Deal\Factory\DealsFactory;
 
 /**
  * Class Deals
@@ -30,24 +29,32 @@ class Deals extends EntityAbstract
      * TODO: Как устанавливать фильтруемые поля? Через установку опций не получится. Еще один интерфейс делать?
      * @var array
      */
-    protected $filterFields = [];
+    protected $filterFields;
 
-    protected $requestedFields = [];
+    protected $requestedFields;
 
-    protected $extraFields = [];
+    protected $extraFields;
 
-    protected $requestParams = [];
+    protected $requestParams;
 
     /**
      * Deals constructor.
      * @param Fields $dealListFields
+     * @param array $filterFields
+     * @param array $requestedFields
+     * @param array $extraFields
+     * @throws \rollun\api\Api\Megaplan\Exception\InvalidArgumentException
      */
-    public function __construct(Fields $dealListFields = null)
+    public function __construct(Fields $dealListFields,
+                                array $filterFields,
+                                array $requestedFields = [],
+                                array $extraFields = [])
     {
-        InsideConstruct::setConstructParams();
         parent::__construct();
-        // TODO: Придумать, куда убрать установку этого значения
-        $this->dealListFields->setOption(Fields::PROGRAM_ID_KEY, 6);
+        $this->dealListFields = $dealListFields;
+        $this->filterFields = $filterFields;
+        $this->requestedFields = $requestedFields;
+        $this->extraFields = $extraFields;
     }
 
     public function get()
@@ -99,30 +106,6 @@ class Deals extends EntityAbstract
     protected function getRequestedFields()
     {
         return $this->requestedFields;
-    }
-
-    public function getOption($optionName)
-    {
-        return $this->determineInsideParameter($optionName);
-    }
-
-    public function setOption($optionName, $optionValue)
-    {
-        $param = &$this->determineInsideParameter($optionName);
-        $param = $optionValue;
-    }
-
-    protected function &determineInsideParameter($optionName)
-    {
-        switch (true) {
-            case (preg_match("/CustomField/", $optionName)):
-                $param = &$this->extraFields[$optionName];
-                break;
-            default:
-                $param = &$this->requestedFields[$optionName];
-                break;
-        }
-        return $param;
     }
 
     protected function getRequestInterval()
