@@ -5,7 +5,7 @@ namespace rollun\api\Api\Megaplan\Serializer;
 use Zend\Serializer\Adapter\JsonOptions;
 use Zend\Serializer\Exception\InvalidArgumentException;
 
-class MegaplanOptions extends JsonOptions implements MegaplanOptionsInterface
+class MegaplanSerializerOptions extends JsonOptions implements MegaplanSerializerOptionsInterface
 {
     protected $entity;
 
@@ -22,7 +22,7 @@ class MegaplanOptions extends JsonOptions implements MegaplanOptionsInterface
 
     /**
      * @param string $entity
-     * @return MegaplanOptions
+     * @return MegaplanSerializerOptions
      */
     public function setEntity($entity)
     {

@@ -2,7 +2,7 @@
 
 namespace rollun\api\Api\Megaplan\Serializer;
 
-interface MegaplanOptionsInterface
+interface MegaplanSerializerOptionsInterface
 {
     /**
      * @return string
@@ -11,7 +11,7 @@ interface MegaplanOptionsInterface
 
     /**
      * @param string $entity
-     * @return MegaplanOptions
+     * @return MegaplanSerializerOptions
      */
     public function setEntity($entity);
 }

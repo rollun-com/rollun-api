@@ -2,13 +2,14 @@
 
 namespace rollun\test\api\Api\Megaplan\Entity;
 
-use rollun\api\Api\Megaplan\Serializer\MegaplanOptions;
+use rollun\api\Api\Megaplan\Serializer\MegaplanSerializerOptions;
 use rollun\datastore\DataStore\DataStoreAbstract;
 use Zend\Serializer\Serializer;
-use rollun\api\Api\Megaplan\Serializer\Megaplan as MegaplanSerializer;
+use rollun\api\Api\Megaplan\Serializer\MegaplanSerializer as MegaplanSerializer;
 use Megaplan\SimpleClient\Client;
 use Interop\Container\ContainerInterface;
 use Mockery;
+use rollun\api\Api\Megaplan\Entity\Deal\Fields;
 
 trait ContainerMockTrait
 {
@@ -19,14 +20,30 @@ trait ContainerMockTrait
             'password' => '',
         ],
         'megaplan_entities' => [
-            'deal_service' => [
-                'entity' => 'deal',
-                'dataStore' => 'some_dataStore',
-                'serializer' => 'serializer',
-                'serializerOptions' => 'serializerOptions',
+            'deals' => [
+                'dealListFields' => 'dealListFields',
+                'filterField' => [
+                    \rollun\api\Api\Megaplan\Entity\Deal\Factory\DealsFactory::FILTER_FIELD_PROGRAM_KEY => 6,
+                ],
+                'requestedFields' => [],
+                'extraFields' => [],
+            ],
+        ],
+        'dataStore' => [
+            'megaplan_deal_dataStore_service' => [
+                'singleEntity' => 'dealEntity',
+                'listEntity' => 'dealsEntity',
+                'class' => \rollun\api\Api\Megaplan\DataStore\MegaplanDataStore::class,
             ],
         ],
     ];
+
+    protected function setUp()
+    {
+        // I have to do this because megaplan entities use InsideConstructor which builds $container from real config.
+        global $container;
+        $container = $this->getContainerMock();
+    }
 
     protected function getContainerMock()
     {
@@ -50,6 +67,9 @@ trait ContainerMockTrait
                         break;
                     case 'megaplan':
                         $instance = $this->getMegaplanClientMock();
+                        break;
+                    case 'dealListFields':
+                        $instance = $this->getDealListFields();
                         break;
                     default:
                         throw new \Exception("Can't create service because I'm mock!!");
@@ -77,11 +97,16 @@ trait ContainerMockTrait
 
     protected function getSerializerOptions()
     {
-        return new MegaplanOptions();
+        return new MegaplanSerializerOptions();
     }
 
     protected function getMegaplanClientMock()
     {
         return Mockery::mock(Client::class);
+    }
+
+    protected function getDealListFields()
+    {
+        return Mockery::mock(Fields::class);
     }
 }

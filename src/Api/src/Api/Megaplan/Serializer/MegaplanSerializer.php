@@ -6,7 +6,7 @@ use Ramsey\Uuid\Uuid;
 use rollun\dic\InsideConstruct;
 use Zend\Serializer\Adapter\Json;
 
-class Megaplan extends Json
+class MegaplanSerializer extends Json
 {
     public function __construct($options = null)
     {

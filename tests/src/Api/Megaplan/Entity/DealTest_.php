@@ -7,7 +7,7 @@ use Mockery;
 use rollun\api\Api\Megaplan\Entity\Factory\AbstractFactory;
 use rollun\installer\Command;
 
-class DealTest extends \PHPUnit_Framework_TestCase
+class DealTest_ extends \PHPUnit_Framework_TestCase
 {
     use ContainerMockTrait;
 

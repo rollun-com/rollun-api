@@ -31,7 +31,7 @@ class MegaplanInstaller extends InstallerAbstract
                     'deals' => [
                         'dealListFields' => 'dealListFields',
                         'filterField' => [
-                            'Program' => 6,
+                            \rollun\api\Api\Megaplan\Entity\Deal\Factory\DealsFactory::FILTER_FIELD_PROGRAM_KEY => 6,
                         ],
                         'requestedFields' => [],
                         'extraFields' => [],
@@ -39,30 +39,28 @@ class MegaplanInstaller extends InstallerAbstract
                 ],
                 'dependencies' => [
                     'invokables' => [
-                        \rollun\api\Api\Megaplan\Serializer\Megaplan::class =>
-                            \rollun\api\Api\Megaplan\Serializer\Megaplan::class,
-                        \rollun\api\Api\Megaplan\Serializer\MegaplanOptions::class =>
-                            \rollun\api\Api\Megaplan\Serializer\MegaplanOptions::class,
-
-                        \rollun\api\Api\Megaplan\Entity\Deal\Deal::class =>
-                            \rollun\api\Api\Megaplan\Entity\Deal\Deal::class,
-
-                        \rollun\api\Api\Megaplan\Entity\Deal\Fields::class =>
-                            \rollun\api\Api\Megaplan\Entity\Deal\Fields::class,
+                        \rollun\api\Api\Megaplan\Serializer\MegaplanSerializer::class =>
+                            \rollun\api\Api\Megaplan\Serializer\MegaplanSerializer::class,
+                        \rollun\api\Api\Megaplan\Serializer\MegaplanSerializerOptions::class =>
+                            \rollun\api\Api\Megaplan\Serializer\MegaplanSerializerOptions::class,
                     ],
                     'factories' => [
                         \Megaplan\SimpleClient\Client::class =>
                             \rollun\api\Api\Megaplan\Entity\Factory\MegaplanClientFactory::class,
                         \rollun\api\Api\Megaplan\Entity\Deal\Deals::class =>
                             \rollun\api\Api\Megaplan\Entity\Deal\Factory\DealsFactory::class,
+                        \rollun\api\Api\Megaplan\Entity\Deal\Fields::class =>
+                            \rollun\api\Api\Megaplan\Entity\Deal\Factory\FieldsFactory::class,
+                        \rollun\api\Api\Megaplan\Entity\Deal\Deal::class =>
+                            \rollun\api\Api\Megaplan\Entity\Deal\Factory\DealFactory::class,
                     ],
                     'abstract_factories' => [
                         \rollun\api\Api\Megaplan\DataStore\Factory\MegaplanAbstractFactory::class,
                     ],
                     'aliases' => [
                         'megaplanClient' => \Megaplan\SimpleClient\Client::class,
-                        'serializer' => \rollun\api\Api\Megaplan\Serializer\Megaplan::class,
-                        'options' => \rollun\api\Api\Megaplan\Serializer\MegaplanOptions::class,
+                        'serializer' => \rollun\api\Api\Megaplan\Serializer\MegaplanSerializer::class,
+                        'options' => \rollun\api\Api\Megaplan\Serializer\MegaplanSerializerOptions::class,
                         'dealsEntity' => \rollun\api\Api\Megaplan\Entity\Deal\Deals::class,
                         'dealEntity' => \rollun\api\Api\Megaplan\Entity\Deal\Deal::class,
                         'dealListFields' => \rollun\api\Api\Megaplan\Entity\Deal\Fields::class,

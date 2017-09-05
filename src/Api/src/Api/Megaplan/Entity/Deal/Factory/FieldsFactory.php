@@ -19,8 +19,8 @@ class FieldsFactory extends AbstractFactory
         }
         $serviceConfig = $config[static::KEY][DealsFactory::DEALS_KEY];
         if (!isset($serviceConfig[DealsFactory::FILTER_FIELD_KEY][DealsFactory::FILTER_FIELD_PROGRAM_KEY])) {
-            throw new InvalidArgumentException("Deals entity has to receive necessary parameter \""
-                . DealsFactory::FILTER_FIELD_PROGRAM_KEY . "\" in the \"" . DealsFactory::DEAL_LIST_FIELDS_KEY . "\" array");
+            throw new InvalidArgumentException("Fields entity has to receive necessary parameter \""
+                . DealsFactory::FILTER_FIELD_PROGRAM_KEY . "\" in the \"" . DealsFactory::FILTER_FIELD_KEY . "\" array");
         }
         $instance = new Fields($serviceConfig[DealsFactory::FILTER_FIELD_KEY][DealsFactory::FILTER_FIELD_PROGRAM_KEY]);
         return $instance;

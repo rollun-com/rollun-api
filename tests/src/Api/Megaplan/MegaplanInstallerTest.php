@@ -76,8 +76,10 @@ class MegaplanInstallerTest extends InstallerTestCase
         );
         $this->assertEquals(
             [
-                'rollun\api\Api\Megaplan\Serializer\Megaplan' => 'rollun\api\Api\Megaplan\Serializer\Megaplan',
-                'rollun\api\Api\Megaplan\Serializer\MegaplanOptions' => 'rollun\api\Api\Megaplan\Serializer\MegaplanOptions',
+                \rollun\api\Api\Megaplan\Serializer\MegaplanSerializer::class =>
+                    \rollun\api\Api\Megaplan\Serializer\MegaplanSerializer::class,
+                \rollun\api\Api\Megaplan\Serializer\MegaplanSerializerOptions::class =>
+                    \rollun\api\Api\Megaplan\Serializer\MegaplanSerializerOptions::class,
             ],
             $installedConfig['dependencies'][$sectionName]
         );
@@ -93,9 +95,17 @@ class MegaplanInstallerTest extends InstallerTestCase
         $this->assertArrayHasKey(
             $sectionName, $installedConfig['dependencies']
         );
+
         $this->assertEquals(
             [
-                'Megaplan\SimpleClient\Client' => 'rollun\api\Api\Megaplan\Entity\Factory\MegaplanClientFactory',
+                \Megaplan\SimpleClient\Client::class =>
+                    \rollun\api\Api\Megaplan\Entity\Factory\MegaplanClientFactory::class,
+                \rollun\api\Api\Megaplan\Entity\Deal\Deals::class =>
+                    \rollun\api\Api\Megaplan\Entity\Deal\Factory\DealsFactory::class,
+                \rollun\api\Api\Megaplan\Entity\Deal\Fields::class =>
+                    \rollun\api\Api\Megaplan\Entity\Deal\Factory\FieldsFactory::class,
+                \rollun\api\Api\Megaplan\Entity\Deal\Deal::class =>
+                    \rollun\api\Api\Megaplan\Entity\Deal\Factory\DealFactory::class,
             ],
             $installedConfig['dependencies'][$sectionName]
         );
@@ -113,7 +123,7 @@ class MegaplanInstallerTest extends InstallerTestCase
         );
         $this->assertEquals(
             [
-                'rollun\api\Api\Megaplan\Entity\Factory\AbstractFactory',
+                \rollun\api\Api\Megaplan\DataStore\Factory\MegaplanAbstractFactory::class,
             ],
             $installedConfig['dependencies'][$sectionName]
         );
@@ -131,9 +141,32 @@ class MegaplanInstallerTest extends InstallerTestCase
         );
         $this->assertEquals(
             [
-                'megaplan' => 'Megaplan\SimpleClient\Client',
-                'serializer' => 'rollun\api\Api\Megaplan\Serializer\Megaplan',
-                'serializerOptions' => 'rollun\api\Api\Megaplan\Serializer\MegaplanOptions',
+                'megaplanClient' => \Megaplan\SimpleClient\Client::class,
+                'serializer' => \rollun\api\Api\Megaplan\Serializer\MegaplanSerializer::class,
+                'options' => \rollun\api\Api\Megaplan\Serializer\MegaplanSerializerOptions::class,
+                'dealsEntity' => \rollun\api\Api\Megaplan\Entity\Deal\Deals::class,
+                'dealEntity' => \rollun\api\Api\Megaplan\Entity\Deal\Deal::class,
+                'dealListFields' => \rollun\api\Api\Megaplan\Entity\Deal\Fields::class,
+                'dataStore' => 'megaplan_deal_dataStore_service',
+            ],
+            $installedConfig['dependencies'][$sectionName]
+        );
+    }
+
+    /**
+     * @depends test_install_shouldReturnInstalledConfig
+     * @param $installedConfig
+     */
+    public function test_installedConfig_shouldContainSharedSection($installedConfig)
+    {
+        $sectionName = 'shared';
+        $this->assertArrayHasKey(
+            $sectionName, $installedConfig['dependencies']
+        );
+        $this->assertEquals(
+            [
+                'serializer' => false,
+                'options' => false,
             ],
             $installedConfig['dependencies'][$sectionName]
         );

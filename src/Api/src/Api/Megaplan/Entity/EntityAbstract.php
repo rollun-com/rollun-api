@@ -3,7 +3,7 @@
 namespace rollun\api\Api\Megaplan\Entity;
 
 use Megaplan\SimpleClient\Client;
-use rollun\api\Api\Megaplan\Serializer\MegaplanOptionsInterface;
+use rollun\api\Api\Megaplan\Serializer\MegaplanSerializerOptionsInterface;
 use rollun\dic\InsideConstruct;
 use Zend\Serializer\Adapter\AdapterInterface as SerializerAdapterInterface;
 use rollun\datastore\DataStore\DataStoreAbstract;
@@ -33,7 +33,7 @@ abstract class EntityAbstract
     public function __construct(Client $megaplanClient = null, SerializerAdapterInterface $serializer = null)
     {
         InsideConstruct::setConstructParams();
-        if ($this->serializer->getOptions() instanceof MegaplanOptionsInterface) {
+        if ($this->serializer->getOptions() instanceof MegaplanSerializerOptionsInterface) {
             $this->serializer->getOptions()->setEntity(static::ENTITY_DATA_KEY);
         }
     }
@@ -42,6 +42,7 @@ abstract class EntityAbstract
     {
         $requestParams = $this->prepareRequestParams();
         $response = $this->megaplanClient->get(static::URI_ENTITY_GET, $requestParams);
+        // TODO: тут бы надо доставать вначале код ответа и анализировать его, а уже потом разворачивать и извлекать данные
         $data = $this->serializer->unserialize($response);
         return $data;
     }

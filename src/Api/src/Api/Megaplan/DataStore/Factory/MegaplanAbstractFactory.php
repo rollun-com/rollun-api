@@ -32,6 +32,7 @@ class MegaplanAbstractFactory extends DataStoreAbstractFactory
 
         $config = $container->get('config');
         if (!isset($config[self::KEY_DATASTORE][$requestedName])) {
+            static::$KEY_IN_CREATE = 0;
             throw new ServiceNotFoundException("Specified service not found");
         }
 
@@ -39,13 +40,15 @@ class MegaplanAbstractFactory extends DataStoreAbstractFactory
         $requestedClassName = $serviceConfig[self::KEY_CLASS];
 
         if (!isset($serviceConfig[self::MEGAPLAN_DATASTORE_SINGLE_ENTITY_KEY])) {
+            static::$KEY_IN_CREATE = 0;
             throw new InvalidArgumentException("The required parameter \""
-                . $serviceConfig[self::MEGAPLAN_DATASTORE_SINGLE_ENTITY_KEY] . "\" is not found in the config.");
+                . self::MEGAPLAN_DATASTORE_SINGLE_ENTITY_KEY . "\" is not found in the config.");
         }
 
         if (!isset($serviceConfig[self::MEGAPLAN_DATASTORE_LIST_ENTITY_KEY])) {
+            static::$KEY_IN_CREATE = 0;
             throw new InvalidArgumentException("The required parameter \""
-                . $serviceConfig[self::MEGAPLAN_DATASTORE_LIST_ENTITY_KEY] . "\" is not found in the config.");
+                . self::MEGAPLAN_DATASTORE_LIST_ENTITY_KEY . "\" is not found in the config.");
         }
 
         $singleEntity = $container->get($serviceConfig[self::MEGAPLAN_DATASTORE_SINGLE_ENTITY_KEY]);

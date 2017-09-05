@@ -30,8 +30,8 @@ class DealsFactory extends AbstractFactory
                 . static::DEAL_LIST_FIELDS_KEY . "\" is not found in the entity config");
         }
         if (!isset($serviceConfig[static::FILTER_FIELD_KEY][static::FILTER_FIELD_PROGRAM_KEY])) {
-            throw new InvalidArgumentException("Deals entity has to receive necessary parameter \""
-                . static::FILTER_FIELD_PROGRAM_KEY . "\" in the \"" . static::DEAL_LIST_FIELDS_KEY . "\" array");
+            throw new InvalidArgumentException("Deal entity has to receive necessary parameter \""
+                . static::FILTER_FIELD_PROGRAM_KEY . "\" in the \"" . static::FILTER_FIELD_KEY . "\" array");
         }
 
         $dealListFields = $container->get($serviceConfig[static::DEAL_LIST_FIELDS_KEY]);
