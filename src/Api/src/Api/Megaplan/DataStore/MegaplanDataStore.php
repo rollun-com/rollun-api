@@ -2,7 +2,10 @@
 
 namespace rollun\api\Api\Megaplan\DataStore;
 
+use rollun\api\Api\Megaplan\DataStore\ConditionBuilder\MegaplanConditionBuilder;
 use rollun\api\Api\Megaplan\Entity\EntityAbstract;
+use rollun\datastore\DataStore\ConditionBuilder\RqlConditionBuilder;
+use rollun\datastore\DataStore\ConditionBuilder\SqlConditionBuilder;
 use rollun\datastore\DataStore\DataStoreAbstract;
 use rollun\datastore\DataStore\DataStoreException;
 use rollun\datastore\DataStore\Interfaces\DataSourceInterface;
@@ -28,6 +31,7 @@ class MegaplanDataStore extends DataStoreAbstract implements DataSourceInterface
     {
         $this->singleEntity = $singleEntity;
         $this->listEntity = $listEntity;
+        $this->conditionBuilder = new MegaplanConditionBuilder();
     }
 
     public function read($id)
@@ -43,7 +47,8 @@ class MegaplanDataStore extends DataStoreAbstract implements DataSourceInterface
 
     public function query(Query $query)
     {
-        throw new DataStoreException("This functionality is not implemented yet");
+        $condition = $this->conditionBuilder->__invoke($query->getQuery());
+        return $this->listEntity->query($condition);
     }
 
     public function create($itemData, $rewriteIfExist = false)

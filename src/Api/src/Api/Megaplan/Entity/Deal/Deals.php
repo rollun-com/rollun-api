@@ -74,13 +74,17 @@ class Deals extends EntityAbstract
         return $data;
     }
 
+    public function query($condition)
+    {
+        $this->filterFields = array_merge($this->filterFields, $condition);
+        return $this->get();
+    }
+
     protected function prepareRequestParams()
     {
         if (!count($this->requestParams)) {
             $this->requestParams = [
-                'FilterFields' => [
-                    'Program' => 6,
-                ],
+                'FilterFields' => $this->filterFields,
                 'RequestedFields' => $this->getRequestedFields(),
                 'ExtraFields' => $this->getExtraFields(),
                 'Limit' => static::MAX_LIMIT,
