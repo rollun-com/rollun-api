@@ -3,8 +3,8 @@
 namespace rollun\api\Api\Megaplan\DataStore\ConditionBuilder;
 
 use rollun\datastore\DataStore\ConditionBuilder\ConditionBuilderAbstract;
-use rollun\datastore\DataStore\ConditionBuilder\RqlConditionBuilder;
 use Xiag\Rql\Parser\Node\AbstractQueryNode;
+use rollun\api\Api\Megaplan\Exception\InvalidArgumentException;
 
 class MegaplanConditionBuilder extends ConditionBuilderAbstract
 {
@@ -24,6 +24,10 @@ class MegaplanConditionBuilder extends ConditionBuilderAbstract
         ]
     ];
 
+    protected $illegalFieldNames = [
+        'Id',
+    ];
+
     public static function encodeString($value)
     {
         /*
@@ -36,5 +40,13 @@ class MegaplanConditionBuilder extends ConditionBuilderAbstract
     public function __invoke(AbstractQueryNode $rootQueryNode = null)
     {
         return json_decode(parent::__invoke($rootQueryNode), true);
+    }
+
+    public function prepareFieldName($fieldName)
+    {
+        if (in_array($fieldName, $this->illegalFieldNames)) {
+            throw new InvalidArgumentException("The selection for field \"{$fieldName}\" is prohibited");
+        }
+        return parent::prepareFieldName($fieldName);
     }
 }
