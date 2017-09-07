@@ -10,28 +10,26 @@ class MegaplanConditionBuilder extends ConditionBuilderAbstract
 {
     protected $literals = [
         'LogicOperator' => [
-            'and' => ['before' => '(', 'between' => ' AND ', 'after' => ')'],
-            'or' => ['before' => '(', 'between' => ' OR ', 'after' => ')'],
-            'not' => ['before' => '( NOT (', 'between' => ' error ', 'after' => ') )'],
+            'and' => ['before' => '[{"and":[', 'between' => ',', 'after' => ']}]'],
+            'or' => ['before' => '[{"or":[', 'between' => ',', 'after' => ']}]'],
+            'not' => ['before' => '[{"not":', 'between' => '":"', 'after' => '}]'],
         ],
-//        'ArrayOperator' => [
-//            'in' => ['before' => '(', 'between' => ' IN (', 'delimiter' => ',', 'after' => '))'],
-//            'out' => ['before' => '(', 'between' => ' NOT IN (', 'delimiter' => ',', 'after' => '))']
-//        ],
         'ScalarOperator' => [
-            // {"TimeUpdated":"2017-09-01 00:00:00"}
             'eq' => ['before' => '{"', 'between' => '":"', 'after' => '"}'],
-            'ne' => ['before' => '[', 'between' => '<>', 'after' => ']'],
-            // {"TimeUpdated":{"greaterOrEqual":"2017-09-01 00:00:00"}}
+            'ne' => ['before' => '{"not":[{"', 'between' => '":"', 'after' => '"}]}'],
             'ge' => ['before' => '{"', 'between' => '":{"greaterOrEqual":"', 'after' => '"}}'],
-            'gt' => ['before' => '[', 'between' => '>', 'after' => ']'],
-            'le' => ['before' => '[', 'between' => '<=', 'after' => ']'],
-            'lt' => ['before' => '[', 'between' => '<', 'after' => ']'],
+            'gt' => ['before' => '{"', 'between' => '":{"greater":"', 'after' => '"}}'],
+            'le' => ['before' => '{"', 'between' => '":{"lessOrEqual":"', 'after' => '"}}'],
+            'lt' => ['before' => '{"', 'between' => '":{"less":"', 'after' => '"}}'],
         ]
     ];
 
     public static function encodeString($value)
     {
+        /*
+         * Don't encode string
+         * Return it in its view
+         */
         return $value;
     }
 
