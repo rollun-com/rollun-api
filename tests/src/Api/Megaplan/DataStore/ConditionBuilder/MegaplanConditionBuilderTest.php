@@ -6,6 +6,7 @@ use rollun\api\Api\Megaplan\DataStore\ConditionBuilder\MegaplanConditionBuilder;
 use Xiag\Rql\Parser\Query;
 use Xiag\Rql\Parser\Node\Query\ScalarOperator;
 use Xiag\Rql\Parser\Node\Query\LogicOperator;
+use rollun\api\Api\Megaplan\Exception\InvalidArgumentException;
 
 class MegaplanConditionBuilderTest extends \PHPUnit_Framework_TestCase
 {
@@ -15,6 +16,18 @@ class MegaplanConditionBuilderTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->conditionBuilder = new MegaplanConditionBuilder();
+    }
+
+    public function test_prohibitionOfSelectionById()
+    {
+        $query = new Query();
+        $node = new ScalarOperator\EqNode("Id", 1);
+        $query->setQuery($node);
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage("The selection for field \"Id\" is prohibited");
+
+        $this->conditionBuilder->__invoke($query->getQuery());
     }
 
     public function test_eq()
