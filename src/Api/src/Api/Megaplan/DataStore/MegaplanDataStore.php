@@ -4,6 +4,7 @@ namespace rollun\api\Api\Megaplan\DataStore;
 
 use rollun\api\Api\Megaplan\DataStore\ConditionBuilder\MegaplanConditionBuilder;
 use rollun\api\Api\Megaplan\Entity\EntityAbstract;
+use rollun\api\Api\Megaplan\Entity\SingeEntityInterface;
 use rollun\datastore\DataStore\ConditionBuilder\RqlConditionBuilder;
 use rollun\datastore\DataStore\ConditionBuilder\SqlConditionBuilder;
 use rollun\datastore\DataStore\DataStoreAbstract;
@@ -16,7 +17,7 @@ class MegaplanDataStore extends DataStoreAbstract implements DataSourceInterface
 {
     const DEF_ID = 'Id';
 
-    /** @var EntityAbstract */
+    /** @var SingeEntityInterface */
     protected $singleEntity;
 
     /** @var EntityAbstract */
@@ -53,12 +54,12 @@ class MegaplanDataStore extends DataStoreAbstract implements DataSourceInterface
 
     public function create($itemData, $rewriteIfExist = false)
     {
-        throw new DataStoreException("This functionality is not implemented yet");
+        return $this->singleEntity->create($itemData, $rewriteIfExist);
     }
 
     public function update($itemData, $createIfAbsent = false)
     {
-        throw new DataStoreException("This functionality is not implemented yet");
+        return $this->singleEntity->update($itemData, $createIfAbsent);
     }
 
     public function delete($id)

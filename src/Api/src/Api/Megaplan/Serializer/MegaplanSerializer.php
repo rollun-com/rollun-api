@@ -3,6 +3,7 @@
 namespace rollun\api\Api\Megaplan\Serializer;
 
 use Ramsey\Uuid\Uuid;
+use rollun\api\Api\Megaplan\Exception\RuntimeException;
 use rollun\dic\InsideConstruct;
 use Zend\Serializer\Adapter\Json;
 
@@ -68,6 +69,11 @@ class MegaplanSerializer extends Json
         }
         // Now decode data with $assoc = true
         $unserializedData = parent::unserialize($serialized);
+
+        if ('error' == $unserializedData['status']['code']) {
+            throw new RuntimeException($unserializedData['status']["message"]);
+        }
+
         $rawUnserializedData = $unserializedData["data"][$this->options->getEntity()];
         return $rawUnserializedData;
 
