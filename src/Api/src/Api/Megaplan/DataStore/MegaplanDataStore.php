@@ -4,23 +4,25 @@ namespace rollun\api\Api\Megaplan\DataStore;
 
 use rollun\api\Api\Megaplan\DataStore\ConditionBuilder\MegaplanConditionBuilder;
 use rollun\api\Api\Megaplan\Entity\EntityAbstract;
-use rollun\api\Api\Megaplan\Entity\SingeEntityInterface;
-use rollun\datastore\DataStore\ConditionBuilder\RqlConditionBuilder;
-use rollun\datastore\DataStore\ConditionBuilder\SqlConditionBuilder;
+use rollun\api\Api\Megaplan\Entity\ListEntityAbstract;
+use rollun\api\Api\Megaplan\Entity\SingleEntityAbstract;
 use rollun\datastore\DataStore\DataStoreAbstract;
 use rollun\datastore\DataStore\DataStoreException;
 use rollun\datastore\DataStore\Interfaces\DataSourceInterface;
-use rollun\dic\InsideConstruct;
 use Xiag\Rql\Parser\Query;
 
+/**
+ * Class MegaplanDataStore
+ * @package rollun\api\Api\Megaplan\DataStore
+ */
 class MegaplanDataStore extends DataStoreAbstract implements DataSourceInterface
 {
     const DEF_ID = 'Id';
 
-    /** @var SingeEntityInterface */
+    /** @var SingleEntityAbstract */
     protected $singleEntity;
 
-    /** @var EntityAbstract */
+    /** @var ListEntityAbstract */
     protected $listEntity;
 
     /**
@@ -35,33 +37,63 @@ class MegaplanDataStore extends DataStoreAbstract implements DataSourceInterface
         $this->conditionBuilder = new MegaplanConditionBuilder();
     }
 
+    /**
+     * {@inheritdoc}
+     *
+     * {@inheritdoc}
+     */
     public function read($id)
     {
         $this->singleEntity->setId($id);
         return $this->singleEntity->get();
     }
 
+    /**
+     * {@inheritdoc}
+     *
+     * {@inheritdoc}
+     */
     public function getAll()
     {
         return $this->listEntity->get();
     }
 
+    /**
+     * {@inheritdoc}
+     *
+     * {@inheritdoc}
+     */
     public function query(Query $query)
     {
         $condition = $this->conditionBuilder->__invoke($query->getQuery());
         return $this->listEntity->query($condition);
     }
 
+    /**
+     * {@inheritdoc}
+     *
+     * {@inheritdoc}
+     */
     public function create($itemData, $rewriteIfExist = false)
     {
         return $this->singleEntity->create($itemData, $rewriteIfExist);
     }
 
+    /**
+     * {@inheritdoc}
+     *
+     * {@inheritdoc}
+     */
     public function update($itemData, $createIfAbsent = false)
     {
         return $this->singleEntity->update($itemData, $createIfAbsent);
     }
 
+    /**
+     * {@inheritdoc}
+     *
+     * {@inheritdoc}
+     */
     public function delete($id)
     {
         throw new DataStoreException("This functionality is not implemented yet");

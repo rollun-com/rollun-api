@@ -10,6 +10,11 @@ use rollun\api\Api\Megaplan\Exception\InvalidArgumentException;
 
 class FieldsFactory extends AbstractFactory
 {
+    /**
+     * {@inheritdoc}
+     *
+     * {@inheritdoc}
+     */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         parent::__invoke($container, $requestedName, $options);

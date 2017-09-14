@@ -2,9 +2,8 @@
 
 namespace rollun\api\Api\Megaplan\Entity\Deal;
 
+use rollun\api\Api\Megaplan\Entity\ListEntityAbstract;
 use rollun\api\Api\Megaplan\Exception\InvalidRequestCountException;
-use rollun\api\Api\Megaplan\Entity\EntityAbstract;
-use rollun\api\Api\Megaplan\Entity\Deal\Factory\DealsFactory;
 
 /**
  * Class Deals
@@ -14,27 +13,34 @@ use rollun\api\Api\Megaplan\Entity\Deal\Factory\DealsFactory;
  *
  * @package rollun\api\Api\Megaplan\Entity
  */
-class Deals extends EntityAbstract
+class Deals extends ListEntityAbstract
 {
     const URI_ENTITY_GET = '/BumsTradeApiV01/Deal/list.api';
 
     const ENTITY_DATA_KEY = 'deals';
 
-    const MAX_REQUEST_COUNT_PRE_HOUR = 3000;
-
     /** @var Fields */
     protected $dealListFields;
 
     /**
-     * TODO: Как устанавливать фильтруемые поля? Через установку опций не получится. Еще один интерфейс делать?
      * @var array
      */
     protected $filterFields;
 
+    /**
+     * @var array
+     */
     protected $requestedFields;
 
+    /**
+     * @var array
+     */
     protected $extraFields;
 
+    /**
+     * Params which prepared before the first request and changed in each loop iteration
+     * @var
+     */
     protected $requestParams;
 
     /**
@@ -57,29 +63,51 @@ class Deals extends EntityAbstract
         $this->extraFields = $extraFields;
     }
 
+    /**
+     * {@inheritdoc}
+     *
+     * {@inheritdoc}
+     */
     public function get()
     {
+        // if there are more than 100 entities we have to collect them in the loop
         $data = [];
         $requestCount = 0;
         do {
             $data = array_merge($data, parent::get());
 
+            // check if the limit is exceeded
             $requestCount++;
-            if ($requestCount >= self::MAX_REQUEST_COUNT_PRE_HOUR) {
+            if ($requestCount >= static::MAX_REQUEST_COUNT_PRE_HOUR) {
                 throw new InvalidRequestCountException("The limit of requests per hour is exceeded");
             }
+            // delay
             usleep($this->getRequestInterval());
+            // get the next 100 entities
             $this->requestParams['Offset'] += static::MAX_LIMIT;
+            // do this while the last part of entities is less than 100 - in this case we reach end of the entities list
         } while(count($data) == $this->requestParams['Offset']);
         return $data;
     }
 
+    /**
+     * Returns entities according to specified condition
+     *
+     * @param $condition
+     * @return array|mixed
+     * @throws InvalidRequestCountException
+     */
     public function query($condition)
     {
         $this->filterFields = array_merge($this->filterFields, $condition);
         return $this->get();
     }
 
+    /**
+     * {@inheritdoc}
+     *
+     * {@inheritdoc}
+     */
     protected function prepareRequestParams()
     {
         if (!count($this->requestParams)) {
@@ -94,6 +122,14 @@ class Deals extends EntityAbstract
         return $this->requestParams;
     }
 
+    /**
+     * Gets extra fields for the entity.
+     *
+     * Extra fields are custom fields. They contain 'CustomField' chunk in their names.
+     * This method gets all the deal fields and then fetch the custom fields only.
+     *
+     * @return array
+     */
     protected function getExtraFields()
     {
         if (!count($this->extraFields)) {
@@ -107,13 +143,13 @@ class Deals extends EntityAbstract
         return $this->extraFields;
     }
 
+    /**
+     * Returns basic set of the fields of the deal.
+     *
+     * @return array
+     */
     protected function getRequestedFields()
     {
         return $this->requestedFields;
-    }
-
-    protected function getRequestInterval()
-    {
-        return ceil(3600 / self::MAX_REQUEST_COUNT_PRE_HOUR * 1000);
     }
 }

@@ -9,6 +9,11 @@ use Zend\ServiceManager\Exception\ServiceNotFoundException;
 
 class DealFactory extends AbstractFactory
 {
+    /**
+     * {@inheritdoc}
+     *
+     * {@inheritdoc}
+     */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         parent::__invoke($container, $requestedName, $options);

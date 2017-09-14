@@ -6,21 +6,33 @@ use Megaplan\SimpleClient\Client;
 use rollun\api\Api\Megaplan\Serializer\MegaplanSerializerOptionsInterface;
 use rollun\dic\InsideConstruct;
 use Zend\Serializer\Adapter\AdapterInterface as SerializerAdapterInterface;
-use rollun\datastore\DataStore\DataStoreAbstract;
 
 abstract class EntityAbstract
 {
+    /**
+     * An URI by which you can get an entity
+     */
     const URI_ENTITY_GET = '';
 
+    /**
+     * A key of a response where real entity data will be returned.
+     * The response has the following structure:
+     * $response = array(
+     *     status => array(
+     *         code => '',
+     *         message => '',
+     *     ),
+     *     data => array(
+     *         self::ENTITY_DATA_KEY => array(
+     *             // ...
+     *         ),
+     *     ),
+     * )
+     */
     const ENTITY_DATA_KEY = '';
-
-    const MAX_LIMIT = 100;
 
     /** @var Client */
     protected $megaplanClient;
-
-    /** @var DataStoreAbstract */
-    protected $dataStore;
 
     /** @var SerializerAdapterInterface */
     protected $serializer;
@@ -38,14 +50,26 @@ abstract class EntityAbstract
         }
     }
 
+    /**
+     * Gets information from Megaplan.
+     *
+     * This is the main method for receive data from Megaplan.
+     *
+     * @return array
+     */
     public function get()
     {
         $requestParams = $this->prepareRequestParams();
         $response = $this->megaplanClient->get(static::URI_ENTITY_GET, $requestParams);
-        // TODO: тут бы надо доставать вначале код ответа и анализировать его, а уже потом разворачивать и извлекать данные
+        // Fetch data from response
         $data = $this->serializer->unserialize($response);
         return $data;
     }
 
+    /**
+     * Prepares request parameters.
+     *
+     * @return array
+     */
     abstract protected function prepareRequestParams();
 }

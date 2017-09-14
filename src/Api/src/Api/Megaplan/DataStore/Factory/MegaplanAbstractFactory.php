@@ -12,10 +12,6 @@ use Zend\ServiceManager\Exception\ServiceNotFoundException;
 
 class MegaplanAbstractFactory extends DataStoreAbstractFactory
 {
-//    const MEGAPLAN_DATASTORE_KEY = 'megaplan_entity';
-
-//    const MEGAPLAN_SCHEME_ID_KEY = 'ProgramId';
-
     const MEGAPLAN_DATASTORE_SINGLE_ENTITY_KEY = 'singleEntity';
     const MEGAPLAN_DATASTORE_LIST_ENTITY_KEY = 'listEntity';
 
@@ -23,6 +19,11 @@ class MegaplanAbstractFactory extends DataStoreAbstractFactory
 
     protected static $KEY_IN_CREATE = 0;
 
+    /**
+     * {@inheritdoc}
+     *
+     * {@inheritdoc}
+     */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         if (static::$KEY_IN_CREATE) {
@@ -58,5 +59,4 @@ class MegaplanAbstractFactory extends DataStoreAbstractFactory
 
         return new $requestedClassName($singleEntity, $listEntity);
     }
-
 }

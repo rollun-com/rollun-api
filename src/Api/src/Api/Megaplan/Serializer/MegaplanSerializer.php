@@ -2,7 +2,6 @@
 
 namespace rollun\api\Api\Megaplan\Serializer;
 
-use Ramsey\Uuid\Uuid;
 use rollun\api\Api\Megaplan\Exception\RuntimeException;
 use rollun\dic\InsideConstruct;
 use Zend\Serializer\Adapter\Json;
@@ -59,6 +58,7 @@ class MegaplanSerializer extends Json
      *
      * @param string $serialized
      * @return array
+     * @throws RuntimeException
      */
     public function unserialize($serialized)
     {
@@ -70,21 +70,14 @@ class MegaplanSerializer extends Json
         // Now decode data with $assoc = true
         $unserializedData = parent::unserialize($serialized);
 
+        /**
+         * API returns not number of error. Instead "error" or "ok"
+         */
         if ('error' == $unserializedData['status']['code']) {
             throw new RuntimeException($unserializedData['status']["message"]);
         }
 
         $rawUnserializedData = $unserializedData["data"][$this->options->getEntity()];
         return $rawUnserializedData;
-
-//        $returnData = [];
-//        foreach ($rawUnserializedData as $entity) {
-//            $id = isset($entity['Id']) ? $entity['Id'] : Uuid::uuid4()->__toString();
-//            $returnData[] = [
-//                'id' => $id,
-//                $this->options->getEntity() => $this->serialize($entity),
-//            ];
-//        }
-//        return $returnData;
     }
 }

@@ -14,6 +14,11 @@ class MegaplanClientFactory implements FactoryInterface
     const API_LOGIN_KEY = 'login';
     const API_PASSWORD_KEY = 'password';
 
+    /**
+     * {@inheritdoc}
+     *
+     * {@inheritdoc}
+     */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $config = $container->get('config');

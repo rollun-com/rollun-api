@@ -2,17 +2,31 @@
 
 namespace rollun\api\Api\Megaplan\Entity\Deal;
 
-use rollun\api\Api\Megaplan\Entity\EntityAbstract;
-use rollun\api\Api\Megaplan\Exception\InvalidArgumentException;
+use rollun\api\Api\Megaplan\Entity\ListEntityAbstract;
 
-class Fields extends EntityAbstract
+class Fields extends ListEntityAbstract
 {
+    /**
+     * {@inheritdoc}
+     *
+     * {@inheritdoc}
+     */
     const URI_ENTITY_GET = '/BumsTradeApiV01/Deal/listFields.api';
 
+    /**
+     * {@inheritdoc}
+     *
+     * {@inheritdoc}
+     */
     const ENTITY_DATA_KEY = 'Fields';
 
     const PROGRAM_ID_KEY = 'ProgramId';
 
+    /**
+     * The only required parameter
+     *
+     * @var int
+     */
     protected $programId;
 
     /**
@@ -25,6 +39,11 @@ class Fields extends EntityAbstract
         $this->programId = $programId;
     }
 
+    /**
+     * {@inheritdoc}
+     *
+     * {@inheritdoc}
+     */
     protected function prepareRequestParams()
     {
         return [

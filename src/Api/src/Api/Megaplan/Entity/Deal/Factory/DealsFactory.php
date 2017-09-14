@@ -17,6 +17,11 @@ class DealsFactory extends AbstractFactory
     const REQUESTED_FIELDS_KEY = 'requestedFields';
     const EXTRA_FIELDS_KEY = 'extraFields';
 
+    /**
+     * {@inheritdoc}
+     *
+     * {@inheritdoc}
+     */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         parent::__invoke($container, $requestedName, $options);

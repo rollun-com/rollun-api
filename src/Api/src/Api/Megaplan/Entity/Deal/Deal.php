@@ -2,18 +2,31 @@
 
 namespace rollun\api\Api\Megaplan\Entity\Deal;
 
-use rollun\api\Api\Megaplan\Entity\EntityAbstract;
-use rollun\api\Api\Megaplan\Entity\SingeEntityInterface;
+use rollun\api\Api\Megaplan\Entity\SingleEntityAbstract;
 use rollun\api\Api\Megaplan\Exception\InvalidArgumentException;
 
-class Deal extends EntityAbstract implements SingeEntityInterface
+class Deal extends SingleEntityAbstract
 {
+    /**
+     * {@inheritdoc}
+     *
+     * {@inheritdoc}
+     */
     const URI_ENTITY_GET = '/BumsTradeApiV01/Deal/card.api';
 
+    /**
+     * {@inheritdoc}
+     *
+     * {@inheritdoc}
+     */
     const ENTITY_DATA_KEY = 'deal';
 
-    const ID_OPTION_KEY = 'Id';
-
+    /**
+     * The list of fields which can be on top level an array of created/updated entity.
+     * No other fields can be here.
+     *
+     * @var array
+     */
     protected $allowedTopLevelDataFields = [
         self::ID_OPTION_KEY,
         'ProgramId',
@@ -23,10 +36,18 @@ class Deal extends EntityAbstract implements SingeEntityInterface
         'Positions',
     ];
 
-    protected $id;
-
+    /**
+     * Requested fields (changes the default set of fields)
+     *
+     * @var array
+     */
     protected $requestedFields;
 
+    /**
+     * Extra fields (adds the default set of fields)
+     *
+     * @var array
+     */
     protected $extraFields;
 
     /**
@@ -41,6 +62,11 @@ class Deal extends EntityAbstract implements SingeEntityInterface
         $this->extraFields = $extraFields;
     }
 
+    /**
+     * {@inheritdoc}
+     *
+     * {@inheritdoc}
+     */
     protected function prepareRequestParams()
     {
         if (is_null($this->id)) {
@@ -54,36 +80,13 @@ class Deal extends EntityAbstract implements SingeEntityInterface
         return $requestParams;
     }
 
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    public function setId($id)
-    {
-        $this->id = $id;
-        return $this;
-    }
-
-    protected function isExists($id)
-    {
-        $this->setId($id);
-        // If the deal doesn't exist here an exception will be thrown
-        $this->get();
-        // if it wasn't then just return true
-        return true;
-    }
-
-    protected function checkDataStructure($itemData)
-    {
-        foreach (array_keys($itemData) as $field) {
-            if (!in_array($field, $this->allowedTopLevelDataFields)) {
-                throw new InvalidArgumentException("Can't process the deal with field \"{$field}\".");
-            }
-        }
-    }
-
-
+    /**
+     * Sends request to Megaplan and returns created or updated entity accordingly to DataStore interface.
+     *
+     * @param $itemData
+     * @return mixed
+     * @throws InvalidArgumentException
+     */
     protected function put($itemData)
     {
         $this->checkDataStructure($itemData);
@@ -96,10 +99,15 @@ class Deal extends EntityAbstract implements SingeEntityInterface
         return $this->get();
     }
 
+    /**
+     * {@inheritdoc}
+     *
+     * {@inheritdoc}
+     */
     public function create($itemData, $rewriteIfExist = false)
     {
         if (isset($itemData[static::ID_OPTION_KEY])) {
-            if ($this->isExists($itemData[static::ID_OPTION_KEY]) && !$rewriteIfExist) {
+            if ($this->has($itemData[static::ID_OPTION_KEY]) && !$rewriteIfExist) {
                 throw new InvalidArgumentException("Can't create a new deal because the deal with " . static::ID_OPTION_KEY
                     . "=\"{$itemData[static::ID_OPTION_KEY]}\" exists but you didn't allow its rewriting.");
             }
@@ -107,10 +115,15 @@ class Deal extends EntityAbstract implements SingeEntityInterface
         return $this->put($itemData);
     }
 
+    /**
+     * {@inheritdoc}
+     *
+     * {@inheritdoc}
+     */
     public function update($itemData, $createIfAbsent = false)
     {
         if (isset($itemData[static::ID_OPTION_KEY])) {
-            if (!$this->isExists($itemData[static::ID_OPTION_KEY]) && !$createIfAbsent) {
+            if (!$this->has($itemData[static::ID_OPTION_KEY]) && !$createIfAbsent) {
                 throw new InvalidArgumentException("The deal with " . static::ID_OPTION_KEY
                     . "=\"{$itemData[static::ID_OPTION_KEY]}\" doesn't exist.");
             }

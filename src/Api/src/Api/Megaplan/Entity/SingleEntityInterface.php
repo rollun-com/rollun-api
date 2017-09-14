@@ -2,7 +2,7 @@
 
 namespace rollun\api\Api\Megaplan\Entity;
 
-interface SingeEntityInterface
+interface SingleEntityInterface
 {
     /**
      * @return int
@@ -11,11 +11,13 @@ interface SingeEntityInterface
 
     /**
      * @param $id
-     * @return SingeEntityInterface
+     * @return SingleEntityInterface
      */
     public function setId($id);
 
     /**
+     * Sends a request for creation an entity with specified data.
+     *
      * @param $itemData
      * @param bool|false $rewriteIfExist
      * @return array
@@ -23,6 +25,8 @@ interface SingeEntityInterface
     public function create($itemData, $rewriteIfExist = false);
 
     /**
+     * Sends a request for update an entity with specified data. Data have to contain entity ID.
+     *
      * @param $itemData
      * @param bool|false $createIfAbsent
      * @return array

@@ -10,6 +10,11 @@ class AbstractFactory implements FactoryInterface
 {
     const KEY = 'megaplan_entities';
 
+    /**
+     * {@inheritdoc}
+     *
+     * {@inheritdoc}
+     */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $config = $container->get('config');

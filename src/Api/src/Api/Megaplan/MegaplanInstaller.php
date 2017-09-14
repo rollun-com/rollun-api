@@ -9,10 +9,16 @@ class MegaplanInstaller extends InstallerAbstract
     protected $message = 'The constant "APP_ENV" is not defined or its value is not "dev".
         You can\'t do anything in a non-DEV mode.';
 
+    /**
+     * {@inheritdoc}
+     *
+     * {@inheritdoc}
+     */
     public function install()
     {
         if (constant('APP_ENV') !== 'dev') {
             $this->consoleIO->write($this->message);
+            return [];
         } else {
             return [
                 'megaplan' => [
@@ -75,6 +81,11 @@ class MegaplanInstaller extends InstallerAbstract
         }
     }
 
+    /**
+     * {@inheritdoc}
+     *
+     * {@inheritdoc}
+     */
     public function uninstall()
     {
         if (constant('APP_ENV') !== 'dev') {
@@ -84,6 +95,11 @@ class MegaplanInstaller extends InstallerAbstract
         }
     }
 
+    /**
+     * {@inheritdoc}
+     *
+     * {@inheritdoc}
+     */
     public function getDescription($lang = "en")
     {
         switch ($lang) {
@@ -99,6 +115,11 @@ class MegaplanInstaller extends InstallerAbstract
         return $description;
     }
 
+    /**
+     * {@inheritdoc}
+     *
+     * {@inheritdoc}
+     */
     public function isInstall()
     {
         $config = $this->container->get('config');
