@@ -36,8 +36,7 @@
         "zendframework/zend-filter": "^2.7",
         "zendframework/zend-cache": "^2.7",
         "megaplan/simple_client": "dev-master",
-        "zendframework/zend-serializer": "^2.8",
-        "ramsey/uuid": "^3.7"
+        "zendframework/zend-serializer": "^2.8"
     },
     "require-dev": {
         "phpunit/phpunit": "^6.0.8 || ^5.7.15",
