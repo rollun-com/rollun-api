@@ -21,6 +21,8 @@ class Deal extends SingleEntityAbstract
      */
     const ENTITY_DATA_KEY = 'deal';
 
+    const PROGRAM_ID_KEY = 'ProgramId';
+
     /**
      * The list of fields which can be on top level an array of created/updated entity.
      * No other fields can be here.
@@ -35,6 +37,8 @@ class Deal extends SingleEntityAbstract
         'Model',
         'Positions',
     ];
+
+    protected $programId;
 
     /**
      * Requested fields (changes the default set of fields)
@@ -52,12 +56,14 @@ class Deal extends SingleEntityAbstract
 
     /**
      * Deal constructor.
+     * @param \Megaplan\SimpleClient\Client $programId
      * @param array $requestedFields
      * @param array $extraFields
      */
-    public function __construct(array $requestedFields = [], array $extraFields = [])
+    public function __construct($programId = null, array $requestedFields = [], array $extraFields = [])
     {
         parent::__construct();
+        $this->programId = $programId;
         $this->requestedFields = $requestedFields;
         $this->extraFields = $extraFields;
     }
@@ -80,6 +86,14 @@ class Deal extends SingleEntityAbstract
         return $requestParams;
     }
 
+    protected function checkDataStructure($itemData)
+    {
+        if (!(isset($itemData[static::PROGRAM_ID_KEY]) || !is_null($this->programId))) {
+            throw new InvalidArgumentException("To create a deal you need to specify ProgramId parameter");
+        }
+        parent::checkDataStructure($itemData);
+    }
+
     /**
      * Sends request to Megaplan and returns created or updated entity accordingly to DataStore interface.
      *
@@ -90,6 +104,9 @@ class Deal extends SingleEntityAbstract
     protected function put($itemData)
     {
         $this->checkDataStructure($itemData);
+        if (!isset($itemData[static::PROGRAM_ID_KEY])) {
+            $itemData[static::PROGRAM_ID_KEY] = $this->programId;
+        }
 
         $response = $this->megaplanClient->get('/BumsTradeApiV01/Deal/save.api', $itemData);
         $data = $this->serializer->unserialize($response);

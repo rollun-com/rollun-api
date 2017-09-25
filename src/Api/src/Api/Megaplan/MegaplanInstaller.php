@@ -123,6 +123,6 @@ class MegaplanInstaller extends InstallerAbstract
     public function isInstall()
     {
         $config = $this->container->get('config');
-        return (isset($config['dependencies']['aliases']['megaplan']));
+        return (isset($config['dependencies']['aliases']['megaplanClient']));
     }
 }

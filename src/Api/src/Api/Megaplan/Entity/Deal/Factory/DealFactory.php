@@ -23,10 +23,12 @@ class DealFactory extends AbstractFactory
         }
         $serviceConfig = $config[static::KEY][DealsFactory::DEALS_KEY];
 
+        $programId = isset($serviceConfig[DealsFactory::FILTER_FIELD_KEY][DealsFactory::FILTER_FIELD_PROGRAM_KEY])
+            ? $serviceConfig[DealsFactory::FILTER_FIELD_KEY][DealsFactory::FILTER_FIELD_PROGRAM_KEY] : null;
         $requestedFields = isset($serviceConfig[DealsFactory::REQUESTED_FIELDS_KEY]) ? $serviceConfig[DealsFactory::REQUESTED_FIELDS_KEY] : [];
         $extraFields = isset($serviceConfig[DealsFactory::EXTRA_FIELDS_KEY]) ? $serviceConfig[DealsFactory::EXTRA_FIELDS_KEY] : [];
 
-        $instance = new Deal($requestedFields, $extraFields);
+        $instance = new Deal($programId, $requestedFields, $extraFields);
         return $instance;
     }
 }
