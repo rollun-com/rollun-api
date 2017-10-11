@@ -1,7 +1,7 @@
 <phpunit bootstrap="tests/bootstrap.php" colors="true">
     <testsuites>
-        <testsuite name="rollun\\test\\skeleton\\">
-            <directory>./tests/src/</directory>
+        <testsuite name="rollun\\test\\api\\">
+            <directory>./tests/src/Api</directory>
         </testsuite>
     </testsuites>
 
