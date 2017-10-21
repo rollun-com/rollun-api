@@ -73,7 +73,7 @@ class Deal extends SingleEntityAbstract
      *
      * {@inheritdoc}
      */
-    protected function prepareRequestParams()
+    protected function getRequestParams()
     {
         if (is_null($this->id)) {
             throw new InvalidArgumentException("The required option \"" . self::ID_OPTION_KEY . "\" is not set.");

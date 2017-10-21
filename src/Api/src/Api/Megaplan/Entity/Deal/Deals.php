@@ -73,7 +73,7 @@ class Deals extends ListEntityAbstract
         // if there are more than 100 entities we have to collect them in the loop
         $data = [];
         $requestCount = 0;
-        $this->requestParams = [];
+        $this->reset();
         do {
             $data = array_merge($data, parent::get());
 
@@ -109,7 +109,7 @@ class Deals extends ListEntityAbstract
      *
      * {@inheritdoc}
      */
-    protected function prepareRequestParams()
+    protected function getRequestParams()
     {
         if (!count($this->requestParams)) {
             $this->requestParams = [
@@ -152,5 +152,10 @@ class Deals extends ListEntityAbstract
     protected function getRequestedFields()
     {
         return $this->requestedFields;
+    }
+    
+    protected function reset()
+    {
+        $this->requestParams['Offset'] = 0;
     }
 }
