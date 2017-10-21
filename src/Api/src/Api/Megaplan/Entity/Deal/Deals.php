@@ -73,6 +73,7 @@ class Deals extends ListEntityAbstract
         // if there are more than 100 entities we have to collect them in the loop
         $data = [];
         $requestCount = 0;
+        $this->requestParams = [];
         do {
             $data = array_merge($data, parent::get());
 
