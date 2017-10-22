@@ -44,6 +44,13 @@ class Deals extends ListEntityAbstract
     protected $requestParams;
 
     /**
+     * Conditions by which the selection is performed
+     *
+     * @var array
+     */
+    protected $conditions = [];
+
+    /**
      * Deals constructor.
      * @param Fields $dealListFields
      * @param array $filterFields
@@ -100,7 +107,7 @@ class Deals extends ListEntityAbstract
      */
     public function query($condition)
     {
-        $this->filterFields = array_merge($this->filterFields, $condition);
+        $this->conditions = $condition;
         return $this->get();
     }
 
@@ -111,16 +118,23 @@ class Deals extends ListEntityAbstract
      */
     protected function getRequestParams()
     {
-        if (!count($this->requestParams)) {
-            $this->requestParams = [
-                'FilterFields' => $this->filterFields,
-                'RequestedFields' => $this->getRequestedFields(),
-                'ExtraFields' => $this->getExtraFields(),
-                'Limit' => static::MAX_LIMIT,
-                'Offset' => 0,
-            ];
-        }
+        $this->requestParams = [
+            'FilterFields' => $this->buildFilterFields(),
+            'RequestedFields' => $this->getRequestedFields(),
+            'ExtraFields' => $this->getExtraFields(),
+            'Limit' => static::MAX_LIMIT,
+        ];
         return $this->requestParams;
+    }
+
+    /**
+     * Adds temporary selection's conditions to the permanent filter fields.
+     *
+     * @return array
+     */
+    protected function buildFilterFields()
+    {
+        return array_merge($this->filterFields, $this->conditions);
     }
 
     /**
@@ -153,9 +167,13 @@ class Deals extends ListEntityAbstract
     {
         return $this->requestedFields;
     }
-    
+
+    /**
+     * Resets offset and rebuilds filter fields with the new conditions
+     */
     protected function reset()
     {
         $this->requestParams['Offset'] = 0;
+        $this->requestParams['FilterFields'] = $this->buildFilterFields();
     }
 }
