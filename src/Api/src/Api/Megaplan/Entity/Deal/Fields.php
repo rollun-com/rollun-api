@@ -44,7 +44,7 @@ class Fields extends ListEntityAbstract
      *
      * {@inheritdoc}
      */
-    protected function prepareRequestParams()
+    protected function getRequestParams()
     {
         return [
             self::PROGRAM_ID_KEY => $this->programId,
