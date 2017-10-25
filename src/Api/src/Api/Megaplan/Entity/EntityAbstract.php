@@ -59,7 +59,7 @@ abstract class EntityAbstract
      */
     public function get()
     {
-        $requestParams = $this->prepareRequestParams();
+        $requestParams = $this->getRequestParams();
         $response = $this->megaplanClient->get(static::URI_ENTITY_GET, $requestParams);
         // Fetch data from response
         $data = $this->serializer->unserialize($response);
@@ -71,5 +71,5 @@ abstract class EntityAbstract
      *
      * @return array
      */
-    abstract protected function prepareRequestParams();
+    abstract protected function getRequestParams();
 }
