@@ -3,6 +3,7 @@
 namespace rollun\api\Api\Megaplan;
 
 use rollun\installer\Install\InstallerAbstract;
+use rollun\api\Api\Megaplan\Entity\Deal\Factory\DealsFactory;
 
 class MegaplanInstaller extends InstallerAbstract
 {
@@ -20,7 +21,7 @@ class MegaplanInstaller extends InstallerAbstract
             $this->consoleIO->write($this->message);
             return [];
         } else {
-            return [
+            $config = [
                 'megaplan' => [
                     'api_url' => '',
                     'login' => '',
@@ -37,7 +38,7 @@ class MegaplanInstaller extends InstallerAbstract
                     'deals' => [
                         'dealListFields' => 'dealListFields',
                         'filterField' => [
-                            \rollun\api\Api\Megaplan\Entity\Deal\Factory\DealsFactory::FILTER_FIELD_PROGRAM_KEY => 6,
+                            DealsFactory::FILTER_FIELD_PROGRAM_KEY => null,
                         ],
                         'requestedFields' => [],
                         'extraFields' => [],
@@ -78,6 +79,13 @@ class MegaplanInstaller extends InstallerAbstract
                     ],
                 ],
             ];
+            $programId = $config['megaplan_entities']['deals']['filterField'][DealsFactory::FILTER_FIELD_PROGRAM_KEY];
+            $config['megaplan_entities']['deals']['filterField'][DealsFactory::FILTER_FIELD_PROGRAM_KEY] =
+                $this->consoleIO->ask(
+                    "Set the id of a scheme in the Megaplan to use [{$programId}]:",
+                    $programId
+                );
+            return $config;
         }
     }
 
