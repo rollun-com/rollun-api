@@ -27,16 +27,8 @@ class MegaplanInstaller extends InstallerAbstract
                     'login' => '',
                     'password' => '',
                 ],
-                'dataStore' => [
-                    'megaplan_deal_dataStore_service' => [
-                        'singleEntity' => 'dealEntity',
-                        'listEntity' => 'dealsEntity',
-                        'class' => \rollun\api\Api\Megaplan\DataStore\MegaplanDataStore::class,
-                    ],
-                ],
                 'megaplan_entities' => [
                     'deals' => [
-                        'dealListFields' => 'dealListFields',
                         'filterField' => [
                             DealsFactory::FILTER_FIELD_PROGRAM_KEY => null,
                         ],
@@ -44,47 +36,31 @@ class MegaplanInstaller extends InstallerAbstract
                         'extraFields' => [],
                     ],
                 ],
-                'dependencies' => [
-                    'invokables' => [
-                        \rollun\api\Api\Megaplan\Serializer\MegaplanSerializer::class =>
-                            \rollun\api\Api\Megaplan\Serializer\MegaplanSerializer::class,
-                        \rollun\api\Api\Megaplan\Serializer\MegaplanSerializerOptions::class =>
-                            \rollun\api\Api\Megaplan\Serializer\MegaplanSerializerOptions::class,
-                    ],
-                    'factories' => [
-                        \Megaplan\SimpleClient\Client::class =>
-                            \rollun\api\Api\Megaplan\Entity\Factory\MegaplanClientFactory::class,
-                        \rollun\api\Api\Megaplan\Entity\Deal\Deals::class =>
-                            \rollun\api\Api\Megaplan\Entity\Deal\Factory\DealsFactory::class,
-                        \rollun\api\Api\Megaplan\Entity\Deal\Fields::class =>
-                            \rollun\api\Api\Megaplan\Entity\Deal\Factory\FieldsFactory::class,
-                        \rollun\api\Api\Megaplan\Entity\Deal\Deal::class =>
-                            \rollun\api\Api\Megaplan\Entity\Deal\Factory\DealFactory::class,
-                    ],
-                    'abstract_factories' => [
-                        \rollun\api\Api\Megaplan\DataStore\Factory\MegaplanAbstractFactory::class,
-                    ],
-                    'aliases' => [
-                        'megaplanClient' => \Megaplan\SimpleClient\Client::class,
-                        'serializer' => \rollun\api\Api\Megaplan\Serializer\MegaplanSerializer::class,
-                        'options' => \rollun\api\Api\Megaplan\Serializer\MegaplanSerializerOptions::class,
-                        'dealsEntity' => \rollun\api\Api\Megaplan\Entity\Deal\Deals::class,
-                        'dealEntity' => \rollun\api\Api\Megaplan\Entity\Deal\Deal::class,
-                        'dealListFields' => \rollun\api\Api\Megaplan\Entity\Deal\Fields::class,
-                        'dataStore' => 'megaplan_deal_dataStore_service',
-                    ],
-                    'shared' => [
-                        'serializer' => false,
-                        'options' => false,
-                    ],
-                ],
             ];
+
+            $config['megaplan']['api_url'] = $this->consoleIO->ask(
+                "Type the <info>URL</info> to access to the Megaplan's API (without protocol, domain name only) [{$config['megaplan']['api_url']}]:",
+                $config['megaplan']['api_url']
+            );
+
+            $config['megaplan']['login'] = $this->consoleIO->ask(
+                "Type the <info>login</info> to access to the Megaplan's API [{$config['megaplan']['login']}]:",
+                $config['megaplan']['login']
+            );
+
+            $config['megaplan']['password'] = $this->consoleIO->ask(
+                "Type the <info>password</info> to access to the Megaplan's API [{$config['megaplan']['password']}]:",
+                $config['megaplan']['password']
+            );
+
             $programId = $config['megaplan_entities']['deals']['filterField'][DealsFactory::FILTER_FIELD_PROGRAM_KEY];
             $config['megaplan_entities']['deals']['filterField'][DealsFactory::FILTER_FIELD_PROGRAM_KEY] =
                 $this->consoleIO->ask(
-                    "Set the id of a scheme in the Megaplan to use [{$programId}]:",
+                    "Set the <info>id of a scheme</info> in the Megaplan to use [{$programId}]:",
                     $programId
                 );
+
+            $this->consoleIO->write("You can also specify additional values of <info>FilterFields, RequestedFields and ExtraFields</info> in the relevant sections.");
             return $config;
         }
     }
@@ -131,6 +107,6 @@ class MegaplanInstaller extends InstallerAbstract
     public function isInstall()
     {
         $config = $this->container->get('config');
-        return (isset($config['dependencies']['aliases']['megaplanClient']));
+        return (isset($config['megaplan']));
     }
 }
