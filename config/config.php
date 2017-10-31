@@ -12,6 +12,8 @@ $cacheConfig = [
 ];
 
 $aggregator = new ConfigAggregator([
+//    \rollun\api\Index\ConfigProvider::class,
+    \rollun\api\Api\Megaplan\ConfigProvider::class,
     \Zend\Serializer\ConfigProvider::class,
     \Zend\Db\ConfigProvider::class,
     \Zend\Cache\ConfigProvider::class,
