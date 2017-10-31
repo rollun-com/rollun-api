@@ -118,12 +118,12 @@ class Deals extends ListEntityAbstract
      */
     protected function getRequestParams()
     {
-        $this->requestParams = [
+        $this->requestParams = array_merge($this->requestParams, [
             'FilterFields' => $this->buildFilterFields(),
             'RequestedFields' => $this->getRequestedFields(),
             'ExtraFields' => $this->getExtraFields(),
             'Limit' => static::MAX_LIMIT,
-        ];
+        ]);
         return $this->requestParams;
     }
 
