@@ -34,7 +34,7 @@
         "google/apiclient": "2.0",
         "zendframework/zend-filter": "^2.7",
         "zendframework/zend-cache": "^2.7",
-        "megaplan/simple_client": "^0.0.1",
+        "megaplan/simple_client": "^1.0.0",
         "zendframework/zend-serializer": "^2.8"
     },
     "require-dev": {
