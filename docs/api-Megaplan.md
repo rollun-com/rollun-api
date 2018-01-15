@@ -172,7 +172,7 @@ Array
 $megaplanDataStore = $container->get("megaplan_deal_dataStore_service");
 ```
 
-Псевдоним **megaplanDataStore** предопределен в ConfigProvider'е. Если Вы ничего не переопределяли в локальной версии
+Псевдоним **megaplan_deal_dataStore_service** предопределен в ConfigProvider'е. Если Вы ничего не переопределяли в локальной версии
 конфигурации, то сервис нормально создастся.
 
 Чтение сделки из Мегаплана:
