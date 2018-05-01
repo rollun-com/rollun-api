@@ -162,3 +162,75 @@ Array
 и переопределить вышеуказанные константы на реальные значения.
 
 Как именно будет назван новый класс, не имеет значения. А вот то, что будет указано в константах, имеет реальный смысл.
+
+
+## Быстрый старт. Итог
+Чтобы начать работу с API сделок Мегаплана, нужно после установки и настройки просто поднять megaplanDataStore из контейнера
+и просто начать его использовать:
+
+```
+$megaplanDataStore = $container->get("megaplan_deal_dataStore_service");
+```
+
+Псевдоним **megaplan_deal_dataStore_service** предопределен в ConfigProvider'е. Если Вы ничего не переопределяли в локальной версии
+конфигурации, то сервис нормально создастся.
+
+Чтение сделки из Мегаплана:
+```
+$deal = $megaplanDatStore->read(123);
+```
+
+Создание сделки.
+Обращаю внимание, что данные непосредственно сделки должны быть обернуты в ключ "Model" набора данных:
+```
+$itemData = [
+    'ProgramId' => 13,
+    'Model' => [
+        'Contractor' => 1000007,
+        'Description' => 'Тестовая сделка; создание.',
+        'Category1000051CustomFieldDataZakupki' => '2017-02-15',
+        'Category1000051CustomFieldPostavshchik' => 'Some Company',
+        'Category1000051CustomFieldSposobOplati2' => 'PayPal',
+        'Category1000051CustomFieldDataPolucheniya' => '2017-03-01',
+        'Category1000051CustomFieldDneyDoSoldOut' => 14,
+        // ...
+    ]
+];
+// В случае успеха вернет созданную сделку (на самом деле массив с полями; НЕ объект)
+$justCreatedDeal = $megaplanDatStore->create($itemData);
+```
+
+Редактирование сделки.
+```
+$itemData = [
+    'Id' => 12345,  // указываем реальный Id сделки в Мегаплане
+    'Model' => [
+        'Description' => 'Тестовая сделка; изменение.',
+        // ...
+    ]
+];
+$justUpdatedDeal = $megaplanDatStore->update($itemData);
+```
+
+
+Выборка сделок по параметрам.
+```
+use Xiag\Rql\Parser\Node\Query\ScalarOperator;
+use Xiag\Rql\Parser\Query;
+
+$query = new Query();
+$node = new ScalarOperator\GeNode(
+    'Category1000051CustomFieldDataZakupki', '2017-09-01 00:00:00'
+);
+$query->setQuery($node);
+$result = $this->dataStore->query($query);
+```
+
+Более подробно о выборке можно почитать в [моих пояснениях по MegaplanAPI](https://github.com/rollun-com/amazon-dropship/blob/master/docs/MegaplanAPI.md)
+
+
+Сервис Мегаплана не предоставляет API для удаления сделок.
+
+Для удобства работы с данными можно обернуть MegaplanDataStore в аспект. И в методах pre- реализовать какую-нибудь
+подготовительную работу с данными. Так сделано в
+[задаче по переносу заказов из Amazon в Megaplan](https://github.com/rollun-com/amazon-dropship/blob/master/src/AmazonOrder/src/Megaplan/Aspect/Deal.php).
