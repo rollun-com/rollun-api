@@ -81,12 +81,10 @@ class ConfigProvider
     public function getDataStore()
     {
         return [
-            'dataStore' => [
-                'megaplan_deal_dataStore_service' => [
-                    'singleEntity' => 'dealEntity',
-                    'listEntity' => 'dealsEntity',
-                    'class' => MegaplanDataStore::class,
-                ],
+            'megaplan_deal_dataStore_service' => [
+                'class' => MegaplanDataStore::class,
+                'singleEntity' => 'dealEntity',
+                'listEntity' => 'dealsEntity',
             ],
         ];
     }

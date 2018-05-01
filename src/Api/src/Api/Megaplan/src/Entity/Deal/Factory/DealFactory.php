@@ -7,12 +7,13 @@ use rollun\api\Api\Megaplan\Entity\Deal\Deal;
 use rollun\api\Api\Megaplan\Entity\Factory\AbstractFactory;
 use Zend\ServiceManager\Exception\ServiceNotFoundException;
 
-class DealFactory extends AbstractFactory
+class DealFactory extends AbstractDealFactory
 {
     /**
      * {@inheritdoc}
      *
      * {@inheritdoc}
+     * @throws \Exception
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
@@ -23,12 +24,13 @@ class DealFactory extends AbstractFactory
         }
         $serviceConfig = $config[static::KEY][DealsFactory::DEALS_KEY];
 
-        $programId = isset($serviceConfig[DealsFactory::FILTER_FIELD_KEY][DealsFactory::FILTER_FIELD_PROGRAM_KEY])
-            ? $serviceConfig[DealsFactory::FILTER_FIELD_KEY][DealsFactory::FILTER_FIELD_PROGRAM_KEY] : null;
-        $requestedFields = isset($serviceConfig[DealsFactory::REQUESTED_FIELDS_KEY]) ? $serviceConfig[DealsFactory::REQUESTED_FIELDS_KEY] : [];
-        $extraFields = isset($serviceConfig[DealsFactory::EXTRA_FIELDS_KEY]) ? $serviceConfig[DealsFactory::EXTRA_FIELDS_KEY] : [];
+        $programId = isset($serviceConfig[static::FILTER_FIELD_KEY][static::FILTER_FIELD_PROGRAM_KEY])
+            ? $serviceConfig[static::FILTER_FIELD_KEY][static::FILTER_FIELD_PROGRAM_KEY] : null;
+        $requestedFields = isset($serviceConfig[static::REQUESTED_FIELDS_KEY]) ? $serviceConfig[static::REQUESTED_FIELDS_KEY] : [];
+        $extraFields = isset($serviceConfig[static::EXTRA_FIELDS_KEY]) ? $serviceConfig[static::EXTRA_FIELDS_KEY] : [];
+        $dealListFields = $container->get($serviceConfig[static::DEAL_LIST_FIELDS_KEY]);
 
-        $instance = new Deal($programId, $requestedFields, $extraFields);
+        $instance = new Deal($dealListFields, $programId, $requestedFields, $extraFields);
         return $instance;
     }
 }

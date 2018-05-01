@@ -8,19 +8,13 @@ use Zend\ServiceManager\Exception\ServiceNotFoundException;
 use rollun\api\Api\Megaplan\Entity\Factory\AbstractFactory;
 use rollun\api\Api\Megaplan\Exception\InvalidArgumentException;
 
-class DealsFactory extends AbstractFactory
+class DealsFactory extends AbstractDealFactory
 {
-    const DEALS_KEY = 'deals';
-    const DEAL_LIST_FIELDS_KEY = 'dealListFields';
-    const FILTER_FIELD_KEY = 'filterField';
-    const FILTER_FIELD_PROGRAM_KEY = 'Program';
-    const REQUESTED_FIELDS_KEY = 'requestedFields';
-    const EXTRA_FIELDS_KEY = 'extraFields';
-
     /**
      * {@inheritdoc}
      *
      * {@inheritdoc}
+     * @throws InvalidArgumentException
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {

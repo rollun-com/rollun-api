@@ -52,10 +52,12 @@ abstract class SingleEntityAbstract extends EntityAbstract implements SingleEnti
      */
     protected function has($id)
     {
+        $prevId = $this->id;
         $this->setId($id);
         // If the deal doesn't exist here an exception will be thrown
-        $this->get();
         // if it wasn't then just return true
+        $this->get();
+        $this->setId($prevId);//return prevId.
         return true;
     }
 

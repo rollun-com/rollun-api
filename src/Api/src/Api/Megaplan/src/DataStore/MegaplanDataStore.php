@@ -26,11 +26,12 @@ class MegaplanDataStore extends DataStoreAbstract implements DataSourceInterface
     protected $listEntity;
 
     /**
+     * TODO: fixed received entity type in __constructor.
      * MegaplanDataStore constructor.
-     * @param EntityAbstract $singleEntity
-     * @param EntityAbstract $listEntity
+     * @param SingleEntityAbstract $singleEntity
+     * @param ListEntityAbstract $listEntity
      */
-    public function __construct(EntityAbstract $singleEntity, EntityAbstract $listEntity)
+    public function __construct(SingleEntityAbstract $singleEntity, ListEntityAbstract $listEntity)
     {
         $this->singleEntity = $singleEntity;
         $this->listEntity = $listEntity;
@@ -60,11 +61,11 @@ class MegaplanDataStore extends DataStoreAbstract implements DataSourceInterface
 
     /**
      * {@inheritdoc}
-     *
      * {@inheritdoc}
      */
     public function query(Query $query)
     {
+        // TODO: not all listEntity support query method. Add check
         $condition = $this->conditionBuilder->__invoke($query->getQuery());
         return $this->listEntity->query($condition);
     }

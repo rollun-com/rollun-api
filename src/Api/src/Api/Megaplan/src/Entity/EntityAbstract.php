@@ -45,7 +45,7 @@ abstract class EntityAbstract
     public function __construct(Client $megaplanClient = null, SerializerAdapterInterface $serializer = null)
     {
         InsideConstruct::setConstructParams();
-        if ($this->serializer->getOptions() instanceof MegaplanSerializerOptionsInterface) {
+        if (method_exists($this->serializer, "getOptions") && $this->serializer->getOptions() instanceof MegaplanSerializerOptionsInterface) {
             $this->serializer->getOptions()->setEntity(static::ENTITY_DATA_KEY);
         }
     }
@@ -56,6 +56,7 @@ abstract class EntityAbstract
      * This is the main method for receive data from Megaplan.
      *
      * @return array
+     * @throws \Exception
      */
     public function get()
     {
