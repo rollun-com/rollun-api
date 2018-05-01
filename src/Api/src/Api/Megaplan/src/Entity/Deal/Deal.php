@@ -7,6 +7,7 @@ use rollun\api\Api\Megaplan\Exception\InvalidArgumentException;
 
 class Deal extends SingleEntityAbstract
 {
+    use ExtraFieldsTrait;
     /**
      * {@inheritdoc}
      *
@@ -47,31 +48,30 @@ class Deal extends SingleEntityAbstract
      */
     protected $requestedFields;
 
-    /**
-     * Extra fields (adds the default set of fields)
-     *
-     * @var array
-     */
-    protected $extraFields;
 
     /**
      * Deal constructor.
+     * @param Fields $dealListFields
      * @param \Megaplan\SimpleClient\Client $programId
      * @param array $requestedFields
      * @param array $extraFields
+     * @throws \Exception
      */
-    public function __construct($programId = null, array $requestedFields = [], array $extraFields = [])
+    public function __construct(Fields $dealListFields, $programId = null, array $requestedFields = [], array $extraFields = [])
     {
         parent::__construct();
+        $this->dealListFields = $dealListFields;
         $this->programId = $programId;
         $this->requestedFields = $requestedFields;
-        $this->extraFields = $extraFields;
+        $this->setExtraFields($extraFields);
     }
 
     /**
      * {@inheritdoc}
      *
      * {@inheritdoc}
+     * @throws InvalidArgumentException
+     * @throws \Exception
      */
     protected function getRequestParams()
     {
@@ -81,7 +81,7 @@ class Deal extends SingleEntityAbstract
         $requestParams = [
             self::ID_OPTION_KEY => $this->id,
             'RequestedFields' => $this->requestedFields,
-            'ExtraFields' => $this->extraFields,
+            'ExtraFields' => $this->getExtraFields(),
         ];
         return $requestParams;
     }
@@ -100,9 +100,11 @@ class Deal extends SingleEntityAbstract
      * @param $itemData
      * @return mixed
      * @throws InvalidArgumentException
+     * @throws \Exception
      */
     protected function put($itemData)
     {
+        $itemData = $this->prepareDataStructure($itemData);
         $this->checkDataStructure($itemData);
         if (!isset($itemData[static::PROGRAM_ID_KEY])) {
             $itemData[static::PROGRAM_ID_KEY] = $this->programId;
@@ -120,6 +122,7 @@ class Deal extends SingleEntityAbstract
      * {@inheritdoc}
      *
      * {@inheritdoc}
+     * @throws InvalidArgumentException
      */
     public function create($itemData, $rewriteIfExist = false)
     {
@@ -136,6 +139,7 @@ class Deal extends SingleEntityAbstract
      * {@inheritdoc}
      *
      * {@inheritdoc}
+     * @throws InvalidArgumentException
      */
     public function update($itemData, $createIfAbsent = false)
     {
@@ -146,5 +150,24 @@ class Deal extends SingleEntityAbstract
             }
         }
         return $this->put($itemData);
+    }
+
+    /**
+     * @param $itemData
+     * @return mixed
+     * @throws \Exception
+     */
+    protected function prepareDataStructure($itemData)
+    {
+        $preparedItem = [];
+        foreach ($itemData as $key => $value) {
+            //TODO: add pattern replace /(?<groupName>[a-zA-Z]+)(?<num>[\d]+)CustomField(?<name>[\w]+)/
+            if(in_array("$key", $this->getExtraFields())) {
+                $preparedItem["Model"][$key] = $value;
+            } else {
+                $preparedItem[$key] = $value;
+            }
+        }
+        return $preparedItem;
     }
 }

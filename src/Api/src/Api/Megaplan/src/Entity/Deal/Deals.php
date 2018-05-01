@@ -15,12 +15,11 @@ use rollun\api\Api\Megaplan\Exception\InvalidRequestCountException;
  */
 class Deals extends ListEntityAbstract
 {
+    use ExtraFieldsTrait;
+
     const URI_ENTITY_GET = '/BumsTradeApiV01/Deal/list.api';
 
     const ENTITY_DATA_KEY = 'deals';
-
-    /** @var Fields */
-    protected $dealListFields;
 
     /**
      * @var array
@@ -31,11 +30,6 @@ class Deals extends ListEntityAbstract
      * @var array
      */
     protected $requestedFields;
-
-    /**
-     * @var array
-     */
-    protected $extraFields;
 
     /**
      * Params which prepared before the first request and changed in each loop iteration
@@ -57,6 +51,7 @@ class Deals extends ListEntityAbstract
      * @param array $requestedFields
      * @param array $extraFields
      * @throws \rollun\api\Api\Megaplan\Exception\InvalidArgumentException
+     * @throws \Exception
      */
     public function __construct(Fields $dealListFields,
                                 array $filterFields,
@@ -67,7 +62,7 @@ class Deals extends ListEntityAbstract
         $this->dealListFields = $dealListFields;
         $this->filterFields = $filterFields;
         $this->requestedFields = $requestedFields;
-        $this->extraFields = $extraFields;
+        $this->setExtraFields($extraFields);
     }
 
     /**
@@ -100,14 +95,15 @@ class Deals extends ListEntityAbstract
 
     /**
      * Returns entities according to specified condition
-     *
      * @param $condition
      * @return array|mixed
      * @throws InvalidRequestCountException
+     * @throws \Exception
      */
     public function query($condition)
     {
-        $this->conditions = $condition;
+        //Cast all value to array
+        $this->conditions = (array)$condition;
         return $this->get();
     }
 
@@ -115,6 +111,7 @@ class Deals extends ListEntityAbstract
      * {@inheritdoc}
      *
      * {@inheritdoc}
+     * @throws \Exception
      */
     protected function getRequestParams()
     {
@@ -129,7 +126,6 @@ class Deals extends ListEntityAbstract
 
     /**
      * Adds temporary selection's conditions to the permanent filter fields.
-     *
      * @return array
      */
     protected function buildFilterFields()
@@ -144,6 +140,7 @@ class Deals extends ListEntityAbstract
      * This method gets all the deal fields and then fetch the custom fields only.
      *
      * @return array
+     * @throws \Exception
      */
     protected function getExtraFields()
     {

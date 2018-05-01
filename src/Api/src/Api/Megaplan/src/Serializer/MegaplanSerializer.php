@@ -8,6 +8,10 @@ use Zend\Serializer\Adapter\Json;
 
 class MegaplanSerializer extends Json
 {
+    /**
+     * MegaplanSerializer constructor.
+     * @param null $options
+     */
     public function __construct($options = null)
     {
         InsideConstruct::init();
