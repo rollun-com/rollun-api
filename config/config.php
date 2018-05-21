@@ -15,7 +15,6 @@ $aggregator = new ConfigAggregator([
     \Zend\Cache\ConfigProvider::class,
     \Zend\Validator\ConfigProvider::class,
     \Zend\Filter\ConfigProvider::class,
-    \Zend\Session\ConfigProvider::class,
     CacheConfigProvider::class,
     \rollun\actionrender\ConfigProvider::class,
     // Include cache configuration
